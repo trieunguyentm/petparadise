@@ -11,7 +11,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${rubik.className} min-h-screen bg-no-repeat bg-cover bg-fixed bg-center bg-[url('/auth.png')]`}
+                className={`${rubik.className} bg-no-repeat bg-cover bg-fixed bg-center bg-[url('/auth.png')]`}
             >
                 {children}
             </body>
