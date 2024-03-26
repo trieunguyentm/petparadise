@@ -27,7 +27,7 @@ const FormVerifyOTP = () => {
                     name="otp"
                     id="otp"
                     placeholder="Enter OTP"
-                    className="flex-1 p-4 pr-16 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
+                    className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
             </div>
             <div className="flex items-center gap-3">

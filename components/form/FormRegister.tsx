@@ -26,7 +26,7 @@ const FormRegister = () => {
                     name="username"
                     id="username"
                     placeholder="Enter your username"
-                    className="flex-1 p-4 pr-16 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
+                    className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
             </div>
             <div className="flex items-center gap-3">
@@ -38,7 +38,7 @@ const FormRegister = () => {
                     name="email"
                     id="email"
                     placeholder="Enter your email"
-                    className="flex-1 p-4 pr-16 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
+                    className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
             </div>
             <div className="flex items-center gap-3 relative">
@@ -50,7 +50,7 @@ const FormRegister = () => {
                     name="password"
                     id="password"
                     placeholder="Confirm your password"
-                    className="flex-1 p-4 pr-16 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
+                    className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                     <EyeOff className="text-brown-1 w-8 h-8 max-md:w-5 max-md:h-5" />

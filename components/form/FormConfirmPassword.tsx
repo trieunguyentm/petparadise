@@ -28,7 +28,7 @@ const FormConfirmPassword = () => {
                     name="password"
                     id="password"
                     placeholder="Enter your new password"
-                    className="flex-1 p-4 pr-16 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
+                    className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
             </div>
             <div className="flex items-center gap-3">
@@ -40,7 +40,7 @@ const FormConfirmPassword = () => {
                     name="confirmPassword"
                     id="confirmPassword"
                     placeholder="Confirm your new password"
-                    className="flex-1 p-4 pr-16 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
+                    className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
             </div>
             <div className="flex items-cente justify-center">
