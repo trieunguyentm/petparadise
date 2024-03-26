@@ -20,7 +20,7 @@ const FormVerifyOTP = () => {
             </div>
             <div className="flex items-center gap-3">
                 <label htmlFor="otp">
-                    <ShieldCheck className="w-10 h-10 text-brown-1" />
+                    <ShieldCheck className="w-10 h-10 text-brown-1 max-md:w-8 max-md:h-8" />
                 </label>
                 <input
                     type="text"
@@ -38,7 +38,7 @@ const FormVerifyOTP = () => {
                 <Button
                     type="submit"
                     variant={"outline"}
-                    className="border-brown-1 border-2 rounded-2xl text-brown-1 text-2xl py-5 px-6 flex items-center hover:text-brown-1"
+                    className="border-brown-1 border-2 rounded-2xl text-brown-1 text-2xl max-md:text-xl py-5 px-6 flex items-center hover:text-brown-1"
                 >
                     Verify
                     <ArrowRight />

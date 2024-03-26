@@ -19,7 +19,7 @@ const FormRegister = () => {
         <form onSubmit={handleSubmit} className="mt-10 flex flex-col justify-center gap-5">
             <div className="flex items-center gap-3">
                 <label htmlFor="username">
-                    <FolderPen className="w-10 h-10 text-brown-1" />
+                    <FolderPen className="w-10 h-10 text-brown-1 max-md:w-8 max-md:h-8" />
                 </label>
                 <input
                     type="text"
@@ -31,7 +31,7 @@ const FormRegister = () => {
             </div>
             <div className="flex items-center gap-3">
                 <label htmlFor="email">
-                    <User className="w-10 h-10 text-brown-1" />
+                    <User className="w-10 h-10 text-brown-1 max-md:w-8 max-md:h-8" />
                 </label>
                 <input
                     type="text"
@@ -43,7 +43,7 @@ const FormRegister = () => {
             </div>
             <div className="flex items-center gap-3 relative">
                 <label htmlFor="password">
-                    <KeyRound className="w-10 h-10 text-brown-1" />
+                    <KeyRound className="w-10 h-10 text-brown-1 max-md:w-8 max-md:h-8" />
                 </label>
                 <input
                     type="password"
@@ -53,14 +53,14 @@ const FormRegister = () => {
                     className="flex-1 p-4 pr-16 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                    <EyeOff className="text-brown-1 w-8 h-8" />
+                    <EyeOff className="text-brown-1 w-8 h-8 max-md:w-5 max-md:h-5" />
                 </div>
             </div>
             <div className="flex items-cente justify-center">
                 <Button
                     type="submit"
                     variant={"outline"}
-                    className="border-brown-1 border-2 rounded-2xl text-brown-1 text-2xl py-5 px-6 flex items-center hover:text-brown-1"
+                    className="border-brown-1 border-2 rounded-2xl text-brown-1 text-2xl max-md:text-xl py-5 px-6 flex items-center hover:text-brown-1"
                 >
                     Register
                     <ArrowRight />
