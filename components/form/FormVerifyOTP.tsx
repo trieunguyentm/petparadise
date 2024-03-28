@@ -2,33 +2,104 @@
 
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { ArrowRight, Eye, EyeOff, FolderPen, KeyRound, ShieldCheck, User } from "lucide-react"
-import { FormEvent, useEffect, useRef } from "react"
+import { ArrowRight, CircleAlert, Loader2, ShieldCheck } from "lucide-react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { Tooltip, Zoom } from "@mui/material"
 import Link from "next/link"
+import SnackbarCustom from "../ui/snackbar"
+import { useRouter } from "next/navigation"
+
+type FormValues = {
+    otpCode: string
+}
 
 const FormVerifyOTP = () => {
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        const formData = new FormData(e.currentTarget)
-        console.log(formData.get("otp"))
+    const router = useRouter()
+    const [loading, setLoading] = useState<boolean>(false)
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
+    /** React hook form */
+    const {
+        register,
+        watch,
+        formState: { errors },
+        handleSubmit,
+    } = useForm<FormValues>({ mode: "onChange" })
+
+    const handleSubmitForm = async () => {
+        setLoading(true)
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify-otp`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    otpCode: watch("otpCode"),
+                }),
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            console.log(data)
+            if (data.success) {
+                // Lưu thông báo vào localStorage
+                localStorage.setItem(
+                    "toastMessage",
+                    JSON.stringify({ type: "success", content: "Register successfully!" }),
+                )
+                router.push("/login")
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
-        <form onSubmit={handleSubmit} className="mt-10 flex flex-col justify-center gap-5">
+        <form
+            onSubmit={handleSubmit(handleSubmitForm)}
+            className="mt-10 flex flex-col justify-center gap-5"
+        >
             <div className="flex items-center gap-3">
                 We have sent an OTP code to your email, please check and confirm
             </div>
             <div className="flex items-center gap-3">
-                <label htmlFor="otp">
+                <label htmlFor="otpCode">
                     <ShieldCheck className="w-10 h-10 text-brown-1 max-md:w-8 max-md:h-8" />
                 </label>
                 <input
+                    {...register("otpCode", {
+                        required: "OTP Code is required",
+                    })}
                     type="text"
-                    name="otp"
-                    id="otp"
+                    name="otpCode"
+                    id="otpCode"
                     placeholder="Enter OTP"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
+                <Tooltip
+                    TransitionComponent={Zoom}
+                    title={<div className="text-red-500 p-0">{errors.otpCode?.message}</div>}
+                    placement="top"
+                >
+                    <CircleAlert
+                        className={`text-red-500 w-5 h-5 ${!errors.otpCode && "invisible"}`}
+                    />
+                </Tooltip>
             </div>
             <div className="flex items-center gap-3">
                 You haven't received the OTP yet?
@@ -36,12 +107,19 @@ const FormVerifyOTP = () => {
             </div>
             <div className="flex items-cente justify-center">
                 <Button
+                    disabled={loading}
                     type="submit"
                     variant={"outline"}
                     className="border-brown-1 border-2 rounded-2xl text-brown-1 text-2xl max-md:text-xl py-5 px-6 flex items-center hover:text-brown-1"
                 >
-                    Verify
-                    <ArrowRight />
+                    {loading ? (
+                        <Loader2 className="w-9 h-9 animate-spin" />
+                    ) : (
+                        <>
+                            Verify
+                            <ArrowRight />
+                        </>
+                    )}
                 </Button>
             </div>
             <div className="flex items-center justify-between text-brown-1">
@@ -55,6 +133,12 @@ const FormVerifyOTP = () => {
                     log in now
                 </Link>
             </div>
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </form>
     )
 }

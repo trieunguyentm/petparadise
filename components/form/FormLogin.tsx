@@ -3,17 +3,32 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { ArrowRight, Eye, EyeOff, KeyRound, User } from "lucide-react"
-import { FormEvent, useEffect, useRef } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import Link from "next/link"
+import SnackbarCustom from "../ui/snackbar"
 
 const FormLogin = () => {
-    const renderCountRef = useRef(0) // Initialize a ref to keep track of render counts
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
     useEffect(() => {
-        // Increment the render count after each render
-        renderCountRef.current++
-        console.log(`FormLogin has rendered ${renderCountRef.current} times`)
-    })
+        // Lấy thông báo từ localStorage
+        const toastMessageString = localStorage.getItem("toastMessage")
+        if (toastMessageString) {
+            const toastMessage = JSON.parse(toastMessageString) // Chỉ phân tích cú pháp khi chắc chắn không phải là null
+            if (toastMessage) {
+                setOpenSnackbar(true)
+                setTypeSnackbar(toastMessage.type)
+                setContentSnackbar(toastMessage.content)
+                // Xóa thông báo sau khi đã hiển thị
+                localStorage.removeItem("toastMessage")
+            }
+        }
+    }, [])
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -79,6 +94,12 @@ const FormLogin = () => {
                     register here
                 </Link>
             </div>
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </form>
     )
 }
