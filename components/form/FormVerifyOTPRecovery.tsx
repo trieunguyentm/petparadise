@@ -1,20 +1,20 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ArrowRight, CircleAlert, Loader2, User } from "lucide-react"
-import { useState } from "react"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
 import { Tooltip, Zoom } from "@mui/material"
-import SnackbarCustom from "../ui/snackbar"
+import { ArrowRight, CircleAlert, Loader2, ShieldCheck } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { Button } from "../ui/button"
+import { Separator } from "../ui/separator"
+import Link from "next/link"
+import SnackbarCustom from "../ui/snackbar"
 
 type FormValues = {
-    email: string
+    otpCode: string
 }
 
-const FormRecoveryPassword = () => {
+const FormVerifyOTPRecovery = () => {
     const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
     /** Snack Bar */
@@ -29,15 +29,13 @@ const FormRecoveryPassword = () => {
         watch,
         formState: { errors },
         handleSubmit,
-    } = useForm<FormValues>({
-        mode: "onChange",
-    })
+    } = useForm<FormValues>({ mode: "onChange" })
 
     const handleSubmitForm = async () => {
         setLoading(true)
         try {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/recovery-password`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify-otp-recovery`,
                 {
                     method: "POST",
                     headers: {
@@ -45,7 +43,7 @@ const FormRecoveryPassword = () => {
                     },
                     credentials: "include",
                     body: JSON.stringify({
-                        email: watch("email"),
+                        otpCode: watch("otpCode"),
                     }),
                 },
             )
@@ -57,7 +55,7 @@ const FormRecoveryPassword = () => {
             }
             console.log(data)
             if (data.success) {
-                router.push("/verify-otp-recovery")
+                router.push("/confirm-password")
             }
         } catch (error) {
             console.log(error)
@@ -75,38 +73,36 @@ const FormRecoveryPassword = () => {
             className="mt-10 flex flex-col justify-center gap-5"
         >
             <div className="flex items-center gap-3">
-                Enter the email you associated with your account. We will send an OTP code to this
-                email for verify
+                We have sent an OTP code to the email you want to recover your password, please
+                enter the OTP code to verify your email information.
             </div>
             <div className="flex items-center gap-3">
-                <label htmlFor="email">
-                    <User className="w-10 h-10 text-brown-1 max-md:w-8 max-md:h-8" />
+                <label htmlFor="otpCode">
+                    <ShieldCheck className="w-10 h-10 text-brown-1 max-md:w-8 max-md:h-8" />
                 </label>
                 <input
-                    {...register("email", {
-                        required: "Email is required",
-                        validate: (value) => {
-                            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                            if (regex.test(value)) {
-                                return true
-                            } else return "Invalid email"
-                        },
+                    {...register("otpCode", {
+                        required: "OTP Code is required",
                     })}
                     type="text"
-                    name="email"
-                    id="email"
-                    placeholder="Enter your email"
+                    name="otpCode"
+                    id="otpCode"
+                    placeholder="Enter OTP"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
                     TransitionComponent={Zoom}
-                    title={<div className="text-red-500 p-0">{errors.email?.message}</div>}
+                    title={<div className="text-red-500 p-0">{errors.otpCode?.message}</div>}
                     placement="top"
                 >
                     <CircleAlert
-                        className={`text-red-500 w-5 h-5 ${!errors.email && "invisible"}`}
+                        className={`text-red-500 w-5 h-5 ${!errors.otpCode && "invisible"}`}
                     />
                 </Tooltip>
+            </div>
+            <div className="flex items-center gap-3">
+                You haven't received the OTP yet?
+                <span className="underline cursor-pointer hover:opacity-50">Click here</span>
             </div>
             <div className="flex items-cente justify-center">
                 <Button
@@ -119,7 +115,7 @@ const FormRecoveryPassword = () => {
                         <Loader2 className="w-9 h-9 animate-spin" />
                     ) : (
                         <>
-                            Send OTP
+                            Verify
                             <ArrowRight />
                         </>
                     )}
@@ -146,4 +142,4 @@ const FormRecoveryPassword = () => {
     )
 }
 
-export default FormRecoveryPassword
+export default FormVerifyOTPRecovery

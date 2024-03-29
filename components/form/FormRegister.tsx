@@ -158,7 +158,7 @@ const FormRegister = () => {
                         required: "Password is required",
                         validate: (value: string) => {
                             if (value.trim().length < 6) {
-                                return "Username must be at least 6 characters"
+                                return "Password must be at least 6 characters"
                             }
                         },
                     })}
