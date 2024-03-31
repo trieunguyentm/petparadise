@@ -43,6 +43,9 @@ export async function middleware(request: NextRequest) {
         if (verifyRoute.includes(url)) {
             const cookieName = url.substring(1)
             const cookieValue = request.cookies.get(cookieName)?.value
+            if (!cookieValue) {
+                return NextResponse.redirect(new URL("/login", request.url))
+            }
             const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify`, {
                 method: "POST",
                 headers: {
@@ -56,7 +59,9 @@ export async function middleware(request: NextRequest) {
             })
             const data = await res.json()
             if (!data.verify) {
-                return NextResponse.redirect(new URL("/login", request.url))
+                const response = NextResponse.redirect(new URL("/login", request.url))
+                response.cookies.set(cookieName, "", { expires: 0 })
+                return response
             } else {
                 return NextResponse.next()
             }
@@ -67,7 +72,11 @@ export async function middleware(request: NextRequest) {
     }
     if (!authRoute.includes(url) && !auth) {
         // Quay về login
-        return NextResponse.redirect(new URL("/login", request.url))
+        const response = NextResponse.redirect(new URL("/login", request.url))
+        response.cookies.set("refresh-token-id", "", {
+            expires: 0,
+        })
+        return response
     }
     if (!authRoute.includes(url) && auth) {
         return NextResponse.next()
