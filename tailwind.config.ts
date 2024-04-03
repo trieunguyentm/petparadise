@@ -58,6 +58,7 @@ const config = {
                 "brown-1": "#654321",
                 "yellow-1": "#FFF8E7",
                 "pink-1": "#F3E0D6",
+                "blue-1": "#22335F",
             },
             borderRadius: {
                 lg: "var(--radius)",

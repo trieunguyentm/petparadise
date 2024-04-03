@@ -5,7 +5,7 @@ import MenuLeft from "./menu-left"
 
 const LeftSideBar = () => {
     return (
-        <div className="w-1/5 border h-screen flex flex-col p-1">
+        <div className="w-1/5 border-x border-brown-1 h-screen flex flex-col p-1">
             <div className="flex flex-row items-center justify-center border-b-2 border-brown-1 pb-5">
                 <Link href={"/"} className="flex items-center justify-center">
                     <Image src={"/assets/logo/logo.svg"} alt="Logo" width={50} height={50} />
