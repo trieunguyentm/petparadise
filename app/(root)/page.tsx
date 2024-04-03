@@ -1,5 +1,4 @@
 import PostFeed from "@/components/shared/post-feed"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Image from "next/image"
 import Link from "next/link"
 

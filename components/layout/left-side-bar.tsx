@@ -13,7 +13,10 @@ const LeftSideBar = () => {
                 </Link>
             </div>
             <MenuLeft />
-            <div className="flex flex-row py-3 items-center gap-3 border-b-2 border-brown-1">
+            <Link
+                href={"/profile"}
+                className="flex flex-row py-3 items-center gap-3 border-b-2 border-brown-1 cursor-pointer"
+            >
                 <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                     <AvatarFallback>TM</AvatarFallback>
@@ -22,7 +25,7 @@ const LeftSideBar = () => {
                     <div className="text-xl font-medium">Manage Account</div>
                     <div className="text-sm">@trieunguyentm</div>
                 </div>
-            </div>
+            </Link>
             <div className="p-1 my-auto flex flex-row gap-2 items-center text-brown-1 hover:bg-red-100 rounded-xl cursor-pointer">
                 <Image src={"/assets/images/log-out.svg"} alt="log-out" width={40} height={40} />
                 <div className="font-medium text-base">Log out</div>
