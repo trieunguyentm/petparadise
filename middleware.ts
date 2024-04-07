@@ -13,9 +13,9 @@ const authRoute = [
 const verifyRoute = ["/verify-otp", "/verify-otp-recovery", "/confirm-password"]
 
 export async function middleware(request: NextRequest) {
-    /** Set auth */
+    // Set auth
     let auth: boolean = false
-    let cookie = request.cookies.get("refresh-token-id")
+    let cookie = request.cookies.get("t")
     if (!cookie) {
         auth = false
     } else {
@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `refresh-token-id=${cookie.value}`,
+                Cookie: `t=${cookie.value}`,
             },
             credentials: "include",
         })
@@ -73,7 +73,7 @@ export async function middleware(request: NextRequest) {
     if (!authRoute.includes(url) && !auth) {
         // Quay về login
         const response = NextResponse.redirect(new URL("/login", request.url))
-        response.cookies.set("refresh-token-id", "", {
+        response.cookies.set("t", "", {
             expires: 0,
         })
         return response
