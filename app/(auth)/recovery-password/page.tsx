@@ -1,4 +1,4 @@
-import FormRecoveryPassword from "@/components/form/FormRecoveryPassword"
+import FormRecoveryPassword from "@/components/form/form-recovery-password"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

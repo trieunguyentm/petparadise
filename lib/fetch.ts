@@ -1,3 +1,4 @@
+import { IUserDocument } from "@/types"
 import { cookies } from "next/headers"
 const cookieStore = cookies()
 
@@ -6,6 +7,7 @@ const delay = (delayInms: number) => {
 }
 
 export const fetchUser = async () => {
+    await delay(3000)
     try {
         const t = cookieStore.get("t")
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {
@@ -17,12 +19,13 @@ export const fetchUser = async () => {
             credentials: "include",
         })
         const data = await res.json()
-        console.log(data)
-        return {
-            user: data,
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IUserDocument
         }
     } catch (error) {
         console.log(error)
-        // throw new Error("Failed to fetch user info")
+        throw new Error("Failed to fetch user info")
     }
 }

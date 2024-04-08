@@ -1,4 +1,4 @@
-import FormRegister from "@/components/form/FormRegister"
+import FormRegister from "@/components/form/form-register"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

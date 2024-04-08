@@ -1,5 +1,7 @@
 import ChangePassword from "@/components/shared/change-password"
-import Image from "next/image"
+import UserInfo from "@/components/shared/user-info"
+import UserInfoSkeleton from "@/components/skeleton/user-info-skeleton"
+import { Suspense } from "react"
 
 export const metadata = {
     title: "Profile",
@@ -15,49 +17,9 @@ const Profile = () => {
                         <div className="font-semibold text-3xl">Manage Account</div>
                         <div>Manage your account information</div>
                     </div>
-                    <div className="flex flex-col">
-                        <div className="border-b py-2 border-brown-1 font-semibold text-2xl text-brown-1">
-                            Profile
-                        </div>
-                        <div className="flex justify-between items-center p-5">
-                            <Image
-                                src={"/assets/images/avatar.jpeg"}
-                                className="rounded-full"
-                                alt="@shadcn"
-                                width={140}
-                                height={140}
-                            />
-                            <div className="flex flex-col gap-3 text-brown-1">
-                                <div className="flex gap-2">
-                                    <Image
-                                        src={"/assets/images/circle-user-round.svg"}
-                                        alt="user-round"
-                                        width={25}
-                                        height={25}
-                                    />
-                                    <div>@trieunguyentm</div>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Image
-                                        src={"/assets/images/cake.svg"}
-                                        alt="cake"
-                                        width={25}
-                                        height={25}
-                                    />
-                                    <div>2002-11-24</div>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Image
-                                        src={"/assets/images/map-pin.svg"}
-                                        alt="map-pin"
-                                        width={25}
-                                        height={25}
-                                    />
-                                    <div>Ha Noi</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Suspense fallback={<UserInfoSkeleton />}>
+                        <UserInfo />
+                    </Suspense>
                     <ChangePassword />
                 </div>
             </div>

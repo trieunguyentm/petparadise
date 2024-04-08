@@ -1,4 +1,4 @@
-import FormVerifyOTPRecovery from "@/components/form/FormVerifyOTPRecovery"
+import FormVerifyOTPRecovery from "@/components/form/form-verify-opt-recovery"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

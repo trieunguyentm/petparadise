@@ -1,4 +1,4 @@
-import FormConfirmPassword from "@/components/form/FormConfirmPassword"
+import FormConfirmPassword from "@/components/form/form-confirm-password"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

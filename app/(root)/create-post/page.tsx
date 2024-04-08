@@ -1,4 +1,4 @@
-import FormCreatePost from "@/components/form/FormCreatePost"
+import FormCreatePost from "@/components/form/form-create-post"
 
 export const metadata = {
     title: "Create Post",

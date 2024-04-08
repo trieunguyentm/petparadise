@@ -11,6 +11,7 @@ const UserCard = () => {
                     width={50}
                     height={50}
                     className="rounded-full"
+                    priority
                 />
                 <div className="flex flex-col">
                     <div className="font-medium text-xl">trieunguyentm</div>

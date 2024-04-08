@@ -1,4 +1,4 @@
-import FormVerifyOTP from "@/components/form/FormVerifyOTP"
+import FormVerifyOTP from "@/components/form/form-verify-otp"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

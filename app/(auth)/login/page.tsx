@@ -1,4 +1,4 @@
-import FormLogin from "@/components/form/FormLogin"
+import FormLogin from "@/components/form/form-login"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
