@@ -1,3 +1,5 @@
+"use server"
+
 import { IUserDocument } from "@/types"
 import { cookies } from "next/headers"
 const cookieStore = cookies()
@@ -17,6 +19,7 @@ export const fetchUser = async () => {
                 Cookie: `${t?.name}=${t?.value}`,
             },
             credentials: "include",
+            cache: "no-store",
         })
         const data = await res.json()
         if (!res.ok) {

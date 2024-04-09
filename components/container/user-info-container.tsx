@@ -1,5 +1,3 @@
-import { Suspense } from "react"
-import UserInfoSkeleton from "../skeleton/user-info-skeleton"
 import UserInfo from "../shared/user-info"
 import ChangePassword from "../shared/change-password"
 import { fetchUser } from "@/lib/fetch"
