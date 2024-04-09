@@ -7,7 +7,7 @@ const delay = (delayInms: number) => {
 }
 
 export const fetchUser = async () => {
-    await delay(3000)
+    // await delay(3000)
     try {
         const t = cookieStore.get("t")
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {

@@ -1,5 +1,5 @@
-import ChangePassword from "@/components/shared/change-password"
-import UserInfo from "@/components/shared/user-info"
+import UserInfoContainer from "@/components/container/user-info-container"
+import ChangePasswordSkeleton from "@/components/skeleton/change-password-skeleton"
 import UserInfoSkeleton from "@/components/skeleton/user-info-skeleton"
 import { Suspense } from "react"
 
@@ -17,10 +17,16 @@ const Profile = () => {
                         <div className="font-semibold text-3xl">Manage Account</div>
                         <div>Manage your account information</div>
                     </div>
-                    <Suspense fallback={<UserInfoSkeleton />}>
-                        <UserInfo />
+                    <Suspense
+                        fallback={
+                            <>
+                                <UserInfoSkeleton />
+                                <ChangePasswordSkeleton />
+                            </>
+                        }
+                    >
+                        <UserInfoContainer />
                     </Suspense>
-                    <ChangePassword />
                 </div>
             </div>
         </div>

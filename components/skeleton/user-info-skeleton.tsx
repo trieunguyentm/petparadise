@@ -18,13 +18,13 @@ const UserInfoSkeleton = () => {
                     <div className="flex gap-2 items-center">
                         <Skeleton className="w-[25px] h-[25px] rounded-full" />
                         <div>
-                            <Skeleton className="w-[100px] h-4" />
+                            <Skeleton className="w-[120px] h-4" />
                         </div>
                     </div>
                     <div className="flex gap-2 items-center">
                         <Skeleton className="w-[25px] h-[25px] rounded-full" />
                         <div>
-                            <Skeleton className="w-[100px] h-4" />
+                            <Skeleton className="w-[110px] h-4" />
                         </div>
                     </div>
                 </div>

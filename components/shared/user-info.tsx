@@ -1,10 +1,7 @@
-import { fetchUser } from "@/lib/fetch"
 import { IUserDocument } from "@/types"
 import Image from "next/image"
 
-const UserInfo = async () => {
-    const user: IUserDocument | null = await fetchUser()
-
+const UserInfo = async ({ user }: { user: IUserDocument | null }) => {
     const formatDate = (date: any) => {
         if (!date) return "dd/mm/yyyy"
         return new Date(date).toLocaleDateString("en-US", {

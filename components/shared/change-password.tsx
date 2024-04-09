@@ -20,11 +20,10 @@ type FormValues = {
     confirmNewPassword: string
 }
 
-const ChangePassword = () => {
+const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
     const [openChangePassword, setOpenChangePassword] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
     const [loadingChangePassword, setLoadingChangePassword] = useState<boolean>(false)
-    const [user, setUser] = useState<IUserDocument | null>(null)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
     const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
@@ -82,39 +81,6 @@ const ChangePassword = () => {
             setLoadingChangePassword(false)
         }
     }
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            setLoading(true)
-            await delay(3000)
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                })
-                const data = await res.json()
-                if (!res.ok) {
-                    setOpenSnackbar(true)
-                    setTypeSnackbar("error")
-                    setContentSnackbar(data.message)
-                }
-                if (data.success) {
-                    setUser(data.data)
-                }
-            } catch (error) {
-                console.log(error)
-                setOpenSnackbar(true)
-                setTypeSnackbar("error")
-                setContentSnackbar("An error occurred, please try again")
-            } finally {
-                setLoading(true)
-            }
-        }
-        fetchUser()
-    }, [])
 
     return (
         <>
