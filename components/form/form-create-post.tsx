@@ -7,14 +7,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dr
 import { useForm } from "react-hook-form"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
+import { Loader2 } from "lucide-react"
+import SnackbarCustom from "../ui/snackbar"
 
 type FormValues = {
     photo: File[]
-    caption: string
+    content: string
     tag: string
 }
 
 const FormCreatePost = () => {
+    const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
     const [caption, setCaption] = useState("")
     const [previewImages, setPreviewImages] = useState<string[]>([])
     const {
@@ -22,8 +25,15 @@ const FormCreatePost = () => {
         setValue,
         watch,
         formState: { errors },
+        reset,
         handleSubmit,
     } = useForm<FormValues>()
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
     const addEmoji = (emoji: any) => {
         let emojiString = emoji.native
@@ -41,10 +51,55 @@ const FormCreatePost = () => {
     }
 
     const handleSubmitForm = async () => {
-        console.log(watch("photo"))
-        console.log(watch("caption"))
-        console.log(watch("tag"))
-        console.log(previewImages)
+        // Khởi tạo FormData
+        const formData = new FormData()
+        const files = watch("photo") // Lấy file từ React Hook Form's watch
+        if (files.length > 0) {
+            files.forEach((file) => {
+                formData.append("photos", file)
+            })
+        }
+
+        // Append các giá trị form khác
+        formData.append("content", caption)
+        formData.append("tags", watch("tag"))
+        try {
+            setLoadingCreate(true)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/post/create`, {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("success")
+                setContentSnackbar(data.message)
+                reset({
+                    photo: [],
+                    content: "",
+                    tag: "",
+                })
+                setCaption("") // Reset caption state
+                setPreviewImages([]) // Clear preview images
+                // Reload trang sau một khoảng thời gian ngắn để người dùng có thể nhìn thấy thông báo
+                // setTimeout(() => {
+                //     window.location.reload()
+                // }, 1500) // Đợi 1.5 giây trước khi reload
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingCreate(false)
+        }
     }
 
     return (
@@ -88,12 +143,12 @@ const FormCreatePost = () => {
                 </div>
             }
             <div className="flex flex-col gap-2 mt-4">
-                <label htmlFor="caption" className="text-brown-1 font-medium text-xl">
+                <label htmlFor="content" className="text-brown-1 font-medium text-xl">
                     Caption
                 </label>
                 <div className="relative">
                     <textarea
-                        {...register("caption", {
+                        {...register("content", {
                             required: "Caption is required",
                             validate: (value: string) => {
                                 if (value.trim().length === 0) {
@@ -101,8 +156,8 @@ const FormCreatePost = () => {
                                 }
                             },
                         })}
-                        name="caption"
-                        id="caption"
+                        name="content"
+                        id="content"
                         rows={5}
                         className="border px-3 pt-3 pb-8 w-full rounded-xl focus:outline-none border-brown-1"
                         value={caption}
@@ -131,9 +186,7 @@ const FormCreatePost = () => {
                 </label>
                 <div className="relative">
                     <textarea
-                        {...register("tag", {
-                            required: "Tag is required",
-                        })}
+                        {...register("tag")}
                         name="tag"
                         id="tag"
                         rows={1}
@@ -143,9 +196,15 @@ const FormCreatePost = () => {
             </div>
             <div className="flex justify-center mt-10 w-full">
                 <Button type="submit" className="w-full">
-                    Publish
+                    {loadingCreate ? <Loader2 className="w-8 h-8 animate-spin" /> : "Publish"}
                 </Button>
             </div>
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </form>
     )
 }

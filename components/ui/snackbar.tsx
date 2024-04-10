@@ -15,7 +15,7 @@ const SnackbarCustom = ({
         <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
             open={open}
-            autoHideDuration={6000}
+            autoHideDuration={3000}
             onClose={() => setOpen(false)}
         >
             <Alert
