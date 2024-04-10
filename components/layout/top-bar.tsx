@@ -18,12 +18,15 @@ const TopBar = () => {
                     className="absolute top-4 right-2"
                 />
             </div>
-            <div className="bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl flex items-center pl-4 pr-6 border border-brown-1">
-                <Link href={"/create-post"} className="flex gap-2 text-brown-1">
+            <Link
+                href={"/create-post"}
+                className="bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl flex items-center pl-4 pr-6 border border-brown-1"
+            >
+                <div className="flex gap-2 text-brown-1">
                     <Image src={"/assets/images/plus.svg"} alt="plus" width={25} height={25} />
                     Create Post
-                </Link>
-            </div>
+                </div>
+            </Link>
         </div>
     )
 }

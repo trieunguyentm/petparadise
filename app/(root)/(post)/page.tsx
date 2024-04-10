@@ -1,3 +1,4 @@
+import PostContainer from "@/components/container/post-container"
 import PostFeed from "@/components/shared/post-feed"
 
 export const metadata = {
@@ -9,10 +10,7 @@ const HomePage = () => {
     return (
         <>
             <div className="text-3xl font-semibold text-brown-1">Feed</div>
-            <PostFeed />
-            <PostFeed />
-            <PostFeed />
-            <PostFeed />
+            <PostContainer />
         </>
     )
 }

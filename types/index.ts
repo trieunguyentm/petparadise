@@ -16,3 +16,14 @@ export interface IUserDocument extends mongoose.Document {
     role: "user" | "admin"
     createdAt: Date
 }
+
+export interface IPostDocument extends mongoose.Document {
+    poster: IUserDocument
+    createdAt: Date
+    likes: mongoose.Schema.Types.ObjectId[]
+    saves: mongoose.Schema.Types.ObjectId[]
+    comments: mongoose.Schema.Types.ObjectId[]
+    images: string[]
+    content: string
+    tags: string[]
+}
