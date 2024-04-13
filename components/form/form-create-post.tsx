@@ -7,8 +7,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dr
 import { useForm } from "react-hook-form"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
-import { Loader2 } from "lucide-react"
+import { CircleAlert, Loader2 } from "lucide-react"
 import SnackbarCustom from "../ui/snackbar"
+import { Tooltip, Zoom } from "@mui/material"
 
 type FormValues = {
     photo: File[]
@@ -143,8 +144,24 @@ const FormCreatePost = () => {
                 </div>
             }
             <div className="flex flex-col gap-2 mt-4">
-                <label htmlFor="content" className="text-brown-1 font-medium text-xl">
-                    Caption
+                <label
+                    htmlFor="content"
+                    className="text-brown-1 font-medium text-xl flex items-center gap-1"
+                >
+                    Caption{" "}
+                    {errors.content && (
+                        <Tooltip
+                            TransitionComponent={Zoom}
+                            title={
+                                <div className="text-red-500 p-0">{errors.content?.message}</div>
+                            }
+                            placement="top"
+                        >
+                            <CircleAlert
+                                className={`text-red-500 w-5 h-5 ${!errors.content && "invisible"}`}
+                            />
+                        </Tooltip>
+                    )}
                 </label>
                 <div className="relative">
                     <textarea
