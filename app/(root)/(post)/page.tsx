@@ -1,5 +1,4 @@
 import PostContainer from "@/components/container/post-container"
-import PostFeed from "@/components/shared/post-feed"
 
 export const metadata = {
     title: "Home Page",

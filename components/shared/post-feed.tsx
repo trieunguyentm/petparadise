@@ -12,11 +12,16 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
-    const [isLiked, setIsLiked] = useState<boolean>(user.likedPosts.includes(post._id))
+    const [isLiked, setIsLiked] = useState<boolean>(
+        user.likedPosts.some((likePost) => likePost._id === post._id),
+    )
     const [numberLike, setNumberLike] = useState<number>(post.likes.length)
-    const [isSaved, setIsSaved] = useState<boolean>(user.savedPosts.includes(post._id))
+    const [isSaved, setIsSaved] = useState<boolean>(
+        user.savedPosts.some((savedPost) => savedPost._id === post._id),
+    )
     const [numberSave, setNumberSave] = useState<number>(post.saves.length)
 
     const handleClickLike = async () => {
@@ -86,12 +91,14 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
     return (
         <div className="flex w-full flex-col">
             <div className="w-full rounded-md p-3 bg-pink-1">
-                <div className="bg-white w-full rounded-t-md p-3">
+                <div className="bg-white w-full rounded-t-md p-3 border-b">
                     <div className="flex flex-row justify-between items-center pb-4">
                         <div className="flex items-center gap-3">
                             <Avatar>
                                 <AvatarImage src={post.poster.profileImage} alt="@avatar" />
-                                <AvatarFallback>@@</AvatarFallback>
+                                <AvatarFallback>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">
                                 <div className="text-lg font-medium">{post.poster.username}</div>
@@ -116,7 +123,7 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
                 </div>
                 {post.images.length > 0 && (
                     <Swiper
-                        className="bg-white border-y"
+                        className="bg-white"
                         pagination={true}
                         // navigation={true}
                         modules={[Pagination]}

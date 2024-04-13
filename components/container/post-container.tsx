@@ -1,6 +1,6 @@
 import { fetchPost, fetchUser } from "@/lib/fetch"
-import PostFeed from "../shared/post-feed"
 import { redirect } from "next/navigation"
+import ListPost from "../shared/list-post"
 
 const PostContainer = async () => {
     const [user, posts] = await Promise.all([fetchUser(), fetchPost()])
@@ -11,9 +11,13 @@ const PostContainer = async () => {
 
     return (
         <>
-            {posts?.map((post) => {
-                return <PostFeed key={post._id} post={post} user={user} />
-            })}
+            {posts === null ? (
+                <div className="w-full h-full flex items-center justify-center">
+                    There are currently no posts
+                </div>
+            ) : (
+                <ListPost posts={posts} user={user} />
+            )}
         </>
     )
 }
