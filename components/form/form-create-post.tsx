@@ -182,12 +182,12 @@ const FormCreatePost = () => {
                     />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <div className="absolute bottom-2 right-1 cursor-pointer">
+                            <div className="absolute bottom-3 right-2 cursor-pointer">
                                 <Image
                                     src={"/assets/images/smile-plus.svg"}
                                     alt="smile-plus"
-                                    width={20}
-                                    height={20}
+                                    width={25}
+                                    height={25}
                                 />
                             </div>
                         </DropdownMenuTrigger>

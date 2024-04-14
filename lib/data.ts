@@ -46,3 +46,6 @@ export const menuLeftSideBar: MenuItem[] = [
         link: "/message",
     },
 ]
+
+export const POST_PER_PAGE = 10
+export const USER_PER_PAGE = 20

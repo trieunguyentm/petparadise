@@ -5,6 +5,7 @@ import { useInView } from "react-intersection-observer"
 import React, { useCallback, useEffect, useState } from "react"
 import PostFeed from "./post-feed"
 import SnackbarCustom from "../ui/snackbar"
+import { POST_PER_PAGE } from "@/lib/data"
 
 const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument }) => {
     const [listPost, setListPost] = useState<IPostDocument[]>(posts)
@@ -28,7 +29,9 @@ const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument
         async function loadMoreData() {
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/post?limit=${10}&offset=${page * 10}`,
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/post?limit=${POST_PER_PAGE}&offset=${
+                        page * POST_PER_PAGE
+                    }`,
                     {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
