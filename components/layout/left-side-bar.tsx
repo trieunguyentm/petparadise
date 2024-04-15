@@ -4,6 +4,7 @@ import MenuLeft from "./menu-left"
 import UserProfile from "../shared/user-profile"
 import { Suspense } from "react"
 import UserProfileSkeleton from "../skeleton/user-profile-skeleton"
+import LogoutComponent from "../shared/logout-component"
 
 const LeftSideBar = () => {
     return (
@@ -25,10 +26,7 @@ const LeftSideBar = () => {
                     <UserProfile />
                 </Suspense>
             </Link>
-            <div className="p-1 my-auto flex flex-row gap-2 items-center text-brown-1 hover:bg-red-100 rounded-xl cursor-pointer max-sm:justify-center">
-                <Image src={"/assets/images/log-out.svg"} alt="log-out" width={40} height={40} />
-                <div className="font-medium text-base max-sm:hidden">Log out</div>
-            </div>
+            <LogoutComponent />
         </div>
     )
 }
