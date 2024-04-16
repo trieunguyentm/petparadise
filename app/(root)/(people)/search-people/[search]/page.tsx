@@ -1,5 +1,5 @@
 import UserCard from "@/components/shared/user-card"
-import { fetchUser } from "@/lib/fetch"
+import { fetchSearchPeople, fetchUser } from "@/lib/fetch"
 import { IUserDocument } from "@/types"
 import { redirect } from "next/navigation"
 
@@ -18,20 +18,24 @@ const SearchPeople = async ({ params }: { params: { search: string } }) => {
         redirect("/")
     }
 
+    const searchedPeople = await fetchSearchPeople({ search: decodeURI(params.search) })
+    const listPeopleWithOutUser = searchedPeople?.filter((people) => people._id.toString() !== user._id.toString())
+
     return (
         <>
-            test
-            {/* {otherPeople === null ? (
-                <div className="w-full h-full flex items-center justify-center">
-                    There are no more users
-                </div>
-            ) : (
-                <div className="flex flex-col gap-8">
-                    {otherPeople.map((people: IUserDocument) => (
-                        <UserCard key={people._id} people={people} user={user} />
-                    ))}
-                </div>
-            )} */}
+            <div>
+                {!listPeopleWithOutUser || listPeopleWithOutUser.length === 0 ? (
+                    <div className="w-full h-full items-center justify-center flex">
+                        There are no user according to your search request
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-8">
+                        {listPeopleWithOutUser.map((people: IUserDocument) => (
+                            <UserCard key={people._id} people={people} user={user} />
+                        ))}
+                    </div>
+                )}
+            </div>
         </>
     )
 }

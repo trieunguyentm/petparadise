@@ -79,6 +79,32 @@ export const fetchSearchPost = async ({ search }: { search: string }) => {
     }
 }
 
+export const fetchSearchPeople = async ({ search }: { search: string }) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/search?query=${search}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IUserDocument[]
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch search")
+    }
+}
+
 export const fetchOtherUser = async () => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/other`, {
