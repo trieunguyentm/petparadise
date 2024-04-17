@@ -1,10 +1,13 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import data from "@emoji-mart/data"
+import Picker from "@emoji-mart/react"
 import { convertISOToFormat } from "@/lib/utils"
 import { IPostDocument, IUserDocument } from "@/types"
 import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation, Pagination } from "swiper/modules"
+import { Pagination } from "swiper/modules"
 import FavoriteIcon from "@mui/icons-material/Favorite"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import Image from "next/image"
@@ -14,10 +17,23 @@ import "swiper/css/pagination"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
+import CommentComponent from "./comment"
 
-const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
+type FormValues = {
+    comment: string
+}
+
+const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
     const router = useRouter()
-    console.log(post)
+    const {
+        register,
+        setValue,
+        watch,
+        formState: { errors },
+        reset,
+        handleSubmit,
+    } = useForm<FormValues>()
     const [isLiked, setIsLiked] = useState<boolean>(
         user.likedPosts.some((likePost) => likePost._id === post._id),
     )
@@ -26,6 +42,12 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
         user.savedPosts.some((savedPost) => savedPost._id === post._id),
     )
     const [numberSave, setNumberSave] = useState<number>(post.saves.length)
+    const [comment, setComment] = useState<string>("")
+
+    const addEmoji = (emoji: any) => {
+        let emojiString = emoji.native
+        setComment(comment + emojiString)
+    }
 
     const handleClickLike = async () => {
         /** Thay đổi tạm thời */
@@ -96,6 +118,7 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
     return (
         <div className="flex w-full flex-col">
             <div className="w-full rounded-md p-3 bg-pink-1">
+                {/* CAPTION */}
                 <div className="bg-white w-full rounded-t-md p-3 border-b">
                     <div className="flex flex-row justify-between items-center pb-4">
                         <div className="flex items-center gap-3">
@@ -126,6 +149,7 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
                         {post.tags.map((tag) => `#${tag}`).join(" ")}
                     </div>
                 </div>
+                {/* IMAGE */}
                 {post.images.length > 0 && (
                     <Swiper
                         className="bg-white"
@@ -148,7 +172,7 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
                     </Swiper>
                 )}
                 {/* TƯƠNG TÁC */}
-                <div className="bg-white w-full rounded-b-md p-3 flex justify-between border-y">
+                <div className="bg-white w-full p-3 flex justify-between border-y">
                     {/* LIKE */}
                     <div
                         className="flex items-center gap-1 cursor-pointer hover:opacity-30"
@@ -201,9 +225,68 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
                         <div className="font-normal text-brown-1">{numberSave}</div>
                     </div>
                 </div>
+                {/* INPUT COMMENT */}
+                <form className="bg-white w-full p-3 border-y flex gap-4">
+                    <Avatar>
+                        <AvatarImage src={user.profileImage} alt="@avatar" />
+                        <AvatarFallback>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="border flex flex-1 items-center relative rounded-lg p-1">
+                        <textarea
+                            {...register("comment", {
+                                required: "Comment is required",
+                            })}
+                            placeholder="Write a comment..."
+                            id="comment"
+                            name="comment"
+                            rows={2}
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            className="focus:outline-none w-full pl-3 py-1 pr-14"
+                        />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <div className="absolute bottom-1 right-2 cursor-pointer">
+                                    <Image
+                                        src={"/assets/images/smile-plus.svg"}
+                                        alt="smile-plus"
+                                        width={20}
+                                        height={20}
+                                    />
+                                </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <Picker data={data} onEmojiSelect={addEmoji} />
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                    <div className="cursor-pointer">
+                        <Image
+                            src={"/assets/images/send-horizontal.svg"}
+                            alt="send"
+                            width={20}
+                            height={20}
+                            className="hover:opacity-50"
+                        />
+                    </div>
+                </form>
+                {/* LIST COMMENT */}
+                <div className="bg-white w-full p-3 border-y flex flex-col gap-4 rounded-b-md">
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                    <CommentComponent post={post} />
+                </div>
             </div>
         </div>
     )
 }
 
-export default PostFeed
+export default PostFeedDetail
