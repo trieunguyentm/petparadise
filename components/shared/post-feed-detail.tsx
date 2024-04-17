@@ -19,6 +19,7 @@ import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import CommentComponent from "./comment"
+import { Button } from "../ui/button"
 
 type FormValues = {
     comment: string
@@ -113,6 +114,13 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
             if (isSaved) setNumberSave((prev) => prev + 1)
             else setNumberSave((prev) => prev - 1)
         }
+    }
+
+    const handleSubmitForm = async () => {
+        alert("Cliked")
+        console.log(watch("comment"))
+        console.log(post)
+        console.log(user)
     }
 
     return (
@@ -226,7 +234,10 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                     </div>
                 </div>
                 {/* INPUT COMMENT */}
-                <form className="bg-white w-full p-3 border-y flex gap-4">
+                <form
+                    onSubmit={handleSubmit(handleSubmitForm)}
+                    className="bg-white w-full p-3 border-y flex gap-4"
+                >
                     <Avatar>
                         <AvatarImage src={user.profileImage} alt="@avatar" />
                         <AvatarFallback>
@@ -262,14 +273,20 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <div className="cursor-pointer">
-                        <Image
-                            src={"/assets/images/send-horizontal.svg"}
-                            alt="send"
-                            width={20}
-                            height={20}
-                            className="hover:opacity-50"
-                        />
+                    <div className="inline-block p-0">
+                        <Button
+                            type="submit"
+                            variant={"ghost"}
+                            className="p-0 hover:bg-transparent"
+                        >
+                            <Image
+                                src={"/assets/images/send-horizontal.svg"}
+                                alt="send"
+                                width={20}
+                                height={20}
+                                className="hover:opacity-50"
+                            />
+                        </Button>
                     </div>
                 </form>
                 {/* LIST COMMENT */}

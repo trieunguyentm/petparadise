@@ -54,7 +54,6 @@ const FormConfirmPassword = () => {
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)
             }
-            console.log(data)
             if (data.success) {
                 // Lưu thông báo vào localStorage
                 localStorage.setItem(

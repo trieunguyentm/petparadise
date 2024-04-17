@@ -66,7 +66,6 @@ const FormLogin = () => {
                 }),
             })
             const data = await res.json()
-            console.log(data)
             if (!res.ok) {
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")

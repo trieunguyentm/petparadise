@@ -67,7 +67,6 @@ const FormRegister = () => {
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)
             }
-            console.log(data)
             if (data.success) {
                 router.push("/verify-otp")
             }

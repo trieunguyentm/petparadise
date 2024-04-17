@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation"
 
 const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
     const router = useRouter()
-    console.log(post)
     const [isLiked, setIsLiked] = useState<boolean>(
         user.likedPosts.some((likePost) => likePost._id === post._id),
     )
