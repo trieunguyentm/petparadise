@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dr
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { convertISOToFormat } from "@/lib/utils"
-import { IPostDocument, IUserDocument } from "@/types"
+import { ICommentDocument, IPostDocument, IUserDocument } from "@/types"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Pagination } from "swiper/modules"
 import FavoriteIcon from "@mui/icons-material/Favorite"
@@ -20,13 +20,16 @@ import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import CommentComponent from "./comment"
 import { Button } from "../ui/button"
+import SnackbarCustom from "../ui/snackbar"
 
 type FormValues = {
     comment: string
+    photo?: File | null
 }
 
 const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
     const router = useRouter()
+    /** React Hook Form */
     const {
         register,
         setValue,
@@ -35,6 +38,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
         reset,
         handleSubmit,
     } = useForm<FormValues>()
+    /** Like Comment Save */
     const [isLiked, setIsLiked] = useState<boolean>(
         user.likedPosts.some((likePost) => likePost._id === post._id),
     )
@@ -43,7 +47,19 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
         user.savedPosts.some((savedPost) => savedPost._id === post._id),
     )
     const [numberSave, setNumberSave] = useState<number>(post.saves.length)
+    /** Input Comment and URL Image */
     const [comment, setComment] = useState<string>("")
+    const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null)
+    /** Loading */
+    const [loadingComment, setLoadingComment] = useState<boolean>(false)
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
+    /** Set list comment */
+    const [comments, setComments] = useState<ICommentDocument[]>(post.comments)
 
     const addEmoji = (emoji: any) => {
         let emojiString = emoji.native
@@ -117,10 +133,65 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
     }
 
     const handleSubmitForm = async () => {
-        alert("Cliked")
-        console.log(watch("comment"))
-        console.log(post)
-        console.log(user)
+        const commentContent = watch("comment")
+        const photo = watch("photo")
+        const postId = post._id
+
+        // Initialize FormData to contain the data to send
+        const formData = new FormData()
+        formData.append("content", commentContent)
+        formData.append("postId", postId)
+
+        // Only add photo if a file is selected and it is not null/undefined
+        if (photo instanceof File) {
+            formData.append("photo", photo)
+        }
+
+        setLoadingComment(true)
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/post/addComment`, {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                reset({
+                    comment: "",
+                    photo: null,
+                })
+                handleDeleteImage()
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingComment(false)
+        }
+    }
+
+    const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0]
+            setValue("photo", file, { shouldValidate: true })
+            // Tạo URL tạm thời cho bản xem trước và cập nhật state
+            const imageUrl = URL.createObjectURL(file)
+            setPreviewImageUrl(imageUrl)
+        }
+    }
+
+    const handleDeleteImage = () => {
+        setValue("photo", null)
+        setPreviewImageUrl(null)
+        // Make sure to revoke the object URL to release memory
+        if (previewImageUrl) URL.revokeObjectURL(previewImageUrl)
     }
 
     return (
@@ -180,7 +251,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                     </Swiper>
                 )}
                 {/* TƯƠNG TÁC */}
-                <div className="bg-white w-full p-3 flex justify-between border-y">
+                <div className="bg-white w-full p-3 flex justify-between border-b">
                     {/* LIKE */}
                     <div
                         className="flex items-center gap-1 cursor-pointer hover:opacity-30"
@@ -234,9 +305,29 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                     </div>
                 </div>
                 {/* INPUT COMMENT */}
+                {previewImageUrl && (
+                    <div className="bg-white w-full flex justify-center py-2">
+                        <div className="relative">
+                            <Image
+                                src={previewImageUrl}
+                                alt="Preview"
+                                width={140}
+                                height={140}
+                                priority
+                            />
+                            <Button
+                                variant={"ghost"}
+                                onClick={handleDeleteImage}
+                                className="p-0 w-4 h-4 text-sm absolute top-0 -right-2 text-red-600 bg-slate-400 rounded-full"
+                            >
+                                X
+                            </Button>
+                        </div>
+                    </div>
+                )}
                 <form
                     onSubmit={handleSubmit(handleSubmitForm)}
-                    className="bg-white w-full p-3 border-y flex gap-4"
+                    className="bg-white w-full p-3 border-b flex gap-4"
                 >
                     <Avatar>
                         <AvatarImage src={user.profileImage} alt="@avatar" />
@@ -257,21 +348,42 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             onChange={(e) => setComment(e.target.value)}
                             className="focus:outline-none w-full pl-3 py-1 pr-14"
                         />
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <div className="absolute bottom-1 right-2 cursor-pointer">
+                        <div className="absolute bottom-1 right-2 cursor-pointer flex flex-row gap-1">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <div>
+                                        <Image
+                                            src={"/assets/images/smile-plus.svg"}
+                                            alt="smile-plus"
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <Picker data={data} onEmojiSelect={addEmoji} />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <div>
+                                <label htmlFor="photo" className="cursor-pointer">
                                     <Image
-                                        src={"/assets/images/smile-plus.svg"}
+                                        src={"/assets/images/camera.svg"}
                                         alt="smile-plus"
                                         width={20}
                                         height={20}
                                     />
-                                </div>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <Picker data={data} onEmojiSelect={addEmoji} />
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                                </label>
+                                <input
+                                    type="file"
+                                    {...register("photo")}
+                                    id="photo"
+                                    name="photo"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={onFileChange}
+                                />
+                            </div>
+                        </div>
                     </div>
                     <div className="inline-block p-0">
                         <Button
@@ -279,29 +391,33 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             variant={"ghost"}
                             className="p-0 hover:bg-transparent"
                         >
-                            <Image
-                                src={"/assets/images/send-horizontal.svg"}
-                                alt="send"
-                                width={20}
-                                height={20}
-                                className="hover:opacity-50"
-                            />
+                            {loadingComment ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <Image
+                                    src={"/assets/images/send-horizontal.svg"}
+                                    alt="send"
+                                    width={20}
+                                    height={20}
+                                    className="hover:opacity-50"
+                                />
+                            )}
                         </Button>
                     </div>
                 </form>
                 {/* LIST COMMENT */}
-                <div className="bg-white w-full p-3 border-y flex flex-col gap-4 rounded-b-md">
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
-                    <CommentComponent post={post} />
+                <div className="bg-white w-full p-3 border-b flex flex-col gap-4 rounded-b-md">
+                    {comments.map((comment) => (
+                        <CommentComponent key={comment._id} comment={comment} />
+                    ))}
                 </div>
             </div>
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </div>
     )
 }

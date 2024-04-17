@@ -22,8 +22,17 @@ export interface IPostDocument extends mongoose.Document {
     createdAt: Date
     likes: mongoose.Schema.Types.ObjectId[]
     saves: mongoose.Schema.Types.ObjectId[]
-    comments: mongoose.Schema.Types.ObjectId[]
+    comments: ICommentDocument[]
     images: string[]
     content: string
     tags: string[]
+}
+
+export interface ICommentDocument extends mongoose.Document {
+    poster: IUserDocument
+    createdAt: Date
+    likes: IUserDocument[]
+    post: IPostDocument
+    content: string
+    image: string
 }
