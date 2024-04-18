@@ -16,7 +16,6 @@ import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import CommentComponent from "./comment"
 import { Button } from "../ui/button"
@@ -29,7 +28,6 @@ type FormValues = {
 }
 
 const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
-    const router = useRouter()
     /** React Hook Form */
     const {
         register,

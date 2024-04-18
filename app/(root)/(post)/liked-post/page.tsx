@@ -1,4 +1,4 @@
-import PostFeed from "@/components/shared/post-feed"
+import PostFeedDetail from "@/components/shared/post-feed-detail"
 import { fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"
 
@@ -19,7 +19,7 @@ const LikedPost = async () => {
             <div className="text-3xl font-semibold text-brown-1">Liked Post</div>
             {user.likedPosts.reverse().map((post) => (
                 <div key={post._id}>
-                    <PostFeed user={user} post={post} />
+                    <PostFeedDetail user={user} post={post} />
                 </div>
             ))}
         </>
