@@ -14,6 +14,7 @@ import "swiper/css/pagination"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
     const router = useRouter()
@@ -167,9 +168,10 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
                         <div className="font-normal text-brown-1">{numberLike}</div>
                     </div>
                     {/* COMMENT */}
-                    <div
+                    <Link
                         className="flex items-center gap-1 cursor-pointer hover:opacity-30"
-                        onClick={handleClickComment}
+                        // onClick={handleClickComment}
+                        href={`/post/${post._id}`}
                     >
                         <Image
                             src={"/assets/images/message-circle.svg"}
@@ -178,7 +180,7 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
                             width={20}
                         />
                         <div className="font-normal text-brown-1">{post.comments.length}</div>
-                    </div>
+                    </Link>
                     {/* SAVE */}
                     <div
                         className="flex items-center gap-1 cursor-pointer hover:opacity-30"

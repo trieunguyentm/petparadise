@@ -61,6 +61,8 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
     /** Set list comment */
     const [comments, setComments] = useState<ICommentDocument[]>(post.comments)
+    /** Show comment */
+    const [showComment, setShowComment] = useState<boolean>(false)
 
     const addEmoji = (emoji: any) => {
         let emojiString = emoji.native
@@ -100,7 +102,8 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
     }
 
     const handleClickComment = () => {
-        router.push(`/post/${post._id}`)
+        // router.push(`/post/${post._id}`)
+        setShowComment((prev) => !prev)
     }
 
     const handleClickSave = async () => {
@@ -249,7 +252,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                 {/* IMAGE */}
                 {post.images.length > 0 && (
                     <Swiper
-                        className="bg-white"
+                        className="bg-white border-b"
                         pagination={true}
                         // navigation={true}
                         modules={[Pagination]}
@@ -269,7 +272,11 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                     </Swiper>
                 )}
                 {/* TƯƠNG TÁC */}
-                <div className="bg-white w-full p-3 flex justify-between border-b">
+                <div
+                    className={`bg-white w-full p-3 flex justify-between border-b ${
+                        !showComment && "rounded-b-md"
+                    }`}
+                >
                     {/* LIKE */}
                     <div
                         className="flex items-center gap-1 cursor-pointer hover:opacity-30"
@@ -322,113 +329,122 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                         <div className="font-normal text-brown-1">{numberSave}</div>
                     </div>
                 </div>
-                {/* INPUT COMMENT */}
-                {previewImageUrl && (
-                    <div className="bg-white w-full flex justify-center py-2">
-                        <div className="relative">
-                            <Image
-                                src={previewImageUrl}
-                                alt="Preview"
-                                width={140}
-                                height={140}
-                                priority
-                            />
-                            <Button
-                                variant={"ghost"}
-                                onClick={handleDeleteImage}
-                                className="p-0 w-4 h-4 text-sm absolute top-0 -right-2 text-red-600 bg-slate-400 rounded-full"
-                            >
-                                X
-                            </Button>
-                        </div>
-                    </div>
-                )}
-                <form
-                    onSubmit={handleSubmit(handleSubmitForm)}
-                    className="bg-white w-full p-3 border-b flex gap-4"
-                >
-                    <Avatar>
-                        <AvatarImage src={user.profileImage} alt="@avatar" />
-                        <AvatarFallback>
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className="border flex flex-1 items-center relative rounded-lg p-1">
-                        <textarea
-                            {...register("comment", {
-                                required: "Comment is required",
-                            })}
-                            placeholder="Write a comment..."
-                            id="comment"
-                            name="comment"
-                            rows={2}
-                            // value={comment}
-                            // onChange={(e) => setComment(e.target.value)}
-                            className="focus:outline-none w-full pl-3 py-1 pr-14"
-                        />
-                        <div className="absolute bottom-1 right-2 cursor-pointer flex flex-row gap-1">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
+                {/* INPUT AND LIST COMMENT */}
+                {showComment && (
+                    <>
+                        {/* INPUT COMMENT */}
+                        {previewImageUrl && (
+                            <div className="bg-white w-full flex justify-center py-2">
+                                <div className="relative">
+                                    <Image
+                                        src={previewImageUrl}
+                                        alt="Preview"
+                                        width={140}
+                                        height={140}
+                                        priority
+                                    />
+                                    <Button
+                                        variant={"ghost"}
+                                        onClick={handleDeleteImage}
+                                        className="p-0 w-4 h-4 text-sm absolute top-0 -right-2 text-red-600 bg-slate-400 rounded-full"
+                                    >
+                                        X
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                        <form
+                            onSubmit={handleSubmit(handleSubmitForm)}
+                            className={`bg-white w-full p-3 border-b flex gap-4 ${
+                                comments.length === 0 && "rounded-b-md"
+                            }`}
+                        >
+                            <Avatar>
+                                <AvatarImage src={user.profileImage} alt="@avatar" />
+                                <AvatarFallback>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className="border flex flex-1 items-center relative rounded-lg p-1">
+                                <textarea
+                                    {...register("comment", {
+                                        required: "Comment is required",
+                                    })}
+                                    placeholder="Write a comment..."
+                                    id="comment"
+                                    name="comment"
+                                    rows={2}
+                                    // value={comment}
+                                    // onChange={(e) => setComment(e.target.value)}
+                                    className="focus:outline-none w-full pl-3 py-1 pr-14"
+                                />
+                                <div className="absolute bottom-1 right-2 cursor-pointer flex flex-row gap-1">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <div>
+                                                <Image
+                                                    src={"/assets/images/smile-plus.svg"}
+                                                    alt="smile-plus"
+                                                    width={20}
+                                                    height={20}
+                                                />
+                                            </div>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <Picker data={data} onEmojiSelect={addEmoji} />
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                     <div>
-                                        <Image
-                                            src={"/assets/images/smile-plus.svg"}
-                                            alt="smile-plus"
-                                            width={20}
-                                            height={20}
+                                        <label htmlFor="photo" className="cursor-pointer">
+                                            <Image
+                                                src={"/assets/images/camera.svg"}
+                                                alt="smile-plus"
+                                                width={20}
+                                                height={20}
+                                            />
+                                        </label>
+                                        <input
+                                            type="file"
+                                            {...register("photo")}
+                                            id="photo"
+                                            name="photo"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={onFileChange}
                                         />
                                     </div>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <Picker data={data} onEmojiSelect={addEmoji} />
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                            <div>
-                                <label htmlFor="photo" className="cursor-pointer">
-                                    <Image
-                                        src={"/assets/images/camera.svg"}
-                                        alt="smile-plus"
-                                        width={20}
-                                        height={20}
-                                    />
-                                </label>
-                                <input
-                                    type="file"
-                                    {...register("photo")}
-                                    id="photo"
-                                    name="photo"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={onFileChange}
-                                />
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="inline-block p-0">
-                        <Button
-                            type="submit"
-                            variant={"ghost"}
-                            className="p-0 hover:bg-transparent"
-                        >
-                            {loadingComment ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                            ) : (
-                                <Image
-                                    src={"/assets/images/send-horizontal.svg"}
-                                    alt="send"
-                                    width={20}
-                                    height={20}
-                                    className="hover:opacity-50"
-                                />
-                            )}
-                        </Button>
-                    </div>
-                </form>
-                {/* LIST COMMENT */}
-                <div className="bg-white w-full p-3 border-b flex flex-col gap-4 rounded-b-md">
-                    {comments.map((comment) => (
-                        <CommentComponent key={comment._id} comment={comment} />
-                    ))}
-                </div>
+                            <div className="inline-block p-0">
+                                <Button
+                                    type="submit"
+                                    variant={"ghost"}
+                                    className="p-0 hover:bg-transparent"
+                                >
+                                    {loadingComment ? (
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                    ) : (
+                                        <Image
+                                            src={"/assets/images/send-horizontal.svg"}
+                                            alt="send"
+                                            width={20}
+                                            height={20}
+                                            className="hover:opacity-50"
+                                        />
+                                    )}
+                                </Button>
+                            </div>
+                        </form>
+                        {/* LIST COMMENT */}
+                        {comments.length > 0 && (
+                            <div className="bg-white w-full p-3 border-b flex flex-col gap-4 rounded-b-md">
+                                {comments.map((comment) => (
+                                    <CommentComponent key={comment._id} comment={comment} />
+                                ))}
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
             <SnackbarCustom
                 open={openSnackbar}

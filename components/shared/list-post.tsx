@@ -3,9 +3,9 @@
 import { IPostDocument, IUserDocument } from "@/types"
 import { useInView } from "react-intersection-observer"
 import React, { useCallback, useEffect, useState } from "react"
-import PostFeed from "./post-feed"
 import SnackbarCustom from "../ui/snackbar"
 import { POST_PER_PAGE } from "@/lib/data"
+import PostFeedDetail from "./post-feed-detail"
 
 const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument }) => {
     const [listPost, setListPost] = useState<IPostDocument[]>(posts)
@@ -82,7 +82,8 @@ const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument
                     else indexRef = listPost.length - 3
                     return (
                         <div key={post._id} ref={index === indexRef ? ref : null}>
-                            <PostFeed post={post} user={user} />
+                            {/* <PostFeed post={post} user={user} /> */}
+                            <PostFeedDetail post={post} user={user} />
                         </div>
                     )
                 })}
