@@ -14,13 +14,14 @@ import Image from "next/image"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import CommentComponent from "./comment"
 import { Button } from "../ui/button"
 import SnackbarCustom from "../ui/snackbar"
+import { pusherClient } from "@/lib/pusher"
 
 type FormValues = {
     comment: string
@@ -47,8 +48,8 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
         user.savedPosts.some((savedPost) => savedPost._id === post._id),
     )
     const [numberSave, setNumberSave] = useState<number>(post.saves.length)
+    const [numberComment, setNumberComment] = useState<number>(post.comments.length)
     /** Input Comment and URL Image */
-    const [comment, setComment] = useState<string>("")
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null)
     /** Loading */
     const [loadingComment, setLoadingComment] = useState<boolean>(false)
@@ -63,7 +64,8 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
 
     const addEmoji = (emoji: any) => {
         let emojiString = emoji.native
-        setComment(comment + emojiString)
+        // setComment(comment + emojiString)
+        setValue("comment", watch("comment") + emojiString)
     }
 
     const handleClickLike = async () => {
@@ -194,6 +196,22 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
         if (previewImageUrl) URL.revokeObjectURL(previewImageUrl)
     }
 
+    const handleNewComment = (newComment: ICommentDocument) => {
+        setComments((prevComments) => [newComment, ...prevComments])
+        setNumberComment((prev) => prev + 1)
+    }
+
+    useEffect(() => {
+        const channel = pusherClient.subscribe(`post-${post._id}-comments`)
+        // Bind to the new-comment event and update the state
+        channel.bind("new-comment", handleNewComment)
+        // Unbind and unsubscribe when the component unmounts
+        return () => {
+            channel.unbind("new-comment", handleNewComment)
+            pusherClient.unsubscribe(`post-${post._id}-comments`)
+        }
+    }, [post._id])
+
     return (
         <div className="flex w-full flex-col">
             <div className="w-full rounded-md p-3 bg-pink-1">
@@ -281,7 +299,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             height={20}
                             width={20}
                         />
-                        <div className="font-normal text-brown-1">{post.comments.length}</div>
+                        <div className="font-normal text-brown-1">{numberComment}</div>
                     </div>
                     {/* SAVE */}
                     <div
@@ -344,8 +362,8 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             id="comment"
                             name="comment"
                             rows={2}
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
+                            // value={comment}
+                            // onChange={(e) => setComment(e.target.value)}
                             className="focus:outline-none w-full pl-3 py-1 pr-14"
                         />
                         <div className="absolute bottom-1 right-2 cursor-pointer flex flex-row gap-1">

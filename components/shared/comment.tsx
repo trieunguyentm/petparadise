@@ -9,7 +9,7 @@ const CommentComponent = ({ comment }: { comment: ICommentDocument }) => {
     return (
         <div className="flex flex-row gap-4">
             <Avatar>
-                <AvatarImage src={comment.poster.profileImage} alt="@avatar" />
+                <AvatarImage src={comment.poster?.profileImage} alt="@avatar" />
                 <AvatarFallback>
                     <Loader2 className="w-5 h-5 animate-spin" />
                 </AvatarFallback>
