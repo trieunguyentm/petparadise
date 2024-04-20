@@ -358,7 +358,10 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             }`}
                         >
                             <Avatar>
-                                <AvatarImage src={user.profileImage} alt="@avatar" />
+                                <AvatarImage
+                                    src={user.profileImage || "/assets/images/avatar.jpeg"}
+                                    alt="@avatar"
+                                />
                                 <AvatarFallback>
                                     <Loader2 className="w-5 h-5 animate-spin" />
                                 </AvatarFallback>

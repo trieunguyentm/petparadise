@@ -9,3 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function convertISOToFormat(dateInput: Date | string) {
     return moment(dateInput).format("DD/MM/YYYY HH:mm")
 }
+
+export function convertISOToFormatMessage(dateInput: Date | string) {
+    return moment(dateInput).format("HH:mm")
+}

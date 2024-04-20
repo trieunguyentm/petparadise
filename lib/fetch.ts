@@ -1,6 +1,6 @@
 "use server"
 
-import { IPostDocument, IUserDocument } from "@/types"
+import { IChatDocument, IPostDocument, IUserDocument } from "@/types"
 import { cookies } from "next/headers"
 
 const delay = (delayInms: number) => {
@@ -148,5 +148,28 @@ export const fetchDetailPost = async ({ postId }: { postId: string }) => {
     } catch (error) {
         console.log(error)
         throw new Error("Failed to fetch detail post")
+    }
+}
+
+export const fetchChatByUser = async () => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/chat`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+            },
+            credentials: "include",
+            cache: "no-store",
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IChatDocument[]
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch list conversation")
     }
 }

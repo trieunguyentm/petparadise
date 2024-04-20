@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { Schema } from "mongoose"
 
 export interface IUserDocument extends mongoose.Document {
     username: string
@@ -35,4 +35,14 @@ export interface ICommentDocument extends mongoose.Document {
     post: IPostDocument
     content: string
     image: string
+}
+
+export interface IChatDocument extends mongoose.Document {
+    members: IUserDocument[]
+    messages: Schema.Types.ObjectId[]
+    isGroup: Boolean
+    name: string
+    groupPhoto: string
+    createdAt: Date
+    lastMessageAt: Date
 }
