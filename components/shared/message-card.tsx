@@ -1,4 +1,5 @@
 import { convertISOToFormatMessage } from "@/lib/utils"
+import { format } from "date-fns"
 import { IChatDocument, IUserDocument } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
@@ -32,7 +33,7 @@ const MessageCard = ({ chat, user }: { chat: IChatDocument; user: IUserDocument 
                 <div className="text-sm font-medium">{displayName}</div>
                 <div className="line-clamp-1 text-xs flex justify-between w-full">
                     <div>{isGroup ? "Group Chat" : "Private Chat"}</div>
-                    <div>{convertISOToFormatMessage(chat.lastMessageAt)}</div>
+                    <div>{format(new Date(chat?.lastMessageAt), "p")}</div>
                 </div>
             </div>
         </Link>

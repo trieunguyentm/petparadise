@@ -173,3 +173,26 @@ export const fetchChatByUser = async () => {
         throw new Error("Failed to fetch list conversation")
     }
 }
+
+export const fetchDetailChat = async ({ chatId }: { chatId: string }) => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/chat/${chatId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+            },
+            credentials: "include",
+            cache: "no-store",
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IChatDocument
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch chat")
+    }
+}

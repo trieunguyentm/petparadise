@@ -39,10 +39,20 @@ export interface ICommentDocument extends mongoose.Document {
 
 export interface IChatDocument extends mongoose.Document {
     members: IUserDocument[]
-    messages: Schema.Types.ObjectId[]
+    messages: IMessageDocument[]
     isGroup: Boolean
     name: string
     groupPhoto: string
     createdAt: Date
+    lastMessage: string
     lastMessageAt: Date
+}
+
+export interface IMessageDocument extends mongoose.Document {
+    chat: IChatDocument
+    sender: IUserDocument
+    text: string
+    photo: string
+    createdAt: Date
+    seenBy: IUserDocument[]
 }
