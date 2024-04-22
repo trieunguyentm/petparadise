@@ -32,8 +32,9 @@ const MessageCard = ({ chat, user }: { chat: IChatDocument; user: IUserDocument 
             <div className="flex flex-col flex-1">
                 <div className="text-sm font-medium">{displayName}</div>
                 <div className="line-clamp-1 text-xs flex justify-between w-full">
-                    <div>{isGroup ? "Group Chat" : "Private Chat"}</div>
-                    <div>{format(new Date(chat?.lastMessageAt), "p")}</div>
+                    <div className="line-clamp-1">{chat.lastMessage}</div>
+
+                    <div className="line-clamp-1">{format(new Date(chat?.lastMessageAt), "p")}</div>
                 </div>
             </div>
         </Link>
