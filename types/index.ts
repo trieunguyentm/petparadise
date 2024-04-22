@@ -43,6 +43,7 @@ export interface IChatDocument extends mongoose.Document {
     isGroup: Boolean
     name: string
     groupPhoto: string
+    seenBy: IUserDocument[]
     createdAt: Date
     lastMessage: string
     lastMessageAt: Date

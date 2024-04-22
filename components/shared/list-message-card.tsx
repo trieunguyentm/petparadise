@@ -16,11 +16,20 @@ const ListMessageCard = ({ chats, user }: { chats: IChatDocument[]; user: IUserD
                 setListChat((allChats) => [newChat, ...allChats])
             }
 
+            const handleUpdateChat = (updatedChat: IChatDocument) => {
+                const tmpListChat = listChat.filter(
+                    (item) => item._id.toString() !== updatedChat._id.toString(),
+                )
+                setListChat([updatedChat, ...tmpListChat])
+            }
+
             pusherClient.bind("new-chat", handleNewChat)
+            pusherClient.bind("update-chat", handleUpdateChat)
 
             return () => {
                 pusherClient.unsubscribe(user._id.toString())
                 pusherClient.unbind("new-chat", handleNewChat)
+                pusherClient.unbind("update-chat", handleUpdateChat)
             }
         }
     }, [user])
