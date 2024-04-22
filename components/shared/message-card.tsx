@@ -1,4 +1,3 @@
-import { convertISOToFormatMessage } from "@/lib/utils"
 import { format } from "date-fns"
 import { IChatDocument, IUserDocument } from "@/types"
 import Image from "next/image"
@@ -6,6 +5,7 @@ import Link from "next/link"
 
 const MessageCard = ({ chat, user }: { chat: IChatDocument; user: IUserDocument }) => {
     const isGroup = chat.isGroup
+    let isSeen = chat.seenBy.includes(user._id)
 
     const defaultImage = "/assets/images/avatar.jpeg"
     let imageSrc = chat.groupPhoto || defaultImage
@@ -32,7 +32,13 @@ const MessageCard = ({ chat, user }: { chat: IChatDocument; user: IUserDocument 
             <div className="flex flex-col flex-1">
                 <div className="text-sm font-medium">{displayName}</div>
                 <div className="line-clamp-1 text-xs flex justify-between w-full">
-                    <div className="line-clamp-1">{chat.lastMessage}</div>
+                    <div
+                        className={`line-clamp-1 opacity-50 ${
+                            !isSeen && "font-medium text-brown-1 opacity-100"
+                        }`}
+                    >
+                        {chat.lastMessage}
+                    </div>
 
                     <div className="line-clamp-1">{format(new Date(chat?.lastMessageAt), "p")}</div>
                 </div>

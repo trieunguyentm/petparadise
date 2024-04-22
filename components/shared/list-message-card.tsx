@@ -17,19 +17,34 @@ const ListMessageCard = ({ chats, user }: { chats: IChatDocument[]; user: IUserD
             }
 
             const handleUpdateChat = (updatedChat: IChatDocument) => {
-                const tmpListChat = listChat.filter(
-                    (item) => item._id.toString() !== updatedChat._id.toString(),
-                )
-                setListChat([updatedChat, ...tmpListChat])
+                setListChat((prevListChat) => {
+                    const newListChat = prevListChat.filter(
+                        (item) => item._id.toString() !== updatedChat._id.toString(),
+                    )
+                    return [updatedChat, ...newListChat]
+                })
+            }
+
+            const handleSeenChat = (updatedChat: IChatDocument) => {
+                setListChat((prevListChat) => {
+                    const newListChat = prevListChat.map((chatItem) =>
+                        chatItem._id.toString() === updatedChat._id.toString()
+                            ? updatedChat
+                            : chatItem,
+                    )
+                    return newListChat
+                })
             }
 
             pusherClient.bind("new-chat", handleNewChat)
             pusherClient.bind("update-chat", handleUpdateChat)
+            pusherClient.bind("seen-chat", handleSeenChat)
 
             return () => {
                 pusherClient.unsubscribe(user._id.toString())
                 pusherClient.unbind("new-chat", handleNewChat)
                 pusherClient.unbind("update-chat", handleUpdateChat)
+                pusherClient.unbind("seen-chat", handleSeenChat)
             }
         }
     }, [user])

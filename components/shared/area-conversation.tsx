@@ -17,7 +17,6 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
     const handleNewMessage = async (newMessage: IMessageDocument) => {
-        console.log(newMessage)
         setListMessage((prevListMessage) => [...prevListMessage, newMessage])
     }
     /** Scrolling down to the bottom when having the new message */
@@ -68,6 +67,27 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
     }, [chatId])
 
     useEffect(() => {
+        const handleSeenChat = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/chat/${chatId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    console.log(res.text)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        handleSeenChat()
+    }, [chatId, listMessage])
+
+    useEffect(() => {
         bottomRef.current?.scrollIntoView({
             behavior: "smooth",
         })
@@ -79,7 +99,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                 <div className="flex flex-col gap-4 overflow-scroll py-8 w-full">
                     {listMessage.map((message) => {
                         return message.sender._id !== user._id ? (
-                            <div className="flex gap-3 items-start">
+                            <div key={message._id} className="flex gap-3 items-start">
                                 <Image
                                     src={
                                         message.sender.profileImage || "/assets/images/avatar.jpeg"
@@ -109,7 +129,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex gap-3 items-start justify-end">
+                            <div key={message._id} className="flex gap-3 items-start justify-end">
                                 <div className="flex flex-col gap-2 items-end">
                                     <p className="text-sm font-medium">
                                         {message.sender.username}&#160;&#183;&#160;
