@@ -6,6 +6,7 @@ import { IMessageDocument, IUserDocument } from "@/types"
 import { format } from "date-fns"
 import { pusherClient } from "@/lib/pusher"
 import AreaConversationSkeleton from "../skeleton/area-conversation-skeleton"
+import { useInView } from "react-intersection-observer"
 
 const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocument }) => {
     const [page, setPage] = useState<number>(0)
@@ -18,48 +19,63 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
     )
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
+    /** Infinite Scroll */
+    const { ref, inView } = useInView()
+    const [hasMore, setHasMore] = useState<boolean>(true)
+
     const handleNewMessage = async (newMessage: IMessageDocument) => {
         setListMessage((prevListMessage) => [...prevListMessage, newMessage])
     }
     /** Scrolling down to the bottom when having the new message */
     const bottomRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        async function loadMessage() {
+    async function loadMessage() {
+        /** Lần đầu loading với page = 0 thì setLoadingMessage tạo Skeleton */
+        if (page === 0) {
             setLoadingMessage(true)
-            try {
-                const res = await fetch(
-                    `${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                    }/api/chat/${chatId}/messages?limit=${MESSAGE_PER_PAGE}&offset=${
-                        page * MESSAGE_PER_PAGE
-                    }`,
-                    {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                    },
-                )
-                const data = await res.json()
-                if (!res.ok) {
-                    setOpenSnackbar(true)
-                    setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading message")
-                    return
-                }
-                const messages: IMessageDocument[] = data.data
-                setListMessage(messages.reverse())
-            } catch (error) {
-                console.error("Failed to fetch message: ", error)
+        }
+        try {
+            const res = await fetch(
+                `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/chat/${chatId}/messages?limit=${MESSAGE_PER_PAGE}&offset=${
+                    page * MESSAGE_PER_PAGE
+                }`,
+                {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch message")
-            } finally {
+                setContentSnackbar(data.message || "Error loading message")
+                return
+            }
+            const messages: IMessageDocument[] = data.data.reverse()
+            /** Nếu không tìm được dữ liệu nào thì setHasMore(false) để báo rằng không có message */
+            if (messages.length === 0) {
+                setHasMore(false)
+            }
+            /** Nối tin nhắn */
+            setListMessage((prevMessages) => [...messages, ...prevMessages])
+        } catch (error) {
+            console.error("Failed to fetch message: ", error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("Failed to fetch message")
+        } finally {
+            if (page === 0) {
                 setLoadingMessage(false)
             }
         }
+    }
+
+    useEffect(() => {
         loadMessage()
-    }, [])
+    }, [page])
 
     useEffect(() => {
         pusherClient.subscribe(chatId)
@@ -93,10 +109,17 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
     }, [chatId, listMessage])
 
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({
-            behavior: "smooth",
-        })
+        /** Chỉ xuống cuối khi lần đầu load vào trang, tức page = 0 */
+        if (listMessage.length > 0 && page === 0) {
+            bottomRef.current?.scrollIntoView()
+        }
     }, [listMessage])
+
+    useEffect(() => {
+        if (inView && hasMore && bottomRef.current !== null) {
+            setPage((prev) => prev + 1)
+        }
+    }, [inView])
 
     return (
         <>
@@ -105,10 +128,18 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
             ) : (
                 <>
                     <div className="flex flex-1 overflow-scroll w-full">
-                        <div className="flex flex-col gap-4 overflow-scroll py-8 w-full">
-                            {listMessage.map((message) => {
+                        <div className="flex flex-col gap-4 overflow-scroll py-8 w-full px-4">
+                            {listMessage.map((message, index) => {
+                                let indexRef = 0
+                                if (listMessage.length >= MESSAGE_PER_PAGE) {
+                                    indexRef = 8
+                                }
                                 return message.sender._id !== user._id ? (
-                                    <div key={message._id} className="flex gap-3 items-start">
+                                    <div
+                                        ref={index === indexRef ? ref : null}
+                                        key={message._id}
+                                        className="flex gap-3 items-start"
+                                    >
                                         <Image
                                             src={
                                                 message.sender.profileImage ||
@@ -140,6 +171,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                                     </div>
                                 ) : (
                                     <div
+                                        ref={index === indexRef ? ref : null}
                                         key={message._id}
                                         className="flex gap-3 items-start justify-end"
                                     >
