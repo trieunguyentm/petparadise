@@ -176,7 +176,7 @@ const FormCreatePost = () => {
                         name="content"
                         id="content"
                         rows={5}
-                        className="border px-3 pt-3 pb-8 w-full rounded-xl focus:outline-none border-brown-1"
+                        className="border px-3 pt-3 pb-8 w-full rounded-xl focus:outline-none border-brown-1 resize-none"
                         value={caption}
                         onChange={(e) => setCaption(e.target.value)}
                     />
@@ -207,7 +207,7 @@ const FormCreatePost = () => {
                         name="tag"
                         id="tag"
                         rows={1}
-                        className="border p-3 w-full rounded-xl focus:outline-none border-brown-1"
+                        className="border p-3 w-full rounded-xl focus:outline-none border-brown-1 resize-none"
                     />
                 </div>
             </div>

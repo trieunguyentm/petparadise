@@ -377,7 +377,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                                     rows={2}
                                     // value={comment}
                                     // onChange={(e) => setComment(e.target.value)}
-                                    className="focus:outline-none w-full pl-3 py-1 pr-14"
+                                    className="focus:outline-none w-full pl-3 py-1 pr-14 resize-none"
                                 />
                                 <div className="absolute bottom-1 right-2 cursor-pointer flex flex-row gap-1">
                                     <DropdownMenu>
