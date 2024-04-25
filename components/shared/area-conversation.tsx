@@ -5,9 +5,11 @@ import { MESSAGE_PER_PAGE } from "@/lib/data"
 import { IMessageDocument, IUserDocument } from "@/types"
 import { format } from "date-fns"
 import { pusherClient } from "@/lib/pusher"
+import AreaConversationSkeleton from "../skeleton/area-conversation-skeleton"
 
 const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocument }) => {
     const [page, setPage] = useState<number>(0)
+    const [loadingMessage, setLoadingMessage] = useState<boolean>(true)
     const [listMessage, setListMessage] = useState<IMessageDocument[]>([])
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
@@ -24,6 +26,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
 
     useEffect(() => {
         async function loadMessage() {
+            setLoadingMessage(true)
             try {
                 const res = await fetch(
                     `${
@@ -51,6 +54,8 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar("Failed to fetch message")
+            } finally {
+                setLoadingMessage(false)
             }
         }
         loadMessage()
@@ -95,72 +100,82 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
 
     return (
         <>
-            <div className="flex flex-1 overflow-scroll w-full">
-                <div className="flex flex-col gap-4 overflow-scroll py-8 w-full">
-                    {listMessage.map((message) => {
-                        return message.sender._id !== user._id ? (
-                            <div key={message._id} className="flex gap-3 items-start">
-                                <Image
-                                    src={
-                                        message.sender.profileImage || "/assets/images/avatar.jpeg"
-                                    }
-                                    alt="profile-photo"
-                                    width={32}
-                                    height={32}
-                                    className="rounded-full"
-                                />
-                                <div className="flex flex-col gap-2">
-                                    <p className="text-sm font-medium">
-                                        {message.sender.username}&#160;&#183;&#160;
-                                        {format(new Date(message?.createdAt), "p")}
-                                    </p>
-                                    <p className="w-fit max-w-[80%] bg-slate-100 px-2 py-1 rounded-md text-sm">
-                                        {message?.text}
-                                        {message.photo && (
-                                            <Image
-                                                src={message.photo}
-                                                alt="photo"
-                                                width={1000}
-                                                height={1000}
-                                                className="rounded-md"
-                                            />
-                                        )}
-                                    </p>
-                                </div>
-                            </div>
-                        ) : (
-                            <div key={message._id} className="flex gap-3 items-start justify-end">
-                                <div className="flex flex-col gap-2 items-end">
-                                    <p className="text-sm font-medium">
-                                        {message.sender.username}&#160;&#183;&#160;
-                                        {format(new Date(message?.createdAt), "p")}
-                                    </p>
+            {loadingMessage ? (
+                <AreaConversationSkeleton />
+            ) : (
+                <>
+                    <div className="flex flex-1 overflow-scroll w-full">
+                        <div className="flex flex-col gap-4 overflow-scroll py-8 w-full">
+                            {listMessage.map((message) => {
+                                return message.sender._id !== user._id ? (
+                                    <div key={message._id} className="flex gap-3 items-start">
+                                        <Image
+                                            src={
+                                                message.sender.profileImage ||
+                                                "/assets/images/avatar.jpeg"
+                                            }
+                                            alt="profile-photo"
+                                            width={32}
+                                            height={32}
+                                            className="rounded-full"
+                                        />
+                                        <div className="flex flex-col gap-2">
+                                            <p className="text-sm font-medium">
+                                                {message.sender.username}&#160;&#183;&#160;
+                                                {format(new Date(message?.createdAt), "p")}
+                                            </p>
+                                            <p className="w-fit max-w-[80%] bg-slate-100 px-2 py-1 rounded-md text-sm">
+                                                {message?.text}
+                                                {message.photo && (
+                                                    <Image
+                                                        src={message.photo}
+                                                        alt="photo"
+                                                        width={1000}
+                                                        height={1000}
+                                                        className="rounded-md"
+                                                    />
+                                                )}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div
+                                        key={message._id}
+                                        className="flex gap-3 items-start justify-end"
+                                    >
+                                        <div className="flex flex-col gap-2 items-end">
+                                            <p className="text-sm font-medium">
+                                                {message.sender.username}&#160;&#183;&#160;
+                                                {format(new Date(message?.createdAt), "p")}
+                                            </p>
 
-                                    <p className="w-fit max-w-[80%] bg-purple-400 px-2 py-1 rounded-md text-sm">
-                                        {message?.text}
-                                        {message.photo && (
-                                            <Image
-                                                src={message.photo}
-                                                alt="photo"
-                                                width={1000}
-                                                height={1000}
-                                                className="rounded-md"
-                                            />
-                                        )}
-                                    </p>
-                                </div>
-                            </div>
-                        )
-                    })}
-                    <div ref={bottomRef} />
-                </div>
-            </div>
-            <SnackbarCustom
-                open={openSnackbar}
-                setOpen={setOpenSnackbar}
-                type={typeSnackbar}
-                content={contentSnackbar}
-            />
+                                            <p className="w-fit max-w-[80%] bg-purple-400 px-2 py-1 rounded-md text-sm">
+                                                {message?.text}
+                                                {message.photo && (
+                                                    <Image
+                                                        src={message.photo}
+                                                        alt="photo"
+                                                        width={1000}
+                                                        height={1000}
+                                                        className="rounded-md"
+                                                    />
+                                                )}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                            <div ref={bottomRef} />
+                        </div>
+                    </div>
+                    <SnackbarCustom
+                        open={openSnackbar}
+                        setOpen={setOpenSnackbar}
+                        type={typeSnackbar}
+                        content={contentSnackbar}
+                    />
+                </>
+            )}
         </>
     )
 }
