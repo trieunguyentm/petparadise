@@ -9,6 +9,7 @@ import { Skeleton } from "../ui/skeleton"
 import { useForm } from "react-hook-form"
 import { Tooltip, Zoom } from "@mui/material"
 import { CircleAlert, Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const delay = (delayInms: number) => {
     return new Promise((resolve) => setTimeout(resolve, delayInms))
@@ -21,6 +22,7 @@ type FormValues = {
 }
 
 const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
+    const router = useRouter()
     const [openChangePassword, setOpenChangePassword] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
     const [loadingChangePassword, setLoadingChangePassword] = useState<boolean>(false)
@@ -60,6 +62,15 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
             )
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)

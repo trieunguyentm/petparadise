@@ -7,8 +7,10 @@ import { format } from "date-fns"
 import { pusherClient } from "@/lib/pusher"
 import AreaConversationSkeleton from "../skeleton/area-conversation-skeleton"
 import { useInView } from "react-intersection-observer"
+import { useRouter } from "next/navigation"
 
 const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocument }) => {
+    const router = useRouter()
     const [page, setPage] = useState<number>(0)
     const [loadingMessage, setLoadingMessage] = useState<boolean>(true)
     const [listMessage, setListMessage] = useState<IMessageDocument[]>([])
@@ -49,6 +51,15 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
             )
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message || "Error loading message")
@@ -99,6 +110,15 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                 })
                 const data = await res.json()
                 if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
                     console.log(res.text)
                 }
             } catch (error) {

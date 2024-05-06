@@ -46,6 +46,15 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 /** Trả về trạng thái thực */
                 setIsLiked((prev) => !prev)
                 if (isLiked) setNumberLike((prev) => prev + 1)
@@ -81,6 +90,15 @@ const PostFeed = ({ post, user }: { post: IPostDocument; user: IUserDocument }) 
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 /** Trả về trạng thái thực */
                 setIsSaved((prev) => !prev)
                 if (isSaved) setNumberSave((prev) => prev + 1)

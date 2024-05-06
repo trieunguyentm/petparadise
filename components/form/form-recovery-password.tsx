@@ -51,6 +51,15 @@ const FormRecoveryPassword = () => {
             )
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)

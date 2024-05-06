@@ -11,6 +11,7 @@ import { Button } from "../ui/button"
 import { useState } from "react"
 import SnackbarCustom from "../ui/snackbar"
 import AreaConversation from "../shared/area-conversation"
+import { useRouter } from "next/navigation"
 
 type FormValues = {
     message: string
@@ -24,6 +25,7 @@ const MessageDetailContainer = ({
     chatDetail: IChatDocument
     user: IUserDocument
 }) => {
+    const router = useRouter()
     const isGroup = chatDetail.isGroup
 
     const defaultImage = "/assets/images/avatar.jpeg"
@@ -99,6 +101,15 @@ const MessageDetailContainer = ({
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)

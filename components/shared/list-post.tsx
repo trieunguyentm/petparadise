@@ -6,8 +6,10 @@ import React, { useCallback, useEffect, useState } from "react"
 import SnackbarCustom from "../ui/snackbar"
 import { POST_PER_PAGE } from "@/lib/data"
 import PostFeedDetail from "./post-feed-detail"
+import { useRouter } from "next/navigation"
 
 const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument }) => {
+    const router = useRouter()
     const [listPost, setListPost] = useState<IPostDocument[]>(posts)
     const [page, setPage] = useState<number>(0)
     const [hasMore, setHasMore] = useState(true)
@@ -40,6 +42,15 @@ const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument
                 )
                 const data = await res.json()
                 if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
                     setContentSnackbar(data.message || "Error loading more posts")

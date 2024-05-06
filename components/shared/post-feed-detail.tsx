@@ -21,6 +21,7 @@ import CommentComponent from "./comment"
 import { Button } from "../ui/button"
 import SnackbarCustom from "../ui/snackbar"
 import { pusherClient } from "@/lib/pusher"
+import { useRouter } from "next/navigation"
 
 type FormValues = {
     comment: string
@@ -28,6 +29,7 @@ type FormValues = {
 }
 
 const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocument }) => {
+    const router = useRouter()
     /** React Hook Form */
     const {
         register,
@@ -87,6 +89,15 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 /** Trả về trạng thái thực */
                 setIsLiked((prev) => !prev)
                 if (isLiked) setNumberLike((prev) => prev + 1)
@@ -123,6 +134,15 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 /** Trả về trạng thái thực */
                 setIsSaved((prev) => !prev)
                 if (isSaved) setNumberSave((prev) => prev + 1)
@@ -159,6 +179,15 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)

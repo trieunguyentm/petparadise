@@ -10,6 +10,7 @@ import Picker from "@emoji-mart/react"
 import { CircleAlert, Loader2 } from "lucide-react"
 import SnackbarCustom from "../ui/snackbar"
 import { Tooltip, Zoom } from "@mui/material"
+import { useRouter } from "next/navigation"
 
 type FormValues = {
     photo: File[]
@@ -18,6 +19,7 @@ type FormValues = {
 }
 
 const FormCreatePost = () => {
+    const router = useRouter()
     const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
     const [caption, setCaption] = useState("")
     const [previewImages, setPreviewImages] = useState<string[]>([])
@@ -73,6 +75,15 @@ const FormCreatePost = () => {
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)

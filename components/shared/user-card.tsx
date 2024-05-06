@@ -2,9 +2,11 @@
 
 import { IUserDocument } from "@/types"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 const UserCard = ({ people, user }: { people: IUserDocument; user: IUserDocument }) => {
+    const router = useRouter()
     const [isFollowing, setIsFollowing] = useState<boolean>(
         user.following.includes(people._id.toString()),
     )
@@ -24,6 +26,15 @@ const UserCard = ({ people, user }: { people: IUserDocument; user: IUserDocument
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setIsFollowing((prev) => !prev)
             }
         } catch (error) {

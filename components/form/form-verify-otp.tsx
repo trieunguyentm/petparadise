@@ -17,6 +17,7 @@ type FormValues = {
 const FormVerifyOTP = () => {
     const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
+    const [loadingResend, setLoadingResend] = useState<boolean>(false)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
     const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
@@ -46,6 +47,15 @@ const FormVerifyOTP = () => {
             })
             const data = await res.json()
             if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
                 setContentSnackbar(data.message)
@@ -65,6 +75,50 @@ const FormVerifyOTP = () => {
             setContentSnackbar("An error occurred, please try again")
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleResendOTP = async () => {
+        setLoadingResend(true)
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/resend-verify-otp`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+                return
+            }
+            if (data.success) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("success")
+                setContentSnackbar("Resend OTP successfully, please check email")
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingResend(false)
         }
     }
 
@@ -102,7 +156,12 @@ const FormVerifyOTP = () => {
             </div>
             <div className="flex items-center gap-3">
                 You haven't received the OTP yet?
-                <span className="underline cursor-pointer hover:opacity-50">Click here</span>
+                <span
+                    className="underline cursor-pointer hover:opacity-50"
+                    onClick={handleResendOTP}
+                >
+                    {loadingResend ? <Loader2 className="w-6 h-6 animate-spin" /> : "Click here"}
+                </span>
             </div>
             <div className="flex items-cente justify-center">
                 <Button
