@@ -17,6 +17,8 @@ const TopBarPeople = () => {
     const handleSearch = () => {
         if (search.trim() !== "") {
             router.push(`/search-people/${search}`)
+        } else {
+            router.push(`/people`)
         }
     }
 

@@ -1,7 +1,5 @@
-import MessageContainer from "@/components/container/message-container"
-import { fetchOtherUser, fetchUser } from "@/lib/fetch"
-import Image from "next/image"
-import { redirect } from "next/navigation"
+import MessageListUser from "@/components/shared/message-list-user"
+import { fetchOtherUser } from "@/lib/fetch"
 
 export const metadata = {
     title: "Message",
@@ -20,21 +18,7 @@ const Message = async () => {
                         Select the friends you want to start a conversation with
                     </div>
                     {/* SEARCH CONTACT */}
-                    <div className="w-full border rounded-md px-2 py-3 relative">
-                        <input
-                            type="text"
-                            className="w-full py-3 pl-2 pr-8 focus:outline-none bg-transparent"
-                            placeholder="Search contact ..."
-                        />
-                        <Image
-                            src={"/assets/images/search.svg"}
-                            alt="search"
-                            width={25}
-                            height={25}
-                            className="absolute top-6 right-2 cursor-pointer"
-                        />
-                    </div>
-                    <MessageContainer otherUser={otherUser} />
+                    <MessageListUser otherUser={otherUser} />
                 </div>
             </div>
         </div>
