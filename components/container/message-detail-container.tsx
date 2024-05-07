@@ -183,7 +183,7 @@ const MessageDetailContainer = ({
                 <textarea
                     {...register("message")}
                     placeholder="Write a message..."
-                    className="w-full bg-pink-1 border-t-2 border-brown-1 py-3 pl-2 pr-12 focus:outline-non resize-none"
+                    className="w-full bg-pink-1 border-t-2 border-brown-1 py-3 pl-2 pr-12 focus:outline-none resize-none"
                 />
                 {/* SEND MESSAGE */}
                 <Button

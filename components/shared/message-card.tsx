@@ -3,7 +3,23 @@ import { IChatDocument, IUserDocument } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
 
-const MessageCard = ({ chat, user }: { chat: IChatDocument; user: IUserDocument }) => {
+const normalizeText = (text: string) => {
+    return text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu
+        .replace(/\s+/g, "") // Loại bỏ khoảng trắng
+        .toLowerCase() // Chuyển về chữ thường
+}
+
+const MessageCard = ({
+    chat,
+    user,
+    search,
+}: {
+    chat: IChatDocument
+    user: IUserDocument
+    search: string
+}) => {
     const isGroup = chat.isGroup
     let isSeen = chat.seenBy.includes(user._id)
 
@@ -17,7 +33,11 @@ const MessageCard = ({ chat, user }: { chat: IChatDocument; user: IUserDocument 
         imageSrc = otherMember && otherMember.profileImage ? otherMember.profileImage : defaultImage
     }
 
-    return (
+    const normalizedSearch = normalizeText(search.trim())
+    const shouldDisplay =
+        normalizedSearch === "" || normalizeText(displayName).includes(normalizedSearch)
+
+    return shouldDisplay ? (
         <Link
             href={`/message/${chat._id}`}
             className="flex gap-2 p-2 rounded-md hover:bg-pink-1 cursor-pointer"
@@ -39,12 +59,11 @@ const MessageCard = ({ chat, user }: { chat: IChatDocument; user: IUserDocument 
                     >
                         {chat.lastMessage}
                     </div>
-
                     <div className="line-clamp-1">{format(new Date(chat?.lastMessageAt), "p")}</div>
                 </div>
             </div>
         </Link>
-    )
+    ) : null
 }
 
 export default MessageCard

@@ -5,7 +5,15 @@ import React, { useEffect, useState } from "react"
 import MessageCard from "./message-card"
 import { pusherClient } from "@/lib/pusher"
 
-const ListMessageCard = ({ chats, user }: { chats: IChatDocument[]; user: IUserDocument }) => {
+const ListMessageCard = ({
+    chats,
+    user,
+    search,
+}: {
+    chats: IChatDocument[]
+    user: IUserDocument
+    search: string
+}) => {
     const [listChat, setListChat] = useState<IChatDocument[]>(chats)
 
     useEffect(() => {
@@ -52,7 +60,7 @@ const ListMessageCard = ({ chats, user }: { chats: IChatDocument[]; user: IUserD
     return (
         <>
             {listChat.map((chat) => (
-                <MessageCard key={chat._id} chat={chat} user={user} />
+                <MessageCard key={chat._id} chat={chat} user={user} search={search} />
             ))}
         </>
     )
