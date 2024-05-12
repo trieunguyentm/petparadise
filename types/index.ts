@@ -62,6 +62,7 @@ export interface IMessageDocument extends mongoose.Document {
 export interface ILostPetPostDocument extends mongoose.Document {
     poster: IUserDocument
     createdAt: Date
+    updatedAt: Date
     petName?: string
     petType: "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
     gender?: "male" | "female"

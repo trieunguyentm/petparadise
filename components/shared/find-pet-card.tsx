@@ -10,8 +10,6 @@ const sizePet = {
 }
 
 const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
-    console.log(post)
-
     return (
         <div className="bg-pink-1 w-full rounded-xl border">
             <Image
@@ -55,7 +53,7 @@ const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
                     <span> {post.description}</span>
                 </div>
                 <Link
-                    href={"/find-pet/"}
+                    href={`/find-pet/${post._id.toString()}`}
                     className="font-medium underline text-center my-2 hover:text-brown-1"
                 >
                     View more &gt;

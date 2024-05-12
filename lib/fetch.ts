@@ -219,3 +219,29 @@ export const fetchFindPetPost = async () => {
         throw new Error("Failed to fetch new find pet post")
     }
 }
+
+export const fetchFindPetPostById = async ({ postId }: { postId: string }) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/lost-pet/find-pet-post/${postId}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as ILostPetPostDocument
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch detail post")
+    }
+}

@@ -164,7 +164,7 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
             <div className="w-full mt-5">
                 <Button className="w-full bg-brown-1">Search</Button>
             </div>
-            <div className="w-full mt-5 sticky top-0">
+            <div className="w-full mt-5">
                 <Button
                     onClick={() => router.push("/find-pet/create-post")}
                     className="w-full bg-green-300 text-black hover:text-white"
