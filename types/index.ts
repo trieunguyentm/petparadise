@@ -7,11 +7,12 @@ export interface IUserDocument extends mongoose.Document {
     profileImage?: string
     address?: string
     dateOfBirth?: Date
-    posts: mongoose.Schema.Types.ObjectId[]
+    posts: IPostDocument[]
+    findPetPosts: ILostPetPostDocument[]
     savedPosts: IPostDocument[]
     likedPosts: IPostDocument[]
-    followers: mongoose.Schema.Types.ObjectId[]
-    following: mongoose.Schema.Types.ObjectId[]
+    followers: IUserDocument[]
+    following: IUserDocument[]
     chats: mongoose.Schema.Types.ObjectId[]
     role: "user" | "admin"
     createdAt: Date
@@ -56,4 +57,22 @@ export interface IMessageDocument extends mongoose.Document {
     photo: string
     createdAt: Date
     seenBy: IUserDocument[]
+}
+
+export interface ILostPetPostDocument extends mongoose.Document {
+    poster: mongoose.Schema.Types.ObjectId
+    createdAt: Date
+    petName: string
+    petType: "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
+    breed: string
+    color: string
+    lastSeenLocation: string
+    lastSeenDate: Date
+    contactInfo: string
+    description: string
+    likes: IUserDocument[]
+    comments: ICommentDocument[]
+    images: string[]
+    size: "small" | "medium" | "big"
+    tags: string[]
 }

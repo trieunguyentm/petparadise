@@ -13,12 +13,28 @@ const FindPetCard = () => {
             />
             <div className="p-2 flex flex-col text-sm">
                 <div>
-                    <span className="font-medium">Type</span>:&nbsp;
+                    <span className="font-medium">Searcher</span>:&nbsp;
+                    <span>trieunguyen241102</span>
+                </div>
+                <div>
+                    <span className="font-medium">Pet Type</span>:&nbsp;
                     <span>Dog</span>
                 </div>
                 <div>
+                    <span className="font-medium">Size</span>:&nbsp;
+                    <span>{"> 15kg"}</span>
+                </div>
+                <div>
+                    <span className="font-medium">Location</span>:&nbsp;
+                    <span>{"Xã Hương Sơn - Huyện Mỹ Đức - Thành phố Hà Nội"}</span>
+                </div>
+                <div>
+                    <span className="font-medium">Time</span>:&nbsp;
+                    <span>{"10/5/2024"}</span>
+                </div>
+                <div>
                     <span className="font-medium">Status</span>:&nbsp;
-                    <span>Lost</span>
+                    <span>{"Pet has been found"}</span>
                 </div>
                 <div className="line-clamp-4" style={{ minHeight: "4.5rem" }}>
                     <span className="font-medium">Description</span>:&nbsp;
