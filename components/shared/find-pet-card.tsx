@@ -1,50 +1,58 @@
+import { convertISOToFormatNotHours } from "@/lib/utils"
+import { ILostPetPostDocument } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
 
-const FindPetCard = () => {
+const sizePet = {
+    big: "> 15kg",
+    medium: "5kg - 15kg",
+    small: "0 - 5kg",
+}
+
+const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
+    console.log(post)
+
     return (
-        <div className="bg-pink-1 w-full rounded-xl">
+        <div className="bg-pink-1 w-full rounded-xl border">
             <Image
-                src={"/assets/images/dog.png"}
+                src={post.images[0]}
                 width={1000}
                 height={200}
                 alt="pet-card"
-                className="rounded-t-xl"
+                className="rounded-t-xl max-h-[400px]"
             />
             <div className="p-2 flex flex-col text-sm">
                 <div>
                     <span className="font-medium">Searcher</span>:&nbsp;
-                    <span>trieunguyen241102</span>
+                    <span>{post.poster.username}</span>
                 </div>
                 <div>
                     <span className="font-medium">Pet Type</span>:&nbsp;
-                    <span>Dog</span>
+                    <span>{post.petType}</span>
                 </div>
                 <div>
                     <span className="font-medium">Size</span>:&nbsp;
-                    <span>{"> 15kg"}</span>
+                    <span>{post.size ? sizePet[post.size] : "Chưa cung cấp"}</span>
                 </div>
                 <div>
                     <span className="font-medium">Location</span>:&nbsp;
-                    <span>{"Xã Hương Sơn - Huyện Mỹ Đức - Thành phố Hà Nội"}</span>
+                    <span>{post.lastSeenLocation}</span>
                 </div>
                 <div>
                     <span className="font-medium">Time</span>:&nbsp;
-                    <span>{"10/5/2024"}</span>
+                    <span>{convertISOToFormatNotHours(post.lastSeenDate)}</span>
                 </div>
                 <div>
                     <span className="font-medium">Status</span>:&nbsp;
-                    <span>{"Pet has been found"}</span>
+                    <span>
+                        {post.status === "unfinished" || !post.status
+                            ? "Chưa tìm thấy"
+                            : "Đã tìm thấy"}
+                    </span>
                 </div>
                 <div className="line-clamp-4" style={{ minHeight: "4.5rem" }}>
                     <span className="font-medium">Description</span>:&nbsp;
-                    <span>
-                        {" "}
-                        A small, fluffy white dog has gone missing. It has a distinctive brown patch
-                        over one eye and a curly tail. The dog is friendly and answers to the name
-                        "Buddy." Last seen wearing a blue collar with a bone-shaped tag, it is
-                        greatly missed by its family.
-                    </span>
+                    <span> {post.description}</span>
                 </div>
                 <Link
                     href={"/find-pet/"}

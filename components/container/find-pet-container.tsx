@@ -14,6 +14,7 @@ import DatePickerDemo from "../shared/date-picker"
 import { Button } from "../ui/button"
 import { MessageCirclePlus, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { ILostPetPostDocument } from "@/types"
 
 export type TypePet =
     | "all"
@@ -69,7 +70,7 @@ const filterSizePet = [
     { value: "big", text: "> 15kg" },
 ]
 
-const FindPetContainer = () => {
+const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument[] | null }) => {
     // ROUTER
     const router = useRouter()
     // FILTER PET
@@ -173,14 +174,19 @@ const FindPetContainer = () => {
                 </Button>
             </div>
             {/* DATA PET */}
-            <div className="grid grid-cols-1 md:grid-cols-2 mt-16 gap-4">
-                <FindPetCard />
-                <FindPetCard />
-                <FindPetCard />
-                <FindPetCard />
-                <FindPetCard />
-                <FindPetCard />
-            </div>
+            {!findPetPosts ? (
+                <div className="w-full h-full flex items-center justify-center mt-10">
+                    There are currently no pet search posts
+                </div>
+            ) : (
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 pt-16 pb-10 gap-4">
+                        {findPetPosts?.map((post) => (
+                            <FindPetCard key={post._id} post={post} />
+                        ))}
+                    </div>
+                </>
+            )}
         </>
     )
 }

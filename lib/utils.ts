@@ -10,6 +10,10 @@ export function convertISOToFormat(dateInput: Date | string) {
     return moment(dateInput).format("DD/MM/YYYY HH:mm")
 }
 
+export function convertISOToFormatNotHours(dateInput: Date | string) {
+    return moment(dateInput).format("DD/MM/YYYY")
+}
+
 export function convertISOToFormatMessage(dateInput: Date | string) {
     return moment(dateInput).format("HH:mm")
 }

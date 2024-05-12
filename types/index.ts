@@ -60,12 +60,13 @@ export interface IMessageDocument extends mongoose.Document {
 }
 
 export interface ILostPetPostDocument extends mongoose.Document {
-    poster: mongoose.Schema.Types.ObjectId
+    poster: IUserDocument
     createdAt: Date
-    petName: string
+    petName?: string
     petType: "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
-    breed: string
-    color: string
+    gender?: "male" | "female"
+    breed?: string
+    color?: string
     lastSeenLocation: string
     lastSeenDate: Date
     contactInfo: string
@@ -75,4 +76,5 @@ export interface ILostPetPostDocument extends mongoose.Document {
     images: string[]
     size: "small" | "medium" | "big"
     tags: string[]
+    status: "unfinished" | "finished"
 }
