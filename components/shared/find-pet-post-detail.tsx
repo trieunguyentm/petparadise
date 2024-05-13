@@ -1,7 +1,7 @@
 "use client"
 
 import { convertISOToFormat, convertISOToFormatNotHours } from "@/lib/utils"
-import { ILostPetPostDocument, IUserDocument } from "@/types"
+import { IFindPetCommentDocument, ILostPetPostDocument, IUserDocument } from "@/types"
 import Image from "next/image"
 import { Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -9,7 +9,7 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { ArrowLeft, Loader2, MessageCircleMore, Settings, X } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import SnackbarCustom from "../ui/snackbar"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
@@ -18,6 +18,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dr
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { Button } from "../ui/button"
+import FindPetPostComment from "./find-pet-post-comment"
+import { pusherClient } from "@/lib/pusher"
 
 type FormValues = {
     comment: string
@@ -46,6 +48,9 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
     const [previewImages, setPreviewImages] = useState<string[]>([])
     /** Loading comment */
     const [loadingComment, setLoadingComment] = useState<boolean>(false)
+    /** List Comment */
+    const [loadingListComment, setLoadingListComment] = useState<boolean>(false)
+    const [comments, setComments] = useState<IFindPetCommentDocument[]>([])
 
     const handleClickStartChat = async () => {
         let selectedUser = [post.poster._id.toString()]
@@ -124,9 +129,12 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         formData.append("content", watch("comment"))
         formData.append("postId", post._id.toString())
         const files = watch("photos")
-        files?.forEach((file) => {
-            formData.append("photos", file)
-        })
+        console.log(files)
+        if (files && files.length > 0) {
+            files?.forEach((file) => {
+                formData.append("photos", file)
+            })
+        }
 
         // Send API
         setLoadingComment(true)
@@ -175,6 +183,61 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
             setLoadingComment(false)
         }
     }
+
+    useEffect(() => {
+        const fetchComments = async () => {
+            setLoadingListComment(true)
+            try {
+                const res = await fetch(
+                    `${
+                        process.env.NEXT_PUBLIC_BASE_URL
+                    }/api/lost-pet/find-pet-post/${post._id.toString()}/comment`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    },
+                )
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message)
+                }
+                if (data.success) {
+                    setComments(data.data as IFindPetCommentDocument[])
+                }
+            } catch (error) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar("An error occurred, please try again")
+            } finally {
+                setLoadingListComment(false)
+            }
+        }
+        fetchComments()
+    }, [])
+
+    const handleNewComment = (newComment: IFindPetCommentDocument) => {
+        setComments((prev) => [newComment, ...prev])
+    }
+
+    useEffect(() => {
+        const channel = pusherClient.subscribe(`find-pet-post-${post._id.toString()}-comments`)
+        channel.bind(`new-comment`, handleNewComment)
+        return () => {
+            channel.unbind(`new-comment`, handleNewComment)
+            pusherClient.unsubscribe(`find-pet-post-${post._id.toString()}-comments`)
+        }
+    }, [post._id])
 
     return (
         <div className="px-5 py-3">
@@ -417,6 +480,13 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                             </Button>
                         </div>
                     </form>
+                    {comments.length > 0 && (
+                        <div className="border border-t-0 p-3 w-full flex flex-col bg-white gap-4">
+                            {comments.map((comment) => (
+                                <FindPetPostComment key={comment._id} comment={comment} />
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
             <SnackbarCustom

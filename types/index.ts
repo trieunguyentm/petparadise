@@ -79,3 +79,12 @@ export interface ILostPetPostDocument extends mongoose.Document {
     tags: string[]
     status: "unfinished" | "finished"
 }
+
+export interface IFindPetCommentDocument extends mongoose.Document {
+    poster: IUserDocument
+    createdAt: Date
+    likes: IUserDocument[]
+    post: ILostPetPostDocument
+    content: string
+    images: string[]
+}
