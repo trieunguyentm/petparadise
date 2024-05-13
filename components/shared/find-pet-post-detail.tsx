@@ -8,12 +8,32 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
-import { ArrowLeft, MessageCircleMore, Settings } from "lucide-react"
+import { ArrowLeft, Loader2, MessageCircleMore, Settings, X } from "lucide-react"
 import { useState } from "react"
 import SnackbarCustom from "../ui/snackbar"
 import { useRouter } from "next/navigation"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { useForm } from "react-hook-form"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import data from "@emoji-mart/data"
+import Picker from "@emoji-mart/react"
+import { Button } from "../ui/button"
+
+type FormValues = {
+    comment: string
+    photos?: File[] | null
+}
 
 const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: IUserDocument }) => {
+    /** React Hook Form */
+    const {
+        register,
+        setValue,
+        watch,
+        formState: { errors },
+        reset,
+        handleSubmit,
+    } = useForm<FormValues>()
     const router = useRouter()
     const [loadingStartChat, setLoadingStartChat] = useState<boolean>(false)
     /** Snack Bar */
@@ -22,6 +42,10 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         "success",
     )
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
+    /** Preview image in comment */
+    const [previewImages, setPreviewImages] = useState<string[]>([])
+    /** Loading comment */
+    const [loadingComment, setLoadingComment] = useState<boolean>(false)
 
     const handleClickStartChat = async () => {
         let selectedUser = [post.poster._id.toString()]
@@ -67,6 +91,91 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         }
     }
 
+    const addEmoji = (emoji: any) => {
+        let emojiString = emoji.native
+        setValue("comment", watch("comment") + emojiString)
+    }
+
+    const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const filesArray = Array.from(e.target.files)
+            setValue("photos", filesArray, { shouldValidate: true })
+            // Tạo bản xem trước cho mỗi file ảnh
+            const filePreviews: string[] = filesArray.map((file) => URL.createObjectURL(file))
+            setPreviewImages(filePreviews)
+        }
+    }
+
+    const handleDeleteImage = (index: number) => {
+        // Cập nhật danh sách các file ảnh đã chọn
+        const files = watch("photos")
+        if (files) {
+            const updatedFiles = files.filter((_: File, i: number) => i !== index)
+            setValue("photos", updatedFiles, { shouldValidate: true })
+        }
+
+        // Cập nhật danh sách các URL xem trước ảnh
+        const updatedPreviews = previewImages.filter((_: string, i: number) => i !== index)
+        setPreviewImages(updatedPreviews)
+    }
+
+    const handleSubmitForm = async () => {
+        const formData = new FormData()
+        formData.append("content", watch("comment"))
+        formData.append("postId", post._id.toString())
+        const files = watch("photos")
+        files?.forEach((file) => {
+            formData.append("photos", file)
+        })
+
+        // Send API
+        setLoadingComment(true)
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/lost-pet/find-pet-post/comment`,
+                {
+                    method: "POST",
+                    credentials: "include",
+                    body: formData,
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                reset({
+                    comment: "",
+                    photos: null,
+                })
+                setValue("photos", null)
+                setPreviewImages([])
+                // Make sure to revoke the object URL to release memory
+                if (previewImages) {
+                    previewImages.forEach((imageURL) => URL.revokeObjectURL(imageURL))
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingComment(false)
+        }
+    }
+
     return (
         <div className="px-5 py-3">
             <div className="flex h-[calc(100vh-24px)] bg-pink-1 rounded-xl p-5 w-full">
@@ -106,9 +215,12 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                         </div>
                         <div className="cursor-pointer">
                             {user._id.toString() === post.poster._id.toString() && <Settings />}
-                            {user._id.toString() !== post.poster._id.toString() && (
-                                <MessageCircleMore onClick={handleClickStartChat} />
-                            )}
+                            {user._id.toString() !== post.poster._id.toString() &&
+                                (loadingStartChat ? (
+                                    <Loader2 className="w-8 h-8 animate-spin" />
+                                ) : (
+                                    <MessageCircleMore onClick={handleClickStartChat} />
+                                ))}
                         </div>
                     </div>
 
@@ -199,6 +311,112 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                             </li>
                         </ul>
                     </div>
+                    {previewImages.length > 0 && (
+                        <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 mt-4">
+                            {previewImages.map((imageURL, index) => (
+                                <div key={index} className="relative">
+                                    <Image
+                                        src={imageURL}
+                                        width={200}
+                                        height={200}
+                                        alt="image"
+                                        priority
+                                    />
+                                    <Button
+                                        variant={"ghost"}
+                                        onClick={() => handleDeleteImage(index)}
+                                        className="p-0 w-4 h-4 text-sm absolute top-0 -right-2 text-red-600 bg-slate-400 rounded-full"
+                                    >
+                                        <X />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    <form
+                        onSubmit={handleSubmit(handleSubmitForm)}
+                        className="bg-white w-full p-3 border flex gap-4 mt-10"
+                    >
+                        <Avatar>
+                            <AvatarImage
+                                src={user.profileImage || "/assets/images/avatar.jpeg"}
+                                alt="@avatar"
+                            />
+                            <AvatarFallback>
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="border flex flex-1 items-center relative rounded-lg p-1">
+                            <textarea
+                                {...register("comment", {
+                                    required: "Comment is required",
+                                })}
+                                placeholder="Write a comment..."
+                                id="comment"
+                                name="comment"
+                                rows={2}
+                                // value={comment}
+                                // onChange={(e) => setComment(e.target.value)}
+                                className="focus:outline-none w-full pl-3 py-1 pr-14 resize-none"
+                            />
+                            <div className="absolute bottom-1 right-2 cursor-pointer flex flex-row gap-1">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <div>
+                                            <Image
+                                                src={"/assets/images/smile-plus.svg"}
+                                                alt="smile-plus"
+                                                width={20}
+                                                height={20}
+                                            />
+                                        </div>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <Picker data={data} onEmojiSelect={addEmoji} />
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <div>
+                                    <label htmlFor="photos" className="cursor-pointer">
+                                        <Image
+                                            src={"/assets/images/camera.svg"}
+                                            alt="smile-plus"
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </label>
+                                    <input
+                                        type="file"
+                                        {...register("photos")}
+                                        id="photos"
+                                        name="photos"
+                                        accept="image/*"
+                                        className="hidden"
+                                        multiple
+                                        onChange={onFileChange}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="inline-block p-0">
+                            <Button
+                                type="submit"
+                                variant={"ghost"}
+                                className="p-0 hover:bg-transparent"
+                            >
+                                {loadingComment ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <Image
+                                        src={"/assets/images/send-horizontal.svg"}
+                                        alt="send"
+                                        width={20}
+                                        height={20}
+                                        className="hover:opacity-50"
+                                    />
+                                )}
+                            </Button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <SnackbarCustom
