@@ -15,6 +15,9 @@ import { Button } from "../ui/button"
 import { MessageCirclePlus, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { ILostPetPostDocument } from "@/types"
+import SnackbarCustom from "../ui/snackbar"
+import { convertISOToFormatNotHours } from "@/lib/utils"
+import { format } from "date-fns"
 
 export type TypePet =
     | "all"
@@ -73,12 +76,20 @@ const filterSizePet = [
 const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument[] | null }) => {
     // ROUTER
     const router = useRouter()
+    // List Post
+    const [listPost, setListPost] = useState<ILostPetPostDocument[] | null>(findPetPosts)
     // FILTER PET
     const [typePet, setTypePet] = useState<TypePet>("all")
     const [genderPet, setGenderPet] = useState<GenderPet>("all")
     const [sizePet, setSizePet] = useState<SizePet>("all")
     const [locationPet, setLocationPet] = useState<LocationPet>(initialLocationState)
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
     const handleSelectTypePet = (value: TypePet) => {
         setTypePet(value)
@@ -91,6 +102,45 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
     const handleSelectSizePet = (value: SizePet) => {
         setSizePet(value)
     }
+
+    const handleSearchPost = async () => {
+        try {
+            let apiEndpoint: string = `${
+                process.env.NEXT_PUBLIC_BASE_URL
+            }/api/lost-pet/find-pet-post-by-search?petType=${typePet}&gender=${genderPet}&size=${sizePet}&lastSeenLocation=${
+                locationPet.cityName + "-" + locationPet.districtName + "-" + locationPet.wardName
+            }`
+            if (selectedDate) apiEndpoint += `&lastSeenDate=${selectedDate}`
+            const res = await fetch(`${apiEndpoint}`, {
+                method: "GET",
+                credentials: "include",
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                setListPost(data.data as ILostPetPostDocument[])
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        }
+    }
+
     return (
         <>
             {" "}
@@ -162,7 +212,9 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                 />
             </div>
             <div className="w-full mt-5">
-                <Button className="w-full bg-brown-1">Search</Button>
+                <Button onClick={handleSearchPost} className="w-full bg-brown-1">
+                    Search
+                </Button>
             </div>
             <div className="w-full mt-5">
                 <Button
@@ -174,19 +226,25 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                 </Button>
             </div>
             {/* DATA PET */}
-            {!findPetPosts ? (
+            {!listPost || listPost.length === 0 ? (
                 <div className="w-full h-full flex items-center justify-center mt-10">
                     There are currently no pet search posts
                 </div>
             ) : (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 pt-16 pb-10 gap-4">
-                        {findPetPosts?.map((post) => (
+                        {listPost?.map((post) => (
                             <FindPetCard key={post._id} post={post} />
                         ))}
                     </div>
                 </>
             )}
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </>
     )
 }
