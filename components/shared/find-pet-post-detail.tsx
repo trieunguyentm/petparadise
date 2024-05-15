@@ -19,11 +19,21 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { Button } from "../ui/button"
@@ -65,6 +75,9 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
     const [statusPost, setStatusPost] = useState<boolean>(
         post.status === "unfinished" || !post.status ? false : true,
     )
+    /** Dialog Alert */
+    const [open, setOpen] = useState(false)
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
 
     const handleClickStartChat = async () => {
         let selectedUser = [post.poster._id.toString()]
@@ -296,6 +309,46 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         }
     }, [post._id])
 
+    const handleDeletePost = async () => {
+        setLoadingDelete(true)
+        try {
+            const res = await fetch(
+                `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/lost-pet/find-pet-post/${post._id.toString()}`,
+                {
+                    method: "DELETE",
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                router.push("/find-pet")
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingDelete(false)
+        }
+    }
+
     return (
         <div className="px-5 py-3">
             <div className="flex h-[calc(100vh-24px)] bg-pink-1 rounded-xl p-5 w-full">
@@ -340,20 +393,49 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                         <DropdownMenuTrigger>
                                             <Settings />
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent className="px-0">
+                                        <DropdownMenuContent>
                                             <DropdownMenuGroup>
                                                 <DropdownMenuItem onClick={handleUpdatePost}>
                                                     <Pencil className="mr-2 h-4 w-4" />
                                                     <span>Đã tìm thấy</span>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setOpen(true)
+                                                    }}
+                                                >
                                                     <Trash className="mr-2 h-4 w-4" />
                                                     <span>Xóa bài tìm kiếm</span>
                                                 </DropdownMenuItem>
                                             </DropdownMenuGroup>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
+                                    <AlertDialog open={open}>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    Bạn có chắc chắn muốn xóa bài viết?
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Hành động này không thể hoàn tác. Bài viết sẽ bị
+                                                    xóa vĩnh viễn.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel onClick={() => setOpen(false)}>
+                                                    Cancel
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction onClick={handleDeletePost}>
+                                                    {loadingDelete ? (
+                                                        <Loader2 className="w-8 h-8 animate-spin" />
+                                                    ) : (
+                                                        "Continue"
+                                                    )}
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </>
                             )}
                             {user._id.toString() !== post.poster._id.toString() &&
