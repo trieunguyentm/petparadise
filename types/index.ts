@@ -88,3 +88,11 @@ export interface IFindPetCommentDocument extends mongoose.Document {
     content: string
     images: string[]
 }
+
+export interface INotificationDocument extends mongoose.Document {
+    receiver: IUserDocument
+    status: "seen" | "unseen"
+    title: string
+    subtitle: string
+    content?: string
+}
