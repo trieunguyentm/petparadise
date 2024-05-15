@@ -12,13 +12,16 @@ const sizePet = {
 const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
     return (
         <div className="bg-pink-1 w-full rounded-xl border">
-            <Image
-                src={post.images[0]}
-                width={1000}
-                height={200}
-                alt="pet-card"
-                className="rounded-t-xl max-h-[400px]"
-            />
+            <Link href={`/find-pet/${post._id.toString()}`}>
+                <Image
+                    src={post.images[0]}
+                    width={1000}
+                    height={200}
+                    alt="pet-card"
+                    className="rounded-t-xl max-h-[400px]"
+                />
+            </Link>
+
             <div className="p-2 flex flex-col text-sm">
                 <div>
                     <span className="font-medium">Searcher</span>:&nbsp;

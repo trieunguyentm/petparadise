@@ -7,17 +7,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import FindPetCard from "../shared/find-pet-card"
 import LocationSelector from "../shared/location-selector"
 import DatePickerDemo from "../shared/date-picker"
 import { Button } from "../ui/button"
-import { MessageCirclePlus, Plus } from "lucide-react"
+import { Loader2, MessageCirclePlus, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { ILostPetPostDocument } from "@/types"
 import SnackbarCustom from "../ui/snackbar"
-import { convertISOToFormatNotHours } from "@/lib/utils"
-import { format } from "date-fns"
+import { useInView } from "react-intersection-observer"
+import { POST_PER_PAGE } from "@/lib/data"
 
 export type TypePet =
     | "all"
@@ -76,6 +76,11 @@ const filterSizePet = [
 const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument[] | null }) => {
     // ROUTER
     const router = useRouter()
+    // Load more
+    const [page, setPage] = useState<number>(0)
+    const [hasMore, setHasMore] = useState<boolean>(true)
+    const [loadingMoreData, setLoadingMoreData] = useState<boolean>(false)
+    const { ref, inView } = useInView()
     // List Post
     const [listPost, setListPost] = useState<ILostPetPostDocument[] | null>(findPetPosts)
     // FILTER PET
@@ -140,6 +145,72 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
             setContentSnackbar("An error occurred, please try again")
         }
     }
+
+    const fetchMorePosts = useCallback(() => {
+        setPage((prev) => prev + 1)
+    }, [])
+
+    useEffect(() => {
+        async function loadMoreData() {
+            setLoadingMoreData(true)
+            try {
+                if (!listPost) return
+                const res = await fetch(
+                    `${
+                        process.env.NEXT_PUBLIC_BASE_URL
+                    }/api/lost-pet/find-pet-post?limit=${POST_PER_PAGE}&offset=${
+                        page * POST_PER_PAGE
+                    }`,
+                    {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                    },
+                )
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message || "Error loading more posts")
+                    return
+                }
+                if (data.success && data.data.length > 0) {
+                    const newPosts = data.data.filter(
+                        (post: ILostPetPostDocument) =>
+                            !listPost?.some((p) => p._id.toString() === post._id.toString()),
+                    )
+                    const tmp = [...listPost, ...newPosts]
+                    setListPost(tmp)
+                    setHasMore(data.data.length > 0)
+                } else {
+                    setHasMore(false)
+                }
+            } catch (error) {
+                console.error("Failed to fetch data: ", error)
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar("Failed to fetch more data")
+            } finally {
+                setLoadingMoreData(false)
+            }
+        }
+        if (page > 0) loadMoreData()
+    }, [page])
+
+    useEffect(() => {
+        if (inView && hasMore) {
+            fetchMorePosts()
+        }
+    }, [inView])
 
     return (
         <>
@@ -239,6 +310,9 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                     </div>
                 </>
             )}
+            <div ref={ref} className="w-full flex justify-center py-5">
+                {loadingMoreData && <Loader2 className="w-8 h-8 animate-spin" />}
+            </div>
             <SnackbarCustom
                 open={openSnackbar}
                 setOpen={setOpenSnackbar}
