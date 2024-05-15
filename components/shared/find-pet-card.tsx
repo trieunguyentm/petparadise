@@ -46,9 +46,11 @@ const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
                 <div>
                     <span className="font-medium">Status</span>:&nbsp;
                     <span>
-                        {post.status === "unfinished" || !post.status
-                            ? "Chưa tìm thấy"
-                            : "Đã tìm thấy"}
+                        {post.status === "unfinished" || !post.status ? (
+                            <span className="text-red-500">Chưa tìm thấy</span>
+                        ) : (
+                            <span className="text-green-500">Đã tìm thấy</span>
+                        )}
                     </span>
                 </div>
                 <div className="line-clamp-4" style={{ minHeight: "4.5rem" }}>

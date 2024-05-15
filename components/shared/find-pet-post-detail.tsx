@@ -8,13 +8,22 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
-import { ArrowLeft, Loader2, MessageCircleMore, Settings, X } from "lucide-react"
+import { ArrowLeft, Loader2, MessageCircleMore, Pencil, Settings, Trash, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import SnackbarCustom from "../ui/snackbar"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { useForm } from "react-hook-form"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { Button } from "../ui/button"
@@ -51,6 +60,11 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
     /** List Comment */
     const [loadingListComment, setLoadingListComment] = useState<boolean>(false)
     const [comments, setComments] = useState<IFindPetCommentDocument[]>([])
+    /** Status Post */
+    const [loadingUpdatePost, setLoadingUpdatePost] = useState<boolean>(false)
+    const [statusPost, setStatusPost] = useState<boolean>(
+        post.status === "unfinished" || !post.status ? false : true,
+    )
 
     const handleClickStartChat = async () => {
         let selectedUser = [post.poster._id.toString()]
@@ -184,6 +198,49 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         }
     }
 
+    const handleUpdatePost = async () => {
+        setLoadingUpdatePost(true)
+        try {
+            const res = await fetch(
+                `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/lost-pet/find-pet-post/${post._id.toString()}`,
+                {
+                    method: "PUT",
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("success")
+                setContentSnackbar(data.message)
+                setStatusPost(true)
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingUpdatePost(false)
+        }
+    }
+
     useEffect(() => {
         const fetchComments = async () => {
             setLoadingListComment(true)
@@ -243,7 +300,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         <div className="px-5 py-3">
             <div className="flex h-[calc(100vh-24px)] bg-pink-1 rounded-xl p-5 w-full">
                 <div className="bg-white rounded-xl w-full p-5 flex flex-col max-h-[100vh] overflow-scroll">
-                    <div className="flex flex-col pb-10 text-brown-1">
+                    <div className="flex flex-col text-brown-1">
                         <div
                             onClick={() => router.push("/find-pet")}
                             className="mb-1 cursor-pointer"
@@ -277,7 +334,28 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                             </div>
                         </div>
                         <div className="cursor-pointer">
-                            {user._id.toString() === post.poster._id.toString() && <Settings />}
+                            {user._id.toString() === post.poster._id.toString() && (
+                                <>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <Settings />
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="px-0">
+                                            <DropdownMenuGroup>
+                                                <DropdownMenuItem onClick={handleUpdatePost}>
+                                                    <Pencil className="mr-2 h-4 w-4" />
+                                                    <span>Đã tìm thấy</span>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem>
+                                                    <Trash className="mr-2 h-4 w-4" />
+                                                    <span>Xóa bài tìm kiếm</span>
+                                                </DropdownMenuItem>
+                                            </DropdownMenuGroup>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </>
+                            )}
                             {user._id.toString() !== post.poster._id.toString() &&
                                 (loadingStartChat ? (
                                     <Loader2 className="w-8 h-8 animate-spin" />
@@ -293,9 +371,11 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;<span className="font-semibold">Trạng thái: </span>
-                                    {post.status === "unfinished" || !post.status
-                                        ? "Chưa tìm thấy"
-                                        : "Đã tìm thấy"}
+                                    {!statusPost ? (
+                                        <span className="text-red-500">Chưa tìm thấy</span>
+                                    ) : (
+                                        <span className="text-green-500">Đã tìm thấy</span>
+                                    )}
                                 </div>
                             </li>
                             <li>

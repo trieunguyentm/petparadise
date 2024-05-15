@@ -21,7 +21,7 @@ const FindPetPostComment = ({ comment }: { comment: IFindPetCommentDocument }) =
                     <Loader2 className="w-5 h-5 animate-spin" />
                 </AvatarFallback>
             </Avatar>
-            <div className="border w-full pl-3 py-1 pr-3 flex flex-col gap-2 bg-slate-100">
+            <div className="border w-full pl-3 pt-1 pb-3 pr-3 flex flex-col gap-2 bg-slate-100">
                 <div className="flex gap-4 items-center">
                     <div className="text-sm font-medium">{comment.poster.username}</div>
                     <div className="text-xs font-light">
