@@ -21,8 +21,8 @@ export interface IUserDocument extends mongoose.Document {
 export interface IPostDocument extends mongoose.Document {
     poster: IUserDocument
     createdAt: Date
-    likes: mongoose.Schema.Types.ObjectId[]
-    saves: mongoose.Schema.Types.ObjectId[]
+    likes: IUserDocument[]
+    saves: IUserDocument[]
     comments: ICommentDocument[]
     images: string[]
     content: string
@@ -73,7 +73,7 @@ export interface ILostPetPostDocument extends mongoose.Document {
     contactInfo: string
     description: string
     likes: IUserDocument[]
-    comments: ICommentDocument[]
+    comments: IFindPetCommentDocument[]
     images: string[]
     size: "small" | "medium" | "big"
     tags: string[]
@@ -95,4 +95,33 @@ export interface INotificationDocument extends mongoose.Document {
     title: string
     subtitle: string
     content?: string
+    moreInfo?: string
+}
+
+export interface IPetAdoptionPostDocument extends mongoose.Document {
+    poster: IUserDocument // Người đăng bài
+    petName?: string // Tên thú cưng
+    petType: "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
+    gender?: "male" | "female"
+    breed?: string // Giống của thú cưng
+    color?: string // Màu lông
+    healthInfo: string // Thông tin sức khỏe thú cưng
+    description: string // Mô tả chi tiết thú cưng và lí do tìm chủ mới
+    likes: IUserDocument[]
+    comments: mongoose.Schema.Types.ObjectId[]
+    location: string // Vị trí hiện tại của thú cưng
+    images: string[] // Các hình ảnh của thú cưng
+    contactInfo: string // Thông tin liên lạc để liên hệ
+    status: "available" | "adopted" // Trạng thái của bài đăng
+    createdAt: Date // Ngày tạo bài đăng
+    updatedAt: Date // Ngày cập nhật bài đăng
+}
+
+export interface IPetAdoptionCommentDocument extends mongoose.Document {
+    poster: IUserDocument
+    createdAt: Date
+    likes: IUserDocument[]
+    post: IPetAdoptionPostDocument
+    content: string
+    images: string[]
 }
