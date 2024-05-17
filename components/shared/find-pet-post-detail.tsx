@@ -45,6 +45,23 @@ type FormValues = {
     photos?: File[] | null
 }
 
+const sizePet = {
+    big: "> 15kg",
+    medium: "5kg - 15kg",
+    small: "0 - 5kg",
+}
+
+const typePet = {
+    dog: "Chó",
+    cat: "Mèo",
+    bird: "Chim",
+    rabbit: "Thỏ",
+    fish: "Cá",
+    rodents: "Loài gặm nhấm",
+    reptile: "Loài bò sát",
+    other: "Khác",
+}
+
 const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: IUserDocument }) => {
     /** React Hook Form */
     const {
@@ -362,7 +379,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                         </div>
                     </div>
                     <div className="flex flex-col pb-16 text-brown-1">
-                        <div className="font-semibold text-3xl">Find Pet</div>
+                        <div className="font-semibold text-3xl">Tìm kiếm thú cưng</div>
                     </div>
                     <div className="flex justify-between items-center">
                         <div>
@@ -424,13 +441,13 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel onClick={() => setOpen(false)}>
-                                                    Cancel
+                                                    Hủy
                                                 </AlertDialogCancel>
                                                 <AlertDialogAction onClick={handleDeletePost}>
                                                     {loadingDelete ? (
                                                         <Loader2 className="w-8 h-8 animate-spin" />
                                                     ) : (
-                                                        "Continue"
+                                                        "Tiếp tục"
                                                     )}
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
@@ -464,13 +481,13 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                 <div className="text-sm">
                                     &bull;&nbsp;
                                     <span className="font-semibold">Loại thú cưng: </span>{" "}
-                                    {post.petType}
+                                    {typePet[post.petType]}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;<span className="font-semibold">Kích thước: </span>{" "}
-                                    {post.size || "Chưa cung cấp"}
+                                    {sizePet[post.size] || "Chưa cung cấp"}
                                 </div>
                             </li>
                             <li>
@@ -576,7 +593,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                 {...register("comment", {
                                     required: "Comment is required",
                                 })}
-                                placeholder="Write a comment..."
+                                placeholder="Viết bình luận của bạn..."
                                 id="comment"
                                 name="comment"
                                 rows={2}

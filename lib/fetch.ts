@@ -1,6 +1,13 @@
 "use server"
 
-import { IChatDocument, ILostPetPostDocument, INotificationDocument, IPostDocument, IUserDocument } from "@/types"
+import {
+    IChatDocument,
+    ILostPetPostDocument,
+    INotificationDocument,
+    IPetAdoptionPostDocument,
+    IPostDocument,
+    IUserDocument,
+} from "@/types"
 import { cookies } from "next/headers"
 
 const delay = (delayInms: number) => {
@@ -271,5 +278,31 @@ export const fetchNotification = async () => {
     } catch (error) {
         console.log(error)
         throw new Error("Failed to fetch notification")
+    }
+}
+
+export const fetchPetAdoptionPost = async () => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/pet-adoption/pet-adoption-post`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IPetAdoptionPostDocument[]
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch pet adoption post")
     }
 }

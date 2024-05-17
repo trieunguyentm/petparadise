@@ -223,7 +223,7 @@ const FormCreatePostFindPet = () => {
                 <div onClick={() => router.push("/find-pet")} className="mb-1 cursor-pointer">
                     <ArrowLeft />
                 </div>
-                <div className="font-semibold text-3xl">Create post find pet</div>
+                <div className="font-semibold text-3xl">Tạo bài đăng tìm thú cưng</div>
             </div>
             <div>
                 Vui lòng điền vào mẫu dưới đây để tìm kiếm về thú cưng bị mất của bạn. Cung cấp càng
@@ -349,11 +349,11 @@ const FormCreatePostFindPet = () => {
                     Hãy cung cấp thêm hình ảnh thú cưng của bạn{" "}
                     <span className="text-red-500">*</span>
                 </label>
-                <div className="flex gap-1 items-center cursor-pointer hover:opacity-50">
-                    <label htmlFor="photos">
+                <div className="flex gap-1 items-center hover:opacity-50">
+                    <label htmlFor="photos" className="cursor-pointer">
                         <ImagePlus className="text-brown-1 w-10 h-10" />
                     </label>
-                    <div className="text-brown-1 text-sm font-semibold">Upload Image</div>
+                    <div className="text-brown-1 text-sm font-semibold">Tải ảnh lên</div>
                 </div>
 
                 <input
@@ -390,7 +390,7 @@ const FormCreatePostFindPet = () => {
             )}
             <div className="flex justify-center mt-4">
                 <Button onClick={handlePost}>
-                    {loading ? <Loader2 className="w-8 h-8 animate-spin " /> : "Post"}
+                    {loading ? <Loader2 className="w-8 h-8 animate-spin " /> : "Tạo bài đăng"}
                 </Button>
             </div>
             <SnackbarCustom

@@ -40,34 +40,25 @@ export type LocationPet = {
 const initialLocationState: LocationPet = { cityName: "", districtName: "", wardName: "" }
 
 const filterTypePet = [
-    { value: "all", text: "All" },
-    { value: "dog", text: "Dog" },
-    { value: "cat", text: "Cat" },
-    { value: "bird", text: "Bird" },
-    { value: "rabbit", text: "Rabbit" },
-    { value: "fish", text: "Fish" },
-    { value: "rodents", text: "Rodents" },
-    { value: "reptile", text: "Reptile" },
-    { value: "other", text: "Other" },
+    { value: "all", text: "Tất cả" },
+    { value: "dog", text: "Chó" },
+    { value: "cat", text: "Mèo" },
+    { value: "bird", text: "Chim" },
+    { value: "rabbit", text: "Thỏ" },
+    { value: "fish", text: "Cá" },
+    { value: "rodents", text: "Loài gặm nhấm" },
+    { value: "reptile", text: "Loài bò sát" },
+    { value: "other", text: "Khác" },
 ]
 
 const filterGenderPet = [
-    {
-        value: "all",
-        text: "All",
-    },
-    {
-        value: "male",
-        text: "Male",
-    },
-    {
-        value: "female",
-        text: "Female",
-    },
+    { value: "all", text: "Tất cả" },
+    { value: "male", text: "Giống đực" },
+    { value: "female", text: "Giống cái" },
 ]
 
 const filterSizePet = [
-    { value: "all", text: "All" },
+    { value: "all", text: "Tất cả" },
     { value: "small", text: "0kg - 5kg" },
     { value: "medium", text: "5kg - 15kg" },
     { value: "big", text: "> 15kg" },
@@ -219,14 +210,14 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
                 {/* TYPE PET */}
                 <div className="flex flex-col gap-1">
-                    <div className="text-sm text-brown-1 font-semibold">Pet type</div>
+                    <div className="text-sm text-brown-1 font-semibold">Loại thú cưng</div>
                     <Select onValueChange={handleSelectTypePet} defaultValue="all">
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a type pet" />
+                            <SelectValue placeholder="Chọn loại thú cưng cần tìm kiếm" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectLabel>Select a pet type</SelectLabel>
+                                <SelectLabel>Chọn loại thú cưng cần tìm kiếm</SelectLabel>
                                 {filterTypePet.map((filter) => (
                                     <SelectItem key={filter.value} value={filter.value}>
                                         {filter.text}
@@ -238,14 +229,14 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                 </div>
                 {/* GENDER PET */}
                 <div className="flex flex-col gap-1">
-                    <div className="text-sm text-brown-1 font-semibold">Pet gender</div>
+                    <div className="text-sm text-brown-1 font-semibold">Giới tính thú cưng</div>
                     <Select onValueChange={handleSelectGenderPet} defaultValue="all">
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a pet gender" />
+                            <SelectValue placeholder="Chọn giới tính của thú cưng" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectLabel>Select a status pet</SelectLabel>
+                                <SelectLabel>Chọn giới tính của thú cưng</SelectLabel>
                                 {filterGenderPet.map((filter) => (
                                     <SelectItem key={filter.value} value={filter.value}>
                                         {filter.text}
@@ -257,14 +248,14 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                 </div>
                 {/* SIZE PET */}
                 <div className="flex flex-col gap-1">
-                    <div className="text-sm text-brown-1 font-semibold">Size pet</div>
+                    <div className="text-sm text-brown-1 font-semibold">Kích thước thú cưng</div>
                     <Select onValueChange={handleSelectSizePet} defaultValue="all">
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a size pet" />
+                            <SelectValue placeholder="Chọn kích thước thú cưng" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectLabel>Select a size pet</SelectLabel>
+                                <SelectLabel>Chọn kích thước của thú cưng</SelectLabel>
                                 {filterSizePet.map((filter) => (
                                     <SelectItem key={filter.value} value={filter.value}>
                                         {filter.text}
@@ -284,7 +275,7 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
             </div>
             <div className="w-full mt-5">
                 <Button onClick={handleSearchPost} className="w-full bg-brown-1">
-                    Search
+                    Tìm kiếm
                 </Button>
             </div>
             <div className="w-full mt-5">
@@ -292,14 +283,14 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                     onClick={() => router.push("/find-pet/create-post")}
                     className="w-full bg-green-300 text-black hover:text-white"
                 >
-                    Create a new post to find your pet &nbsp;
+                    Tạo một bài viết mới để tìm kiếm thú cưng &nbsp;
                     <MessageCirclePlus className="w-4 h-4" />
                 </Button>
             </div>
             {/* DATA PET */}
             {!listPost || listPost.length === 0 ? (
                 <div className="w-full h-full flex items-center justify-center mt-10">
-                    There are currently no pet search posts
+                    Hiện tại chưa có bài viết tìm kiếm thú cưng nào
                 </div>
             ) : (
                 <>

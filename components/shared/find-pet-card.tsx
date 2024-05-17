@@ -9,6 +9,17 @@ const sizePet = {
     small: "0 - 5kg",
 }
 
+const typePet = {
+    dog: "Chó",
+    cat: "Mèo",
+    bird: "Chim",
+    rabbit: "Thỏ",
+    fish: "Cá",
+    rodents: "Loài gặm nhấm",
+    reptile: "Loài bò sát",
+    other: "Khác",
+}
+
 const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
     return (
         <div className="bg-pink-1 w-full rounded-xl border">
@@ -24,27 +35,27 @@ const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
 
             <div className="p-2 flex flex-col text-sm">
                 <div>
-                    <span className="font-medium">Searcher</span>:&nbsp;
+                    <span className="font-medium">Người tìm kiếm</span>:&nbsp;
                     <span>{post.poster.username}</span>
                 </div>
                 <div>
-                    <span className="font-medium">Pet Type</span>:&nbsp;
-                    <span>{post.petType}</span>
+                    <span className="font-medium">Loại thú cưng</span>:&nbsp;
+                    <span>{typePet[post.petType]}</span>
                 </div>
                 <div>
-                    <span className="font-medium">Size</span>:&nbsp;
+                    <span className="font-medium">Kích thước</span>:&nbsp;
                     <span>{post.size ? sizePet[post.size] : "Chưa cung cấp"}</span>
                 </div>
                 <div>
-                    <span className="font-medium">Location</span>:&nbsp;
+                    <span className="font-medium">Vị trí trước khi bị mất</span>:&nbsp;
                     <span>{post.lastSeenLocation}</span>
                 </div>
                 <div>
-                    <span className="font-medium">Time</span>:&nbsp;
+                    <span className="font-medium">Thời điểm lần cuối thấy thú cưng</span>:&nbsp;
                     <span>{convertISOToFormatNotHours(post.lastSeenDate)}</span>
                 </div>
                 <div>
-                    <span className="font-medium">Status</span>:&nbsp;
+                    <span className="font-medium">Trạng thái</span>:&nbsp;
                     <span>
                         {post.status === "unfinished" || !post.status ? (
                             <span className="text-red-500">Chưa tìm thấy</span>
@@ -54,14 +65,14 @@ const FindPetCard = ({ post }: { post: ILostPetPostDocument }) => {
                     </span>
                 </div>
                 <div className="line-clamp-4" style={{ minHeight: "4.5rem" }}>
-                    <span className="font-medium">Description</span>:&nbsp;
+                    <span className="font-medium">Mô tả chi tiết</span>:&nbsp;
                     <span> {post.description}</span>
                 </div>
                 <Link
                     href={`/find-pet/${post._id.toString()}`}
                     className="font-medium underline text-center my-2 hover:text-brown-1"
                 >
-                    View more &gt;
+                    Xem thêm chi tiết &gt;
                 </Link>
             </div>
         </div>

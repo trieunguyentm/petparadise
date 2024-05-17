@@ -97,11 +97,11 @@ const LocationSelector = ({ setLocationPet }: { setLocationPet: (arg: LocationPe
                 <div className="text-sm text-brown-1 font-semibold">Tỉnh/thành</div>
                 <Select onValueChange={(value) => setSelectedCityId(value)} value={selectedCityId}>
                     <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a city" />
+                        <SelectValue placeholder="Chọn vị trí cần tìm" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectLabel>Select a City</SelectLabel>
+                            <SelectLabel>Chọn vị trí cần tìm</SelectLabel>
                             <SelectItem value="00">Chọn tỉnh/thành phố</SelectItem>
                             {cityOptions.map((city) => (
                                 <SelectItem key={city.Id} value={city.Id}>
@@ -121,11 +121,11 @@ const LocationSelector = ({ setLocationPet }: { setLocationPet: (arg: LocationPe
                     disabled={selectedCityId === "00"}
                 >
                     <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a district" />
+                        <SelectValue placeholder="Chọn vị trí cần tìm" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectLabel>Select a District</SelectLabel>
+                            <SelectLabel>Chọn vị trí cần tìm</SelectLabel>
                             <SelectItem value="000">Chọn quận/huyện</SelectItem>
                             {districtOptions.map((district) => (
                                 <SelectItem key={district.Id} value={district.Id}>
@@ -145,11 +145,11 @@ const LocationSelector = ({ setLocationPet }: { setLocationPet: (arg: LocationPe
                     disabled={selectedDistrictId === "000"}
                 >
                     <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a ward" />
+                        <SelectValue placeholder="Chọn vị trí cần tìm" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectLabel>Select a Ward</SelectLabel>
+                            <SelectLabel>Chọn vị trí cần tìm</SelectLabel>
                             <SelectItem value="00000">Chọn phường/xã</SelectItem>
                             {wardOptions.map((ward) => (
                                 <SelectItem key={ward.Id} value={ward.Id}>
