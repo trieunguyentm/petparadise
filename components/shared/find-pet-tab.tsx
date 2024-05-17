@@ -3,6 +3,7 @@
 import { ILostPetPostDocument } from "@/types"
 import FindPetContainer from "../container/find-pet-container"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
+import PetAdoptionContainer from "../container/pet-adoption-container"
 
 const FindPetTab = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument[] | null }) => {
     return (
@@ -15,7 +16,9 @@ const FindPetTab = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument[] | n
                 <TabsContent value="post-find-pet">
                     <FindPetContainer findPetPosts={findPetPosts} />
                 </TabsContent>
-                <TabsContent value="post-find-owner">Hello</TabsContent>
+                <TabsContent value="post-find-owner">
+                    <PetAdoptionContainer />
+                </TabsContent>
             </Tabs>
         </>
     )

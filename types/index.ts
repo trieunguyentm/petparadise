@@ -9,6 +9,7 @@ export interface IUserDocument extends mongoose.Document {
     dateOfBirth?: Date
     posts: IPostDocument[]
     findPetPosts: ILostPetPostDocument[]
+    petAdoptionPosts: IPetAdoptionPostDocument[]
     savedPosts: IPostDocument[]
     likedPosts: IPostDocument[]
     followers: IUserDocument[]
@@ -102,6 +103,7 @@ export interface IPetAdoptionPostDocument extends mongoose.Document {
     poster: IUserDocument // Người đăng bài
     petName?: string // Tên thú cưng
     petType: "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
+    sizePet?: "small" | "medium" | "big"
     gender?: "male" | "female"
     breed?: string // Giống của thú cưng
     color?: string // Màu lông
@@ -113,6 +115,7 @@ export interface IPetAdoptionPostDocument extends mongoose.Document {
     images: string[] // Các hình ảnh của thú cưng
     contactInfo: string // Thông tin liên lạc để liên hệ
     status: "available" | "adopted" // Trạng thái của bài đăng
+    reason: "lost-pet" | "your-pet" // Lí do cần tìm chủ mới
     createdAt: Date // Ngày tạo bài đăng
     updatedAt: Date // Ngày cập nhật bài đăng
 }
