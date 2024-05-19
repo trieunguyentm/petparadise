@@ -152,7 +152,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
             {/* LIST OTHER USER */}
             <div className="w-4/5 border h-[500px] rounded-md p-3 flex flex-col gap-4">
                 {otherUser === null ? (
-                    <>No users found</>
+                    <>Không có người dùng nào</>
                 ) : (
                     <>
                         {otherUser.map((people) => (
@@ -171,7 +171,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                     {selectedUser.length >= 2 && (
                         <form className="flex flex-col gap-2">
                             <div>
-                                <label htmlFor="nameGroup">Group chat name</label>
+                                <label htmlFor="nameGroup">Đặt tên cho cuộc trò chuyện</label>
                                 <input
                                     {...register("nameGroup", {
                                         required: "Group name is required",
@@ -183,7 +183,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                             </div>
                             <div>
                                 <label htmlFor="avatarGroup" className="flex flex-row gap-1">
-                                    Avatar Group
+                                    Tạo ảnh đại diện cho cuộc trò chuyện
                                     <Image
                                         src={"/assets/images/image-plus.svg"}
                                         width={20}
@@ -214,7 +214,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                                         className="text-xs"
                                         onClick={handleCancel}
                                     >
-                                        Delete Image
+                                        Xóa ảnh
                                     </Button>
                                 </>
                             )}
@@ -222,7 +222,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                     )}
                     <Button onClick={handleClickStartChat}>
                         {!loadingStartChat ? (
-                            "Start Chat"
+                            "Bắt đầu"
                         ) : (
                             <Loader2 className="w-8 h-8 animate-spin" />
                         )}

@@ -6,42 +6,42 @@ type MenuItem = {
 
 export const menuLeftSideBar: MenuItem[] = [
     {
-        title: "Home",
+        title: "Trang chủ",
         icon: "/assets/images/home.svg",
         link: "/",
     },
     {
-        title: "Create Post",
+        title: "Tạo bài viết",
         icon: "/assets/images/image-plus.svg",
         link: "/create-post",
     },
     {
-        title: "Saved Post",
+        title: "Bài viết đã lưu",
         icon: "/assets/images/bookmark-check.svg",
         link: "/saved-post",
     },
     {
-        title: "Liked Post",
+        title: "Bài viết đã thích",
         icon: "/assets/images/heart.svg",
         link: "/liked-post",
     },
     {
-        title: "People",
+        title: "Người dùng",
         icon: "/assets/images/users-round.svg",
         link: "/people",
     },
     {
-        title: "Store",
+        title: "Cửa hàng",
         icon: "/assets/images/store.svg",
         link: "/store",
     },
     {
-        title: "Find Pet",
+        title: "Tìm thú cưng",
         icon: "/assets/images/dog.svg",
         link: "/find-pet",
     },
     {
-        title: "Message",
+        title: "Tin nhắn",
         icon: "/assets/images/message-circle.svg",
         link: "/message",
     },

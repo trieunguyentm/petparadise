@@ -145,7 +145,7 @@ const MessageDetailContainer = ({
                     <div className="flex flex-col gap-1">
                         <div className="font-medium">{displayName}</div>
                         {isGroup && (
-                            <div className="text-xs">{chatDetail.members.length} members</div>
+                            <div className="text-xs">{chatDetail.members.length} thành viên</div>
                         )}
                         {!isGroup && (
                             <div className="text-xs">
@@ -182,7 +182,7 @@ const MessageDetailContainer = ({
                 {/* TEXT AREA */}
                 <textarea
                     {...register("message")}
-                    placeholder="Write a message..."
+                    placeholder="Nhập nội dung tin nhắn..."
                     className="w-full bg-pink-1 border-t-2 border-brown-1 py-3 pl-2 pr-12 focus:outline-none resize-none"
                 />
                 {/* SEND MESSAGE */}

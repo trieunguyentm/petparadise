@@ -76,7 +76,7 @@ const MessageListUser = ({ otherUser }: { otherUser: IUserDocument[] | null }) =
                 <input
                     type="text"
                     className="w-full py-3 pl-2 pr-8 focus:outline-none bg-transparent"
-                    placeholder="Search contact ..."
+                    placeholder="Tìm kiếm các liên hệ ..."
                     onChange={(e) => handleChangeSearch(e.target.value)}
                 />
                 {loading ? (

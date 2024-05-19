@@ -16,7 +16,7 @@ const RightSideBar = async () => {
             <div className="flex flex-col">
                 <div className="p-1 flex items-center gap-2 text-brown-1 mb-2">
                     <Image src={"/assets/images/bell.svg"} alt="bell" width={40} height={40} />
-                    <div className="font-medium text-base">Notification</div>
+                    <div className="font-medium text-base">Thông báo</div>
                 </div>
                 <ListNotification dataNotification={dataNotification} user={user} />
             </div>
@@ -28,7 +28,7 @@ const RightSideBar = async () => {
                         width={40}
                         height={40}
                     />
-                    <div className="font-medium text-base">Other User</div>
+                    <div className="font-medium text-base">Người dùng khác</div>
                 </div>
                 <div className="p-2 max-h-[40vh] min-h-[200px] w-[100%] overflow-auto bg-white rounded-xl flex flex-col gap-2 border-brown-1 border">
                     <User />

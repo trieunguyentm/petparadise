@@ -68,7 +68,7 @@ const LogoutComponent = () => {
                             width={40}
                             height={40}
                         />
-                        <div className="font-medium text-base max-sm:hidden">Log out</div>{" "}
+                        <div className="font-medium text-base max-sm:hidden">Đăng xuất</div>{" "}
                     </>
                 ) : (
                     <Loader2 className="w-10 h-10 animate-spin" />

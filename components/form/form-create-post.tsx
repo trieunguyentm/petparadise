@@ -120,7 +120,7 @@ const FormCreatePost = () => {
             className="bg-white rounded-xl w-full p-5 flex flex-col max-h-[100vh] overflow-scroll"
         >
             <div className="flex flex-col pb-16 text-brown-1">
-                <div className="font-semibold text-3xl">Create post</div>
+                <div className="font-semibold text-3xl">Tạo bài viết</div>
             </div>
             <label htmlFor="photo" className="flex items-center gap-3 cursor-pointer">
                 <Image
@@ -130,7 +130,7 @@ const FormCreatePost = () => {
                     height={100}
                     priority={true}
                 />
-                <div className="font-semibold text-xl text-brown-1">Upload a photo</div>
+                <div className="font-semibold text-xl text-brown-1">Tải ảnh lên</div>
             </label>
             <input
                 {...register("photo")}
@@ -159,7 +159,7 @@ const FormCreatePost = () => {
                     htmlFor="content"
                     className="text-brown-1 font-medium text-xl flex items-center gap-1"
                 >
-                    Caption{" "}
+                    Nội dung bài viết{" "}
                     {errors.content && (
                         <Tooltip
                             TransitionComponent={Zoom}
@@ -210,7 +210,7 @@ const FormCreatePost = () => {
             </div>
             <div className="flex flex-col gap-2 mt-4">
                 <label htmlFor="tag" className="text-brown-1 font-medium text-xl">
-                    Tag
+                    Thẻ gắn kèm
                 </label>
                 <div className="relative">
                     <textarea
@@ -224,7 +224,7 @@ const FormCreatePost = () => {
             </div>
             <div className="flex justify-center mt-10 w-full">
                 <Button type="submit" className="w-full">
-                    {loadingCreate ? <Loader2 className="w-8 h-8 animate-spin" /> : "Publish"}
+                    {loadingCreate ? <Loader2 className="w-8 h-8 animate-spin" /> : "Tạo bài viết"}
                 </Button>
             </div>
             <SnackbarCustom

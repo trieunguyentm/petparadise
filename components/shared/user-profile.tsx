@@ -18,8 +18,8 @@ const UserProfile = async () => {
                 </AvatarFallback>
             </Avatar>
             <div className="flex flex-col text-brown-1 max-lg:hidden">
-                <div className="text-xl font-medium">Manage Account</div>
-                <div className="text-sm">@{user?.username}</div>
+                <div className="text-xl font-medium">Thông tin cá nhân</div>
+                <div className="text-sm">{user?.username}</div>
             </div>
         </>
     )

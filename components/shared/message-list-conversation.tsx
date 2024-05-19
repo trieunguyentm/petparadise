@@ -26,7 +26,7 @@ const MessageListConversation = ({
             <div className="bg-pink-1 py-2 pl-2 pr-8 rounded-xl relative border border-brown-1">
                 <input
                     type="text"
-                    placeholder="Seach conversation..."
+                    placeholder="Tìm cuộc trò chuyện..."
                     className="focus:outline-none py-2 px-1 bg-transparent"
                     onChange={(e) => handleChangeSearch(e.target.value)}
                 />
@@ -41,8 +41,8 @@ const MessageListConversation = ({
             <div className="flex flex-1 overflow-scroll flex-col gap-4 pt-4 mt-6 border-t border-brown-1">
                 {!chats ? (
                     <div className="flex items-center justify-center text-brown-1">
-                        You haven't joined any conversations yet, select your friends and message
-                        them
+                        Bạn chưa tham gia cuộc trò chuyện nào, hãy chọn bạn bè của bạn và bắt đầu
+                        một cuộc trò chuyện
                     </div>
                 ) : (
                     <ListMessageCard chats={chats} user={user} search={search} />

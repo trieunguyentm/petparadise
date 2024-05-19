@@ -15,7 +15,7 @@ const Message = async () => {
                 <div className="bg-white rounded-xl w-full p-5 flex flex-col max-h-[100vh] overflow-scroll gap-10">
                     {/* TITLE */}
                     <div className="text-brown-1 font-semibold">
-                        Select the friends you want to start a conversation with
+                        Chọn danh sách người dùng để bắt đầu một cuộc trò chuyện
                     </div>
                     {/* SEARCH CONTACT */}
                     <MessageListUser otherUser={otherUser} />

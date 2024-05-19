@@ -24,11 +24,11 @@ const TopBarPeople = () => {
 
     return (
         <div className="flex pb-16 text-brown-1 justify-between">
-            <div className="font-semibold text-3xl">People</div>
+            <div className="font-semibold text-3xl">Người dùng</div>
             <div className="relative pl-4 py-2 pr-8 bg-pink-1 rounded-xl border border-brown-1">
                 <input
                     type="text"
-                    placeholder="Search people"
+                    placeholder="Tìm kiếm người dùng"
                     className="bg-transparent focus:outline-none py-2"
                     onKeyDown={handleKeyDown}
                     value={search}

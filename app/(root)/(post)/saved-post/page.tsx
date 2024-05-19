@@ -16,7 +16,7 @@ const SavedPost = async () => {
 
     return (
         <>
-            <div className="text-3xl font-semibold text-brown-1">Saved Post</div>
+            <div className="text-3xl font-semibold text-brown-1">Bài viết đã lưu</div>
             {user.savedPosts.reverse().map((post) => (
                 <div key={post._id}>
                     <PostFeedDetail user={user} post={post} />

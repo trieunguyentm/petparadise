@@ -16,7 +16,7 @@ const LikedPost = async () => {
 
     return (
         <>
-            <div className="text-3xl font-semibold text-brown-1">Liked Post</div>
+            <div className="text-3xl font-semibold text-brown-1">Bài viết đã thích</div>
             {user.likedPosts.reverse().map((post) => (
                 <div key={post._id}>
                     <PostFeedDetail user={user} post={post} />

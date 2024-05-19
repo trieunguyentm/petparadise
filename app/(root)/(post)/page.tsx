@@ -8,7 +8,7 @@ export const metadata = {
 const HomePage = () => {
     return (
         <>
-            <div className="text-3xl font-semibold text-brown-1">Feed</div>
+            <div className="text-3xl font-semibold text-brown-1">Bảng tin</div>
             <PostContainer />
         </>
     )
