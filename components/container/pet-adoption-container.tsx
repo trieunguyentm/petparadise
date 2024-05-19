@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
     Select,
     SelectContent,
@@ -11,10 +11,13 @@ import {
 import { GenderPet, LocationPet, SizePet, TypePet } from "./find-pet-container"
 import LocationSelector from "../shared/location-selector"
 import { Button } from "../ui/button"
-import { MessageCirclePlus } from "lucide-react"
+import { Loader2, MessageCirclePlus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { IPetAdoptionPostDocument } from "@/types"
 import PetAdoptionCard from "../shared/pet-adoption-card"
+import SnackbarCustom from "../ui/snackbar"
+import { useInView } from "react-intersection-observer"
+import { POST_PER_PAGE } from "@/lib/data"
 
 export type PetAdoptionStatus = "all" | "available" | "adopted"
 
@@ -66,6 +69,11 @@ const PetAdoptionContainer = ({
 }) => {
     const router = useRouter()
     const [listPost, setListPost] = useState<IPetAdoptionPostDocument[] | null>(petAdoptionPosts)
+    // Load more
+    const [page, setPage] = useState<number>(0)
+    const [hasMore, setHasMore] = useState<boolean>(true)
+    const [loadingMoreData, setLoadingMoreData] = useState<boolean>(false)
+    const { ref, inView } = useInView()
     // FILTER PET
     const [typePet, setTypePet] = useState<TypePet>("all")
     const [genderPet, setGenderPet] = useState<GenderPet>("all")
@@ -73,6 +81,78 @@ const PetAdoptionContainer = ({
     const [locationPet, setLocationPet] = useState<LocationPet>(initialLocationState)
     const [statusPet, setStatusPet] = useState<PetAdoptionStatus>("all")
     const [reasonFindPet, setReasonFindPet] = useState<PetReasonFind>("all")
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
+
+    const fetchMorePosts = useCallback(() => {
+        setPage((prev) => prev + 1)
+    }, [])
+
+    useEffect(() => {
+        async function loadMoreData() {
+            setLoadingMoreData(true)
+            try {
+                if (!listPost) return
+                const res = await fetch(
+                    `${
+                        process.env.NEXT_PUBLIC_BASE_URL
+                    }/api/pet-adoption/pet-adoption-post?limit=${POST_PER_PAGE}&offset=${
+                        page * POST_PER_PAGE
+                    }`,
+                    {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                    },
+                )
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message || "Error loading more posts")
+                    return
+                }
+                if (data.success && data.data.length > 0) {
+                    const newPosts = data.data.filter(
+                        (post: IPetAdoptionPostDocument) =>
+                            !listPost?.some((p) => p._id.toString() === post._id.toString()),
+                    )
+                    const tmp = [...listPost, ...newPosts]
+                    setListPost(tmp)
+                    setHasMore(data.data.length > 0)
+                } else {
+                    setHasMore(false)
+                }
+            } catch (error) {
+                console.error("Failed to fetch data: ", error)
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar("Failed to fetch more data")
+            } finally {
+                setLoadingMoreData(false)
+            }
+        }
+        if (page > 0) loadMoreData()
+    }, [page])
+
+    useEffect(() => {
+        if (inView && hasMore) {
+            fetchMorePosts()
+        }
+    }, [inView])
 
     return (
         <>
@@ -218,6 +298,15 @@ const PetAdoptionContainer = ({
                     </div>
                 </>
             )}
+            <div ref={ref} className="w-full flex justify-center py-5">
+                {loadingMoreData && <Loader2 className="w-8 h-8 animate-spin" />}
+            </div>
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </>
     )
 }

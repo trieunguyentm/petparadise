@@ -1,10 +1,14 @@
-import { Rubik } from "next/font/google"
+import { Be_Vietnam_Pro, Rubik } from "next/font/google"
 import "../../globals.css"
 import TopBarPeople from "@/components/layout/top-bar-people"
 import { Suspense } from "react"
 import UserCardSkeleton from "@/components/skeleton/user-card-skeleton"
 
-const rubik = Rubik({ subsets: ["latin"] })
+// const rubik = Rubik({ subsets: ["latin"] })
+const vietnamese = Be_Vietnam_Pro({
+    subsets: ["latin"],
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+})
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (

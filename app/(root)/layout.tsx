@@ -1,15 +1,19 @@
-import { Rubik } from "next/font/google"
+import { Be_Vietnam_Pro, Rubik } from "next/font/google"
 import "../globals.css"
 import LeftSideBar from "@/components/layout/left-side-bar"
 import MainContainer from "@/components/layout/main-container"
 import RightSideBar from "@/components/layout/right-side-bar"
 
-const rubik = Rubik({ subsets: ["latin"] })
+// const rubik = Rubik({ subsets: ["latin"] })
+const vietnamese = Be_Vietnam_Pro({
+    subsets: ["latin"],
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+})
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
-            <body className={`${rubik.className} bg-yellow-1`}>
+            <body className={`${vietnamese.className} bg-yellow-1`}>
                 <main className="flex flex-row">
                     <LeftSideBar />
                     <MainContainer>{children}</MainContainer>
