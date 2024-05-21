@@ -1,19 +1,11 @@
 "use client"
 
-import { convertISOToFormat, convertISOToFormatNotHours } from "@/lib/utils"
-import { IFindPetCommentDocument, ILostPetPostDocument, IUserDocument } from "@/types"
-import Image from "next/image"
-import { Pagination } from "swiper/modules"
-import { Swiper, SwiperSlide } from "swiper/react"
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
+import { convertISOToFormat } from "@/lib/utils"
+import { IPetAdoptionCommentDocument, IPetAdoptionPostDocument, IUserDocument } from "@/types"
 import { ArrowLeft, Loader2, MessageCircleMore, Pencil, Settings, Trash, X } from "lucide-react"
-import { useEffect, useState } from "react"
-import SnackbarCustom from "../ui/snackbar"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { useForm } from "react-hook-form"
+import React, { useEffect, useState } from "react"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,25 +23,20 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-
+} from "../ui/alert-dialog"
+import SnackbarCustom from "../ui/snackbar"
+import { Pagination } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/react"
+import "swiper/css"
+import "swiper/css/navigation"
+import "swiper/css/pagination"
+import { useForm } from "react-hook-form"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { Button } from "../ui/button"
-import FindPetPostComment from "./find-pet-post-comment"
+import PetAdoptionPostComment from "./pet-adoption-post-comment"
 import { pusherClient } from "@/lib/pusher"
-
-type FormValues = {
-    comment: string
-    photos?: File[] | null
-}
-
-const sizePet = {
-    big: "> 15kg",
-    medium: "5kg - 15kg",
-    small: "0 - 5kg",
-}
 
 const typePet = {
     dog: "Chó",
@@ -62,7 +49,25 @@ const typePet = {
     other: "Khác",
 }
 
-const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: IUserDocument }) => {
+const sizePet = {
+    big: "> 15kg",
+    medium: "5kg - 15kg",
+    small: "0 - 5kg",
+}
+
+type FormValues = {
+    comment: string
+    photos?: File[] | null
+}
+
+const PetAdoptionPostDetail = ({
+    post,
+    user,
+}: {
+    post: IPetAdoptionPostDocument
+    user: IUserDocument
+}) => {
+    const router = useRouter()
     /** React Hook Form */
     const {
         register,
@@ -72,29 +77,57 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         reset,
         handleSubmit,
     } = useForm<FormValues>()
-    const router = useRouter()
+    /** Start Chat */
     const [loadingStartChat, setLoadingStartChat] = useState<boolean>(false)
-    /** Snack Bar */
-    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
-    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
-        "success",
+    /** Dialog Alert */
+    const [open, setOpen] = useState(false)
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
+    /** Status Post */
+    const [loadingUpdatePost, setLoadingUpdatePost] = useState<boolean>(false)
+    const [statusPost, setStatusPost] = useState<boolean>(
+        post.status === "available" || !post.status ? false : true,
     )
-    const [contentSnackbar, setContentSnackbar] = useState<string>("")
     /** Preview image in comment */
     const [previewImages, setPreviewImages] = useState<string[]>([])
     /** Loading comment */
     const [loadingComment, setLoadingComment] = useState<boolean>(false)
     /** List Comment */
     const [loadingListComment, setLoadingListComment] = useState<boolean>(false)
-    const [comments, setComments] = useState<IFindPetCommentDocument[]>([])
-    /** Status Post */
-    const [loadingUpdatePost, setLoadingUpdatePost] = useState<boolean>(false)
-    const [statusPost, setStatusPost] = useState<boolean>(
-        post.status === "unfinished" || !post.status ? false : true,
+    const [comments, setComments] = useState<IPetAdoptionCommentDocument[]>([])
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
     )
-    /** Dialog Alert */
-    const [open, setOpen] = useState(false)
-    const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
+
+    const addEmoji = (emoji: any) => {
+        let emojiString = emoji.native
+        setValue("comment", watch("comment") + emojiString)
+    }
+
+    const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const filesArray = Array.from(e.target.files)
+            setValue("photos", filesArray, { shouldValidate: true })
+            // Tạo bản xem trước cho mỗi file ảnh
+            const filePreviews: string[] = filesArray.map((file) => URL.createObjectURL(file))
+            setPreviewImages(filePreviews)
+        }
+    }
+
+    const handleDeleteImage = (index: number) => {
+        // Cập nhật danh sách các file ảnh đã chọn
+        const files = watch("photos")
+        if (files) {
+            const updatedFiles = files.filter((_: File, i: number) => i !== index)
+            setValue("photos", updatedFiles, { shouldValidate: true })
+        }
+
+        // Cập nhật danh sách các URL xem trước ảnh
+        const updatedPreviews = previewImages.filter((_: string, i: number) => i !== index)
+        setPreviewImages(updatedPreviews)
+    }
 
     const handleClickStartChat = async () => {
         let selectedUser = [post.poster._id.toString()]
@@ -140,34 +173,6 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         }
     }
 
-    const addEmoji = (emoji: any) => {
-        let emojiString = emoji.native
-        setValue("comment", watch("comment") + emojiString)
-    }
-
-    const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const filesArray = Array.from(e.target.files)
-            setValue("photos", filesArray, { shouldValidate: true })
-            // Tạo bản xem trước cho mỗi file ảnh
-            const filePreviews: string[] = filesArray.map((file) => URL.createObjectURL(file))
-            setPreviewImages(filePreviews)
-        }
-    }
-
-    const handleDeleteImage = (index: number) => {
-        // Cập nhật danh sách các file ảnh đã chọn
-        const files = watch("photos")
-        if (files) {
-            const updatedFiles = files.filter((_: File, i: number) => i !== index)
-            setValue("photos", updatedFiles, { shouldValidate: true })
-        }
-
-        // Cập nhật danh sách các URL xem trước ảnh
-        const updatedPreviews = previewImages.filter((_: string, i: number) => i !== index)
-        setPreviewImages(updatedPreviews)
-    }
-
     const handleSubmitForm = async () => {
         const formData = new FormData()
         formData.append("content", watch("comment"))
@@ -183,7 +188,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         setLoadingComment(true)
         try {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/lost-pet/find-pet-post/comment`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/pet-adoption/pet-adoption-post/comment`,
                 {
                     method: "POST",
                     credentials: "include",
@@ -227,49 +232,6 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         }
     }
 
-    const handleUpdatePost = async () => {
-        setLoadingUpdatePost(true)
-        try {
-            const res = await fetch(
-                `${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                }/api/lost-pet/find-pet-post/${post._id.toString()}`,
-                {
-                    method: "PUT",
-                    credentials: "include",
-                },
-            )
-            const data = await res.json()
-            if (!res.ok) {
-                if (data.type === "ERROR_SESSION") {
-                    // Lưu thông báo vào localStorage
-                    localStorage.setItem(
-                        "toastMessage",
-                        JSON.stringify({ type: "error", content: data.message }),
-                    )
-                    router.push("/login")
-                    return
-                }
-                setOpenSnackbar(true)
-                setTypeSnackbar("error")
-                setContentSnackbar(data.message)
-            }
-            if (data.success) {
-                setOpenSnackbar(true)
-                setTypeSnackbar("success")
-                setContentSnackbar(data.message)
-                setStatusPost(true)
-            }
-        } catch (error) {
-            console.log(error)
-            setOpenSnackbar(true)
-            setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
-        } finally {
-            setLoadingUpdatePost(false)
-        }
-    }
-
     useEffect(() => {
         const fetchComments = async () => {
             setLoadingListComment(true)
@@ -277,7 +239,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                 const res = await fetch(
                     `${
                         process.env.NEXT_PUBLIC_BASE_URL
-                    }/api/lost-pet/find-pet-post/${post._id.toString()}/comment`,
+                    }/api/pet-adoption/pet-adoption-post/${post._id.toString()}/comment`,
                     {
                         method: "GET",
                         credentials: "include",
@@ -299,7 +261,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                     setContentSnackbar(data.message)
                 }
                 if (data.success) {
-                    setComments(data.data as IFindPetCommentDocument[])
+                    setComments(data.data as IPetAdoptionCommentDocument[])
                 }
             } catch (error) {
                 setOpenSnackbar(true)
@@ -312,16 +274,16 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
         fetchComments()
     }, [])
 
-    const handleNewComment = (newComment: IFindPetCommentDocument) => {
+    const handleNewComment = (newComment: IPetAdoptionCommentDocument) => {
         setComments((prev) => [newComment, ...prev])
     }
 
     useEffect(() => {
-        const channel = pusherClient.subscribe(`find-pet-post-${post._id.toString()}-comments`)
+        const channel = pusherClient.subscribe(`pet-adoption-post-${post._id.toString()}-comments`)
         channel.bind(`new-comment`, handleNewComment)
         return () => {
             channel.unbind(`new-comment`, handleNewComment)
-            pusherClient.unsubscribe(`find-pet-post-${post._id.toString()}-comments`)
+            pusherClient.unsubscribe(`pet-adoption-post-${post._id.toString()}-comments`)
         }
     }, [post._id])
 
@@ -331,7 +293,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
             const res = await fetch(
                 `${
                     process.env.NEXT_PUBLIC_BASE_URL
-                }/api/lost-pet/find-pet-post/${post._id.toString()}`,
+                }/api/pet-adoption/pet-adoption-post/${post._id.toString()}`,
                 {
                     method: "DELETE",
                     credentials: "include",
@@ -378,7 +340,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                         </div>
                     </div>
                     <div className="flex flex-col pb-16 text-brown-1">
-                        <div className="font-semibold text-3xl">Tìm kiếm thú cưng</div>
+                        <div className="font-semibold text-3xl">Nhận nuôi thú cưng</div>
                     </div>
                     <div className="flex justify-between items-center">
                         <div>
@@ -411,11 +373,13 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             <DropdownMenuGroup>
-                                                <DropdownMenuItem onClick={handleUpdatePost}>
+                                                {/* <DropdownMenuItem
+                                                    onClick={() => console.log("Đã tìm thấy")}
+                                                >
                                                     <Pencil className="mr-2 h-4 w-4" />
                                                     <span>Đã tìm thấy</span>
                                                 </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
+                                                <DropdownMenuSeparator /> */}
                                                 <DropdownMenuItem
                                                     onClick={() => {
                                                         setOpen(true)
@@ -462,17 +426,20 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                 ))}
                         </div>
                     </div>
-
-                    <h1 className="text-xl mt-6 font-semibold">Thông tin tìm kiếm thú cưng</h1>
+                    <h1 className="text-xl mt-6 font-semibold">Thông tin chi tiết</h1>
                     <div className="mt-3">
                         <ul className="flex flex-col gap-2">
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;<span className="font-semibold">Trạng thái: </span>
                                     {!statusPost ? (
-                                        <span className="text-red-500">Chưa tìm thấy</span>
+                                        <span className="text-yellow-500">
+                                            Chưa có người nhận nuôi
+                                        </span>
                                     ) : (
-                                        <span className="text-green-500">Đã tìm thấy</span>
+                                        <span className="text-green-500">
+                                            Đã có người nhận nuôi
+                                        </span>
                                     )}
                                 </div>
                             </li>
@@ -486,46 +453,65 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;<span className="font-semibold">Kích thước: </span>{" "}
-                                    {sizePet[post.size] || "Chưa cung cấp"}
+                                    {sizePet[post.sizePet] || "Chưa cung cấp"}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
                                     <span className="font-semibold">
-                                        Vị trí lần cuối thấy thú cưng:{" "}
+                                        Vị trí hiện tại của thú cưng:{" "}
                                     </span>
-                                    {post.lastSeenLocation || "Chưa cung cấp"}
+                                    {post.location || "Chưa cung cấp"}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
                                     <span className="font-semibold">
-                                        Thời điểm lần cuối thấy thú cưng:{" "}
+                                        Lí do cần tìm chủ cho thú cưng:{" "}
                                     </span>
-                                    {convertISOToFormatNotHours(post.lastSeenDate) ||
-                                        "Chưa cung cấp"}
+                                    {post.reason === "lost-pet" ? (
+                                        <span>Tìm chủ cho thú cưng đi lạc/ bỏ rơi</span>
+                                    ) : (
+                                        <span>
+                                            Tìm chủ mới cho thú cưng do hiện tại không thể tiếp tục
+                                            chăm sóc
+                                        </span>
+                                    )}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">Mô tả chi tiết: </span>
+                                    <span className="font-semibold">
+                                        Tình trạng sức khỏe của thú cưng:{" "}
+                                    </span>
+                                    {post.healthInfo}
+                                </div>
+                            </li>
+                            <li>
+                                <div className="text-sm">
+                                    &bull;&nbsp;
+                                    <span className="font-semibold">
+                                        Mô tả chi tiết về thú cưng và các yêu cầu khi chăm sóc:{" "}
+                                    </span>
                                     {post.description}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">Thông tin liên hệ: </span>
+                                    <span className="font-semibold">Thông tin liên hệ riêng: </span>
                                     {post.contactInfo}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">Hình ảnh đi kèm: </span>
+                                    <span className="font-semibold">
+                                        Hình ảnh đi kèm của thú cưng:{" "}
+                                    </span>
                                 </div>
                                 <div>
                                     {post.images.length > 0 && (
@@ -661,7 +647,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                     {comments.length > 0 && (
                         <div className="border border-t-0 p-3 w-full flex flex-col bg-white gap-4">
                             {comments.map((comment) => (
-                                <FindPetPostComment key={comment._id} comment={comment} />
+                                <PetAdoptionPostComment key={comment._id} comment={comment} />
                             ))}
                         </div>
                     )}
@@ -677,4 +663,4 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
     )
 }
 
-export default FindPetPostDetail
+export default PetAdoptionPostDetail

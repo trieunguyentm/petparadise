@@ -103,7 +103,7 @@ export interface IPetAdoptionPostDocument extends mongoose.Document {
     poster: IUserDocument // Người đăng bài
     petName?: string // Tên thú cưng
     petType: "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
-    sizePet?: "small" | "medium" | "big"
+    sizePet: "small" | "medium" | "big"
     gender?: "male" | "female"
     breed?: string // Giống của thú cưng
     color?: string // Màu lông

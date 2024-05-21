@@ -67,6 +67,12 @@ const PetAdoptionCard = ({ post }: { post: IPetAdoptionPostDocument }) => {
                     <span className="font-medium">Mô tả</span>:&nbsp;
                     <span> {post.description}</span>
                 </div>
+                <Link
+                    href={`/pet-adoption/${post._id.toString()}`}
+                    className="font-medium underline text-center my-2 hover:text-brown-1"
+                >
+                    Xem thêm chi tiết &gt;
+                </Link>
             </div>
         </div>
     )
