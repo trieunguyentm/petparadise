@@ -1,3 +1,4 @@
+import ListOtherUserBySearch from "@/components/shared/list-other-people-by-search"
 import UserCard from "@/components/shared/user-card"
 import { fetchSearchPeople, fetchUser } from "@/lib/fetch"
 import { IUserDocument } from "@/types"
@@ -19,7 +20,9 @@ const SearchPeople = async ({ params }: { params: { search: string } }) => {
     }
 
     const searchedPeople = await fetchSearchPeople({ search: decodeURI(params.search) })
-    const listPeopleWithOutUser = searchedPeople?.filter((people) => people._id.toString() !== user._id.toString())
+    const listPeopleWithOutUser = searchedPeople?.filter(
+        (people) => people._id.toString() !== user._id.toString(),
+    )
 
     return (
         <>
@@ -29,11 +32,11 @@ const SearchPeople = async ({ params }: { params: { search: string } }) => {
                         There are no user according to your search request
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-8">
-                        {listPeopleWithOutUser.map((people: IUserDocument) => (
-                            <UserCard key={people._id} people={people} user={user} />
-                        ))}
-                    </div>
+                    <ListOtherUserBySearch
+                        user={user}
+                        listPeopleWithOutUser={listPeopleWithOutUser}
+                        param={params.search}
+                    />
                 )}
             </div>
         </>

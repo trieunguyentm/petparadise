@@ -1,4 +1,5 @@
 import TopBarPeople from "@/components/layout/top-bar-people"
+import ListOtherPeople from "@/components/shared/list-other-people"
 import UserCard from "@/components/shared/user-card"
 import { fetchOtherUser, fetchUser } from "@/lib/fetch"
 import { IUserDocument } from "@/types"
@@ -25,11 +26,7 @@ const People = async () => {
                     There are no more users
                 </div>
             ) : (
-                <div className="flex flex-col gap-8">
-                    {otherPeople.map((people: IUserDocument) => (
-                        <UserCard key={people._id} people={people} user={user} />
-                    ))}
-                </div>
+                <ListOtherPeople user={user} otherPeople={otherPeople} />
             )}
         </>
     )

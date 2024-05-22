@@ -21,14 +21,14 @@ import { PetReasonFind } from "../container/pet-adoption-container"
 
 const filterTypePet = [
     { value: "all", text: "Chọn loại thú cưng của bạn" },
-    { value: "dog", text: "Dog" },
-    { value: "cat", text: "Cat" },
-    { value: "bird", text: "Bird" },
-    { value: "rabbit", text: "Rabbit" },
-    { value: "fish", text: "Fish" },
-    { value: "rodents", text: "Rodents" },
-    { value: "reptile", text: "Reptile" },
-    { value: "other", text: "Other" },
+    { value: "dog", text: "Chó" },
+    { value: "cat", text: "Mèo" },
+    { value: "bird", text: "Chim" },
+    { value: "rabbit", text: "Thỏ" },
+    { value: "fish", text: "Cá" },
+    { value: "rodents", text: "Loài gặm nhấm" },
+    { value: "reptile", text: "Loài bò sát" },
+    { value: "other", text: "Khác" },
 ]
 
 const filterGenderPet = [

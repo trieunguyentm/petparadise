@@ -9,6 +9,17 @@ const sizePet = {
     small: "0 - 5kg",
 }
 
+const typePet = {
+    dog: "Chó",
+    cat: "Mèo",
+    bird: "Chim",
+    rabbit: "Thỏ",
+    fish: "Cá",
+    rodents: "Loài gặm nhấm",
+    reptile: "Loài bò sát",
+    other: "Khác",
+}
+
 const PetAdoptionCard = ({ post }: { post: IPetAdoptionPostDocument }) => {
     return (
         <div className="bg-pink-1 w-full rounded-xl border">
@@ -29,7 +40,7 @@ const PetAdoptionCard = ({ post }: { post: IPetAdoptionPostDocument }) => {
                 </div>
                 <div>
                     <span className="font-medium">Loại thú cưng</span>:&nbsp;
-                    <span>{post.petType}</span>
+                    <span>{typePet[post.petType]}</span>
                 </div>
                 <div>
                     <span className="font-medium">Kích thước</span>:&nbsp;
