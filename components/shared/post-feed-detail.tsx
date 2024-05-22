@@ -15,7 +15,7 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { useEffect, useState } from "react"
-import { Loader2 } from "lucide-react"
+import { Loader2, X } from "lucide-react"
 import { useForm } from "react-hook-form"
 import CommentComponent from "./comment"
 import { Button } from "../ui/button"
@@ -375,7 +375,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                                         onClick={handleDeleteImage}
                                         className="p-0 w-4 h-4 text-sm absolute top-0 -right-2 text-red-600 bg-slate-400 rounded-full"
                                     >
-                                        X
+                                        <X />
                                     </Button>
                                 </div>
                             </div>
@@ -450,6 +450,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                                     type="submit"
                                     variant={"ghost"}
                                     className="p-0 hover:bg-transparent"
+                                    disabled={loadingComment}
                                 >
                                     {loadingComment ? (
                                         <Loader2 className="w-4 h-4 animate-spin" />
