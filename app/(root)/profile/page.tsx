@@ -14,8 +14,8 @@ const Profile = () => {
             <div className="flex h-[calc(100vh-24px)] bg-pink-1 rounded-xl p-5 w-full">
                 <div className="bg-white rounded-xl w-full p-5 flex flex-col max-h-[100vh] overflow-scroll">
                     <div className="flex flex-col pb-16 text-brown-1">
-                        <div className="font-semibold text-3xl">Manage Account</div>
-                        <div>Manage your account information</div>
+                        <div className="font-semibold text-3xl">Quản lý tài khoản</div>
+                        <div>Quản lý tài khoản và thông tin cá nhân</div>
                     </div>
                     <Suspense
                         fallback={

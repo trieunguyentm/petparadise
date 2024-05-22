@@ -1,11 +1,13 @@
 import mongoose, { Schema } from "mongoose"
 
+export type TypePet = "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
 export interface IUserDocument extends mongoose.Document {
     username: string
     email: string
     password: string
     profileImage?: string
     address?: string
+    petTypeFavorites?: TypePet[]
     dateOfBirth?: Date
     posts: IPostDocument[]
     findPetPosts: ILostPetPostDocument[]

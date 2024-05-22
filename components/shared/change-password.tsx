@@ -97,11 +97,11 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
         <>
             <div className="flex flex-col">
                 <div className="border-b py-2 border-brown-1 font-semibold text-2xl text-brown-1">
-                    Account
+                    Thông tin tài khoản
                 </div>
                 <div className="py-5 flex flex-col text-brown-1 gap-2">
-                    <div className="flex items-center">
-                        <div className="w-1/6 font-medium">Username</div>
+                    <div className={`block md:flex items-center`}>
+                        <div className="w-1/6 font-medium">Tên người dùng</div>
                         <div className="w-5/6 text-sm">
                             {loading && !user ? (
                                 <Skeleton className="w-[100px] h-4" />
@@ -110,7 +110,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                             )}
                         </div>
                     </div>
-                    <div className="flex items-center">
+                    <div className={`block md:flex items-center`}>
                         <div className="w-1/6 font-medium">Gmail</div>
                         <div className="w-5/6 text-sm">
                             {loading && !user ? (
@@ -120,8 +120,8 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                             )}
                         </div>
                     </div>
-                    <div className="flex items-center">
-                        <div className="w-1/6 font-medium">Password</div>
+                    <div className={`block md:flex items-center`}>
+                        <div className="w-1/6 font-medium">Mật khẩu</div>
                         <div className="w-5/6 text-sm flex gap-4">
                             {loading && !user ? (
                                 <Skeleton className="w-[120px] h-4" />
@@ -149,7 +149,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                 >
                     <div className="flex flex-col gap-2">
                         <label htmlFor="currentPassword" className="font-medium">
-                            Current password
+                            Mật khẩu hiện tại
                         </label>
                         <div className="flex flex-row gap-2 items-center">
                             <input
@@ -186,7 +186,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                     </div>
                     <div className="flex flex-col gap-2">
                         <label htmlFor="newPassword" className="font-medium">
-                            New password
+                            Mật khẩu mới
                         </label>
                         <div className="flex flex-row gap-2 items-center">
                             <input
@@ -223,7 +223,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                     </div>
                     <div className="flex flex-col gap-2">
                         <label htmlFor="confirmNewPassword" className="font-medium">
-                            Confirm new password
+                            Xác nhận mật khẩu mới
                         </label>
                         <div className="flex flex-row gap-2 items-center">
                             <input
@@ -262,7 +262,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-row-reverse gap-3">
+                    <div className="flex flex-row-reverse max-md:flex-col-reverse gap-3">
                         <Button type="submit">
                             {loadingChangePassword ? (
                                 <Loader2 className="w-8 h-8 animate-spin" />
