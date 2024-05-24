@@ -2,7 +2,20 @@
 
 import { convertISOToFormat } from "@/lib/utils"
 import { IPetAdoptionCommentDocument, IPetAdoptionPostDocument, IUserDocument } from "@/types"
-import { ArrowLeft, Loader2, MessageCircleMore, Pencil, Settings, Trash, X } from "lucide-react"
+import {
+    ArrowLeft,
+    Dog,
+    Dot,
+    ImagePlus,
+    Loader2,
+    Menu,
+    MessageCircleMore,
+    Pencil,
+    SendHorizonal,
+    Settings,
+    Trash,
+    X,
+} from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
@@ -37,6 +50,9 @@ import Picker from "@emoji-mart/react"
 import { Button } from "../ui/button"
 import PetAdoptionPostComment from "./pet-adoption-post-comment"
 import { pusherClient } from "@/lib/pusher"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog"
+import DialogReclaimPet from "./dialog-reclaim-pet"
+import DialogAdoptPet from "./dialog-adopt-pet"
 
 const typePet = {
     dog: "Chó",
@@ -79,6 +95,11 @@ const PetAdoptionPostDetail = ({
     } = useForm<FormValues>()
     /** Start Chat */
     const [loadingStartChat, setLoadingStartChat] = useState<boolean>(false)
+    /** Dialog Request */
+    const [openDialogRequest, setOpenDialogRequest] = useState<boolean>(false)
+    const [typeOpenDialogRequest, setTypeOpenDialogRequest] = useState<"reclaim-pet" | "adopt-pet">(
+        "adopt-pet",
+    )
     /** Dialog Alert */
     const [open, setOpen] = useState(false)
     const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
@@ -127,6 +148,16 @@ const PetAdoptionPostDetail = ({
         // Cập nhật danh sách các URL xem trước ảnh
         const updatedPreviews = previewImages.filter((_: string, i: number) => i !== index)
         setPreviewImages(updatedPreviews)
+    }
+
+    const handleRequestReclaimPet = () => {
+        setOpenDialogRequest(true)
+        setTypeOpenDialogRequest("reclaim-pet")
+    }
+
+    const handleRequestAdoptPet = () => {
+        setOpenDialogRequest(true)
+        setTypeOpenDialogRequest("adopt-pet")
     }
 
     const handleClickStartChat = async () => {
@@ -365,21 +396,42 @@ const PetAdoptionPostDetail = ({
                             </div>
                         </div>
                         <div className="cursor-pointer">
-                            {user._id.toString() === post.poster._id.toString() && (
-                                <>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger>
-                                            <Settings />
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuGroup>
-                                                {/* <DropdownMenuItem
-                                                    onClick={() => console.log("Đã tìm thấy")}
-                                                >
-                                                    <Pencil className="mr-2 h-4 w-4" />
-                                                    <span>Đã tìm thấy</span>
+                            {/* {user._id.toString() === post.poster._id.toString() && (
+                                
+                            )}
+                            {user._id.toString() !== post.poster._id.toString() &&
+                                (loadingStartChat ? (
+                                    <Loader2 className="w-8 h-8 animate-spin" />
+                                ) : (
+                                    <MessageCircleMore onClick={handleClickStartChat} />
+                                ))} */}
+                            <>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <Menu />
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuGroup>
+                                            {/* Nếu là thú cưng bị mất có thêm option nhận lại thú cưng, cần khác với người đăng bài */}
+                                            {post.reason === "lost-pet" &&
+                                                post.poster._id.toString() !==
+                                                    user._id.toString() && (
+                                                    <DropdownMenuItem
+                                                        onClick={handleRequestReclaimPet}
+                                                    >
+                                                        <SendHorizonal className="mr-2 h-4 w-4" />
+                                                        <span>Gửi yêu cầu nhận lại thú cưng</span>
+                                                    </DropdownMenuItem>
+                                                )}
+                                            {/* Gửi yêu cầu nhận nuôi thú cưng (áp dụng cho cả thú cưng bị mất và thú cưng đang có người nuôi), cần khác với người đăng bài */}
+                                            {post.poster._id.toString() !== user._id.toString() && (
+                                                <DropdownMenuItem onClick={handleRequestAdoptPet}>
+                                                    <Dog className="mr-2 h-4 w-4" />
+                                                    <span>Gửi yêu cầu nhận nuôi thú cưng</span>
                                                 </DropdownMenuItem>
-                                                <DropdownMenuSeparator /> */}
+                                            )}
+                                            {/* Nếu là chủ bài đăng có quyền xóa */}
+                                            {post.poster._id.toString() === user._id.toString() && (
                                                 <DropdownMenuItem
                                                     onClick={() => {
                                                         setOpen(true)
@@ -388,42 +440,81 @@ const PetAdoptionPostDetail = ({
                                                     <Trash className="mr-2 h-4 w-4" />
                                                     <span>Xóa bài tìm kiếm</span>
                                                 </DropdownMenuItem>
-                                            </DropdownMenuGroup>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                    <AlertDialog open={open}>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    Bạn có chắc chắn muốn xóa bài viết?
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    Hành động này không thể hoàn tác. Bài viết sẽ bị
-                                                    xóa vĩnh viễn.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel onClick={() => setOpen(false)}>
-                                                    Hủy
-                                                </AlertDialogCancel>
-                                                <AlertDialogAction onClick={handleDeletePost}>
-                                                    {loadingDelete ? (
-                                                        <Loader2 className="w-8 h-8 animate-spin" />
-                                                    ) : (
-                                                        "Tiếp tục"
-                                                    )}
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </>
-                            )}
-                            {user._id.toString() !== post.poster._id.toString() &&
-                                (loadingStartChat ? (
-                                    <Loader2 className="w-8 h-8 animate-spin" />
-                                ) : (
-                                    <MessageCircleMore onClick={handleClickStartChat} />
-                                ))}
+                                            )}
+                                            {/* Contact Poster nếu là người khác với chủ bài đăng */}
+                                            {user._id.toString() !== post.poster._id.toString() && (
+                                                <DropdownMenuItem onClick={handleClickStartChat}>
+                                                    <MessageCircleMore className="mr-2 h-4 w-4" />
+                                                    <span>Liên hệ trực tiếp</span>
+                                                </DropdownMenuItem>
+                                            )}
+                                        </DropdownMenuGroup>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <AlertDialog open={open}>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                Bạn có chắc chắn muốn xóa bài viết?
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                Hành động này không thể hoàn tác. Bài viết sẽ bị xóa
+                                                vĩnh viễn.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel onClick={() => setOpen(false)}>
+                                                Hủy
+                                            </AlertDialogCancel>
+                                            <AlertDialogAction onClick={handleDeletePost}>
+                                                {loadingDelete ? (
+                                                    <Loader2 className="w-8 h-8 animate-spin" />
+                                                ) : (
+                                                    "Tiếp tục"
+                                                )}
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                                <Dialog open={openDialogRequest}>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>
+                                                {typeOpenDialogRequest === "reclaim-pet"
+                                                    ? "Yêu cầu nhận lại thú cưng"
+                                                    : "Yêu cầu nhận nuôi thú cưng"}
+                                            </DialogTitle>
+                                            <DialogDescription>
+                                                Hãy điền một số thông tin cần thiết
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        {typeOpenDialogRequest === "reclaim-pet" && (
+                                            <DialogReclaimPet
+                                                petAdoptionPost={post}
+                                                setOpenDialogRequest={setOpenDialogRequest}
+                                                openSnackbar={openSnackbar}
+                                                setOpenSnackbar={setOpenSnackbar}
+                                                typeSnackbar={typeSnackbar}
+                                                setTypeSnackbar={setTypeSnackbar}
+                                                contentSnackbar={contentSnackbar}
+                                                setContentSnackbar={setContentSnackbar}
+                                            />
+                                        )}
+                                        {typeOpenDialogRequest === "adopt-pet" && (
+                                            <DialogAdoptPet
+                                                petAdoptionPost={post}
+                                                setOpenDialogRequest={setOpenDialogRequest}
+                                                openSnackbar={openSnackbar}
+                                                setOpenSnackbar={setOpenSnackbar}
+                                                typeSnackbar={typeSnackbar}
+                                                setTypeSnackbar={setTypeSnackbar}
+                                                contentSnackbar={contentSnackbar}
+                                                setContentSnackbar={setContentSnackbar}
+                                            />
+                                        )}
+                                    </DialogContent>
+                                </Dialog>
+                            </>
                         </div>
                     </div>
                     <h1 className="text-xl mt-6 font-semibold">Thông tin chi tiết</h1>
@@ -539,13 +630,13 @@ const PetAdoptionPostDetail = ({
                         </ul>
                     </div>
                     {previewImages.length > 0 && (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 mt-4">
+                        <div className="grid grid-cols-3 gap-4 mt-4">
                             {previewImages.map((imageURL, index) => (
                                 <div key={index} className="relative">
                                     <Image
                                         src={imageURL}
-                                        width={200}
-                                        height={200}
+                                        width={1000}
+                                        height={300}
                                         alt="image"
                                         priority
                                     />

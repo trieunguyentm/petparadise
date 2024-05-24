@@ -99,6 +99,11 @@ const ListNotification = ({
     useEffect(() => {
         pusherClient.subscribe(`user-${user._id.toString()}-notifications`)
         pusherClient.bind("new-notification", handleNewNotification)
+
+        return () => {
+            pusherClient.unsubscribe(`user-${user._id.toString()}-notifications`)
+            pusherClient.unbind("new-notification", handleNewNotification)
+        }
     }, [user])
 
     useEffect(() => {

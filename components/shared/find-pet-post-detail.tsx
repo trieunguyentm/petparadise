@@ -415,7 +415,6 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                                     <Pencil className="mr-2 h-4 w-4" />
                                                     <span>Đã tìm thấy</span>
                                                 </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
                                                 <DropdownMenuItem
                                                     onClick={() => {
                                                         setOpen(true)

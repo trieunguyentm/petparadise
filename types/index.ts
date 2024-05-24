@@ -118,6 +118,7 @@ export interface IPetAdoptionPostDocument extends mongoose.Document {
     contactInfo: string // Thông tin liên lạc để liên hệ
     status: "available" | "adopted" // Trạng thái của bài đăng
     reason: "lost-pet" | "your-pet" // Lí do cần tìm chủ mới
+    adoptionRequests: IAdoptionRequestDocument[]
     createdAt: Date // Ngày tạo bài đăng
     updatedAt: Date // Ngày cập nhật bài đăng
 }
@@ -129,4 +130,17 @@ export interface IPetAdoptionCommentDocument extends mongoose.Document {
     post: IPetAdoptionPostDocument
     content: string
     images: string[]
+}
+
+export interface IAdoptionRequestDocument extends mongoose.Document {
+    requester: IUserDocument
+    petAdoptionPost: IPetAdoptionPostDocument
+    descriptionForPet?: string // Mô tả về thú cưng, dành cho type = "reclaim-pet"
+    descriptionForUser?: string // Mô tả về bản thân, dành cho type = "adopt-pet"
+    contactInfo: string
+    type: "reclaim-pet" | "adopt-pet"
+    status: "pending" | "approved" | "rejected"
+    images?: string[]
+    createdAt: Date
+    updatedAt: Date
 }

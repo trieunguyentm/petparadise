@@ -1,13 +1,14 @@
 "use client"
 
 import { INotificationDocument } from "@/types"
-import { Dot } from "lucide-react"
+import { Dot, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import SnackbarCustom from "../ui/snackbar"
 
 const Notification = ({ notification }: { notification: INotificationDocument }) => {
     const router = useRouter()
+    const [loading, setLoading] = useState<boolean>(false)
     const [seen, setSeen] = useState<boolean>(notification.status === "seen" ? true : false)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
@@ -17,12 +18,19 @@ const Notification = ({ notification }: { notification: INotificationDocument })
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
     const handleClickNotification = async () => {
-        if (seen) return
+        if (seen) {
+            if (notification.moreInfo) {
+                router.push(notification.moreInfo)
+            } else {
+                return
+            }
+        }
         const prevState = seen
         if (!seen) {
             setSeen(true)
         }
         try {
+            setLoading(true)
             const res = await fetch(
                 `${
                     process.env.NEXT_PUBLIC_BASE_URL
@@ -55,6 +63,8 @@ const Notification = ({ notification }: { notification: INotificationDocument })
             setOpenSnackbar(true)
             setTypeSnackbar("error")
             setContentSnackbar("Failed to seen notification")
+        } finally {
+            setLoading(false)
         }
 
         if (notification.moreInfo) {
@@ -69,9 +79,10 @@ const Notification = ({ notification }: { notification: INotificationDocument })
             className="border-l-2 pl-1 my-2 border-brown-1 cursor-pointer hover:bg-slate-100"
             onClick={handleClickNotification}
         >
-            <div className="font-medium text-base text-brown-1 flex">
+            <div className="font-medium text-base text-brown-1 flex items-center">
                 {notification.title}
                 {!seen && <Dot className="text-blue-500" />}
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             </div>
             <div className={`text-sm font-thin`}>{notification.subtitle}</div>
             <SnackbarCustom
