@@ -1,4 +1,4 @@
-import PetAdoptionRequestDetail from "@/components/shared/pet-adoption-request"
+import PetAdoptionRequestDetail from "@/components/shared/list-pet-adoption-request"
 import { fetchAdoptionRequestByPost, fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"
 
