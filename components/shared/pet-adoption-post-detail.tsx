@@ -8,6 +8,7 @@ import {
     Dot,
     ImagePlus,
     Loader2,
+    Mail,
     Menu,
     MessageCircleMore,
     Pencil,
@@ -446,6 +447,19 @@ const PetAdoptionPostDetail = ({
                                                 <DropdownMenuItem onClick={handleClickStartChat}>
                                                     <MessageCircleMore className="mr-2 h-4 w-4" />
                                                     <span>Liên hệ trực tiếp</span>
+                                                </DropdownMenuItem>
+                                            )}
+                                            {/* Truy cập xem các request nếu người là chủ bài đăng */}
+                                            {user._id.toString() === post.poster._id.toString() && (
+                                                <DropdownMenuItem
+                                                    onClick={() =>
+                                                        router.push(
+                                                            `/pet-adoption/request/${post._id.toString()}`,
+                                                        )
+                                                    }
+                                                >
+                                                    <Mail className="mr-2 h-4 w-4" />
+                                                    <span>Xem các yêu cầu</span>
                                                 </DropdownMenuItem>
                                             )}
                                         </DropdownMenuGroup>

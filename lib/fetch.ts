@@ -1,6 +1,7 @@
 "use server"
 
 import {
+    IAdoptionRequestDocument,
     IChatDocument,
     ILostPetPostDocument,
     INotificationDocument,
@@ -330,5 +331,34 @@ export const fetchPetAdoptionPostById = async ({ postId }: { postId: string }) =
     } catch (error) {
         console.log(error)
         throw new Error("Failed to fetch detail post")
+    }
+}
+
+export const fetchAdoptionRequestByPost = async ({ postId }: { postId: string }) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-request/${postId}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as {
+                adoptionRequests: IAdoptionRequestDocument[]
+                totalRequests: number
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch request")
     }
 }
