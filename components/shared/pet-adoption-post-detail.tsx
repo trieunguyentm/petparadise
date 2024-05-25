@@ -54,6 +54,7 @@ import { pusherClient } from "@/lib/pusher"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog"
 import DialogReclaimPet from "./dialog-reclaim-pet"
 import DialogAdoptPet from "./dialog-adopt-pet"
+import { Skeleton } from "../ui/skeleton"
 
 const typePet = {
     dog: "Chó",
@@ -122,6 +123,9 @@ const PetAdoptionPostDetail = ({
         "success",
     )
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
+    /** Người nhận nuôi */
+    const [loadGetAdoptedPetOwner, setLoadGetAdoptedPetOwner] = useState<boolean>(false)
+    const [adoptedPetOwner, setAdoptedPetOwner] = useState<IUserDocument | null>(null)
 
     const addEmoji = (emoji: any) => {
         let emojiString = emoji.native
@@ -359,6 +363,51 @@ const PetAdoptionPostDetail = ({
         }
     }
 
+    useEffect(() => {
+        const fetchAdoptedPetOwner = async () => {
+            setLoadGetAdoptedPetOwner(true)
+            try {
+                const res = await fetch(
+                    `${
+                        process.env.NEXT_PUBLIC_BASE_URL
+                    }/api/pet-adoption/${post._id.toString()}/adopted-pet-owner`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    },
+                )
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message)
+                }
+                if (data.success) {
+                    setAdoptedPetOwner(data.data.adopter)
+                }
+            } catch (error) {
+                console.log(error)
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar("An error occurred, please try again")
+            } finally {
+                setLoadGetAdoptedPetOwner(false)
+            }
+        }
+        if (post.status === "adopted") {
+            fetchAdoptedPetOwner()
+        }
+    }, [])
+
     return (
         <div className="px-5 py-3">
             <div className="flex h-[calc(100vh-24px)] bg-pink-1 rounded-xl p-5 w-full">
@@ -543,6 +592,23 @@ const PetAdoptionPostDetail = ({
                                     )}
                                 </div>
                             </li>
+                            {post.status === "adopted" && (
+                                <li>
+                                    <div className="text-sm flex">
+                                        &bull;&nbsp;
+                                        <span className="font-semibold">Người nhận nuôi:</span>
+                                        &nbsp;
+                                        {loadGetAdoptedPetOwner ? (
+                                            <Loader2 className="w-6 h-6 animate-spin" />
+                                        ) : (
+                                            <>
+                                                {adoptedPetOwner?.username !== undefined &&
+                                                    adoptedPetOwner.username}
+                                            </>
+                                        )}
+                                    </div>
+                                </li>
+                            )}
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
