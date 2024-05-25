@@ -397,19 +397,14 @@ const PetAdoptionPostDetail = ({
                             </div>
                         </div>
                         <div className="cursor-pointer">
-                            {/* {user._id.toString() === post.poster._id.toString() && (
-                                
-                            )}
-                            {user._id.toString() !== post.poster._id.toString() &&
-                                (loadingStartChat ? (
-                                    <Loader2 className="w-8 h-8 animate-spin" />
-                                ) : (
-                                    <MessageCircleMore onClick={handleClickStartChat} />
-                                ))} */}
                             <>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>
-                                        <Menu />
+                                        {loadingStartChat ? (
+                                            <Loader2 className="w-8 h-8 animate-spin" />
+                                        ) : (
+                                            <Menu />
+                                        )}
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent>
                                         <DropdownMenuGroup>

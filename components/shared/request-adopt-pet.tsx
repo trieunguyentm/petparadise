@@ -8,7 +8,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
-import { Check, Menu, X } from "lucide-react"
+import { Check, Loader2, Menu, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 const RequestAdoptPet = ({
@@ -23,11 +23,12 @@ const RequestAdoptPet = ({
     setContentSnackbar: (arg: string) => void
 }) => {
     const router = useRouter()
+    const [load, setLoad] = useState<boolean>(false)
 
     const handleRequest = async (status: "approved" | "rejected") => {
         if (status === "approved" && request.status === "approved") return
         if (status === "rejected" && request.status === "rejected") return
-
+        setLoad(true)
         try {
             const res = await fetch(
                 `${
@@ -64,6 +65,8 @@ const RequestAdoptPet = ({
             setOpenSnackbar(true)
             setTypeSnackbar("error")
             setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoad(false)
         }
     }
 
@@ -96,7 +99,7 @@ const RequestAdoptPet = ({
                 <div>
                     <DropdownMenu>
                         <DropdownMenuTrigger>
-                            <Menu />
+                            {load ? <Loader2 className="w-6 h-6 animate-spin" /> : <Menu />}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <DropdownMenuGroup>
