@@ -4,6 +4,7 @@ import { ILostPetPostDocument, IPetAdoptionPostDocument } from "@/types"
 import FindPetContainer from "../container/find-pet-container"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import PetAdoptionContainer from "../container/pet-adoption-container"
+import { useEffect, useState } from "react"
 
 const FindPetTab = ({
     findPetPosts,
@@ -12,9 +13,23 @@ const FindPetTab = ({
     findPetPosts: ILostPetPostDocument[] | null
     petAdoptionPosts: IPetAdoptionPostDocument[] | null
 }) => {
+    const [tab, setTab] = useState<"post-find-pet" | "post-find-owner">("post-find-pet")
+
+    useEffect(() => {
+        const savedTab = localStorage.getItem("activeTab") as "post-find-pet" | "post-find-owner"
+        if (savedTab) {
+            setTab(savedTab)
+        }
+    }, [])
+
+    const handleTabChange = (value: string) => {
+        localStorage.setItem("activeTab", value)
+        setTab(value as "post-find-pet" | "post-find-owner")
+    }
+
     return (
         <>
-            <Tabs defaultValue="post-find-pet" className="w-full h-full">
+            <Tabs value={tab} className="w-full h-full" onValueChange={handleTabChange}>
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="post-find-pet">Tìm kiếm thú cưng</TabsTrigger>
                     <TabsTrigger value="post-find-owner">
