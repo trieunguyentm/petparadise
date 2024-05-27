@@ -14,6 +14,7 @@ import {
     Pencil,
     SendHorizonal,
     Settings,
+    SquarePen,
     Trash,
     X,
 } from "lucide-react"
@@ -506,6 +507,23 @@ const PetAdoptionPostDetail = ({
                                                     <span>Xem các yêu cầu</span>
                                                 </DropdownMenuItem>
                                             )}
+                                            {/* Cập nhật trạng thái trao đổi thú cưng */}
+                                            {post.status === "adopted" &&
+                                                (user._id.toString() ===
+                                                    post.poster._id.toString() ||
+                                                    user._id.toString() ===
+                                                        adoptedPetOwner?._id.toString()) && (
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            router.push(
+                                                                `/pet-adoption/confirm/${post._id.toString()}`,
+                                                            )
+                                                        }
+                                                    >
+                                                        <SquarePen className="mr-2 h-4 w-4" />
+                                                        <span>Xác nhận giao - nhận thú cưng</span>
+                                                    </DropdownMenuItem>
+                                                )}
                                         </DropdownMenuGroup>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

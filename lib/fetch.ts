@@ -362,3 +362,29 @@ export const fetchAdoptionRequestByPost = async ({ postId }: { postId: string })
         throw new Error("Failed to fetch request")
     }
 }
+
+export const fetchAdoptedPetOwner = async ({ postId }: { postId: string }) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/pet-adoption/${postId}/adopted-pet-owner`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data.adopter as IUserDocument
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch adopted pet owner")
+    }
+}

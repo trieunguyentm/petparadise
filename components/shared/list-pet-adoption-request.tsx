@@ -107,9 +107,13 @@ const PetAdoptionRequestDetail = ({
         setRequests((prevRequests) =>
             prevRequests.map((request) => (request._id === newRequest._id ? newRequest : request)),
         )
-        setOpenSnackbar(true)
-        setTypeSnackbar("info")
-        setContentSnackbar(`Đã ${newRequest.status === "approved" ? "chấp nhận" : "từ chối"} yêu cầu`)
+        if (newRequest.status === "approved") {
+            setOpenSnackbar(true)
+            setTypeSnackbar("info")
+            setContentSnackbar(
+                `Đã ${newRequest.status === "approved" ? "chấp nhận" : "từ chối"} yêu cầu`,
+            )
+        }
     }
 
     useEffect(() => {

@@ -144,3 +144,15 @@ export interface IAdoptionRequestDocument extends mongoose.Document {
     createdAt: Date
     updatedAt: Date
 }
+
+export interface ITransferContractDocument extends mongoose.Document {
+    petAdoptionPost: IPetAdoptionPostDocument
+    adoptionRequest: IAdoptionRequestDocument
+    giver: IUserDocument
+    receiver: IUserDocument
+    giverConfirmed: boolean
+    receiverConfirmed: boolean
+    status: "pending" | "confirmed" | "cancelled"
+    createdAt: Date
+    updatedAt: Date
+}
