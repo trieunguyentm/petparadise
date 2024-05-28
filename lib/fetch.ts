@@ -15,13 +15,23 @@ const delay = (delayInms: number) => {
     return new Promise((resolve) => setTimeout(resolve, delayInms))
 }
 
+async function getSessionId() {
+    const cookieData = cookies().get("t")
+    return new Promise((resolve) =>
+        setTimeout(() => {
+            resolve(cookieData)
+        }, 100),
+    )
+}
+
 export const fetchUser = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -39,12 +49,13 @@ export const fetchUser = async () => {
 }
 
 export const fetchPost = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/post`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -62,6 +73,7 @@ export const fetchPost = async () => {
 }
 
 export const fetchSearchPost = async ({ search }: { search: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/post/search?query=${search}`,
@@ -69,7 +81,7 @@ export const fetchSearchPost = async ({ search }: { search: string }) => {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
                 },
                 credentials: "include",
                 cache: "no-store",
@@ -88,6 +100,7 @@ export const fetchSearchPost = async ({ search }: { search: string }) => {
 }
 
 export const fetchSearchPeople = async ({ search }: { search: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/search?query=${search}`,
@@ -95,7 +108,7 @@ export const fetchSearchPeople = async ({ search }: { search: string }) => {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
                 },
                 credentials: "include",
                 cache: "no-store",
@@ -114,12 +127,13 @@ export const fetchSearchPeople = async ({ search }: { search: string }) => {
 }
 
 export const fetchOtherUser = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/other`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -137,12 +151,13 @@ export const fetchOtherUser = async () => {
 }
 
 export const fetchDetailPost = async ({ postId }: { postId: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/post/detail/${postId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -160,12 +175,13 @@ export const fetchDetailPost = async ({ postId }: { postId: string }) => {
 }
 
 export const fetchChatByUser = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/chat`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -183,12 +199,13 @@ export const fetchChatByUser = async () => {
 }
 
 export const fetchDetailChat = async ({ chatId }: { chatId: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/chat/${chatId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -206,12 +223,13 @@ export const fetchDetailChat = async ({ chatId }: { chatId: string }) => {
 }
 
 export const fetchFindPetPost = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/lost-pet/find-pet-post`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -229,6 +247,7 @@ export const fetchFindPetPost = async () => {
 }
 
 export const fetchFindPetPostById = async ({ postId }: { postId: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/lost-pet/find-pet-post/${postId}`,
@@ -236,7 +255,7 @@ export const fetchFindPetPostById = async ({ postId }: { postId: string }) => {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
                 },
                 credentials: "include",
                 cache: "no-store",
@@ -255,12 +274,13 @@ export const fetchFindPetPostById = async ({ postId }: { postId: string }) => {
 }
 
 export const fetchNotification = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/notification`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
             },
             credentials: "include",
             cache: "no-store",
@@ -283,6 +303,7 @@ export const fetchNotification = async () => {
 }
 
 export const fetchPetAdoptionPost = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/pet-adoption/pet-adoption-post`,
@@ -290,7 +311,7 @@ export const fetchPetAdoptionPost = async () => {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
                 },
                 credentials: "include",
                 cache: "no-store",
@@ -309,6 +330,7 @@ export const fetchPetAdoptionPost = async () => {
 }
 
 export const fetchPetAdoptionPostById = async ({ postId }: { postId: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/pet-adoption/pet-adoption-post/${postId}`,
@@ -316,7 +338,7 @@ export const fetchPetAdoptionPostById = async ({ postId }: { postId: string }) =
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
                 },
                 credentials: "include",
                 cache: "no-store",
@@ -335,6 +357,7 @@ export const fetchPetAdoptionPostById = async ({ postId }: { postId: string }) =
 }
 
 export const fetchAdoptionRequestByPost = async ({ postId }: { postId: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-request/${postId}`,
@@ -342,7 +365,7 @@ export const fetchAdoptionRequestByPost = async ({ postId }: { postId: string })
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
                 },
                 credentials: "include",
                 cache: "no-store",
@@ -364,6 +387,7 @@ export const fetchAdoptionRequestByPost = async ({ postId }: { postId: string })
 }
 
 export const fetchAdoptedPetOwner = async ({ postId }: { postId: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/pet-adoption/${postId}/adopted-pet-owner`,
@@ -371,7 +395,7 @@ export const fetchAdoptedPetOwner = async ({ postId }: { postId: string }) => {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Cookie: `${cookies().get("t")?.name}=${cookies().get("t")?.value}`,
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
                 },
                 credentials: "include",
                 cache: "no-store",
