@@ -244,25 +244,25 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
 
     return (
         <div className="flex w-full flex-col">
-            <div className="w-full rounded-md p-3 bg-pink-1">
+            <div className="w-full rounded-md p-4 bg-pink-1">
                 {/* CAPTION */}
                 <div className="bg-white w-full rounded-t-md p-3 border-b">
                     <div className="flex flex-row justify-between items-center pb-4">
                         <div className="flex items-center gap-3">
-                            <Avatar>
+                            <Avatar className="cursor-pointer">
                                 <AvatarImage src={post.poster.profileImage} alt="@avatar" />
                                 <AvatarFallback>
                                     <Loader2 className="w-5 h-5 animate-spin" />
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">
-                                <div className="text-lg font-medium">{post.poster.username}</div>
+                                <div className="text-sm font-medium">{post.poster.username}</div>
                                 <div className="text-xs font-thin">
                                     {convertISOToFormat(post.createdAt)}
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div className="cursor-pointer">
                             <Image
                                 src={"/assets/images/settings.svg"}
                                 alt="setting"
@@ -272,18 +272,13 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                         </div>
                     </div>
                     <div className="font-normal text-sm pb-4">{post.content}</div>
-                    <div className="font-normal text-sm text-blue-1">
+                    <div className="font-normal text-xs text-blue-1">
                         {post.tags.map((tag) => `#${tag}`).join(" ")}
                     </div>
                 </div>
                 {/* IMAGE */}
                 {post.images.length > 0 && (
-                    <Swiper
-                        className="bg-white border-b"
-                        pagination={true}
-                        // navigation={true}
-                        modules={[Pagination]}
-                    >
+                    <Swiper className="bg-white border-b" pagination={true} modules={[Pagination]}>
                         {post.images.map((image, index) => (
                             <SwiperSlide key={index}>
                                 <Image
@@ -395,12 +390,12 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                                     <Loader2 className="w-5 h-5 animate-spin" />
                                 </AvatarFallback>
                             </Avatar>
-                            <div className="border flex flex-1 items-center relative rounded-lg p-1">
+                            <div className="border flex flex-1 items-center text-sm relative rounded-lg p-1">
                                 <textarea
                                     {...register("comment", {
                                         required: "Comment is required",
                                     })}
-                                    placeholder="Write a comment..."
+                                    placeholder="Viết bình luận..."
                                     id="comment"
                                     name="comment"
                                     rows={2}

@@ -23,20 +23,20 @@ const MessageListConversation = ({
     return (
         <>
             {/* INPUT */}
-            <div className="bg-pink-1 py-2 pl-2 pr-8 rounded-xl relative border border-brown-1">
+            <div className="bg-gradient-to-tr from-pink-1 to-yellow-50 py-2 pl-2 pr-8 rounded-xl relative border-2 border-brown-1">
                 <input
                     type="text"
                     placeholder="Tìm cuộc trò chuyện..."
                     className="focus:outline-none py-2 px-1 bg-transparent"
                     onChange={(e) => handleChangeSearch(e.target.value)}
                 />
-                <Image
+                {/* <Image
                     src={"/assets/images/search.svg"}
                     alt="search"
                     width={25}
                     height={25}
                     className="absolute top-4 right-2 cursor-pointer"
-                />
+                /> */}
             </div>
             <div className="flex flex-1 overflow-scroll flex-col gap-4 pt-4 mt-6 border-t border-brown-1">
                 {!chats ? (

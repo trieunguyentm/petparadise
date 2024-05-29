@@ -48,9 +48,10 @@ const MessageCard = ({
                 width={40}
                 height={40}
                 className="rounded-full border"
+                style={{ minWidth: "40px", minHeight: "40px", clipPath: "circle()" }}
             />
             <div className="flex flex-col flex-1">
-                <div className="text-sm font-medium">{displayName}</div>
+                <div className="text-sm font-medium text-brown-1">{displayName}</div>
                 <div className="line-clamp-1 text-xs flex justify-between w-full">
                     <div
                         className={`line-clamp-1 opacity-50 ${
@@ -59,7 +60,9 @@ const MessageCard = ({
                     >
                         {chat.lastMessage}
                     </div>
-                    <div className="line-clamp-1">{format(new Date(chat?.lastMessageAt), "p")}</div>
+                    <div className="line-clamp-1 text-xs font-light">
+                        {format(new Date(chat?.lastMessageAt), "p")}
+                    </div>
                 </div>
             </div>
         </Link>

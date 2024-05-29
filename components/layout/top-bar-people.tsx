@@ -23,9 +23,9 @@ const TopBarPeople = () => {
     }
 
     return (
-        <div className="flex pb-16 text-brown-1 justify-between">
+        <div className="flex pb-16 text-brown-1 justify-between max-sm:flex-col max-sm:gap-8">
             <div className="font-semibold text-3xl">Người dùng</div>
-            <div className="relative pl-4 py-2 pr-8 bg-pink-1 rounded-xl border border-brown-1">
+            <div className="relative pl-4 py-2 pr-8 bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl border border-brown-1 text-sm">
                 <input
                     type="text"
                     placeholder="Tìm kiếm người dùng"
@@ -39,7 +39,7 @@ const TopBarPeople = () => {
                     alt="search"
                     width={25}
                     height={25}
-                    className="absolute top-4 right-2 cursor-pointer"
+                    className="absolute top-4 right-2 cursor-pointer transition-all hover:-translate-y-1.5"
                     onClick={handleSearch}
                 />
             </div>

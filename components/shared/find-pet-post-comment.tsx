@@ -22,7 +22,7 @@ const FindPetPostComment = ({ comment }: { comment: IFindPetCommentDocument }) =
                 </AvatarFallback>
             </Avatar>
             <div className="border w-full pl-3 pt-1 pb-3 pr-3 flex flex-col gap-2 bg-slate-100">
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-4 sm:items-center max-sm:flex-col">
                     <div className="text-sm font-medium">{comment.poster.username}</div>
                     <div className="text-xs font-light">
                         {convertISOToFormat(comment.createdAt)}

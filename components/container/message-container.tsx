@@ -148,9 +148,9 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
     }
 
     return (
-        <div className="flex flex-row gap-5">
+        <div className="flex-col flex gap-1">
             {/* LIST OTHER USER */}
-            <div className="w-4/5 border h-[500px] rounded-md p-3 flex flex-col gap-4">
+            <div className="w-full border-2 border-brown-1 h-[300px] rounded-md p-3 flex flex-col gap-4">
                 {otherUser === null ? (
                     <>Không có người dùng nào</>
                 ) : (
@@ -166,23 +166,28 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                 )}
             </div>
             {/* BUTTON START CHAT */}
-            <div className="w-1/5 flex flex-col p-3 rounded-md">
+            <div className="w-full flex flex-col mt-3 rounded-md">
                 <div className="flex justify-center w-full flex-col gap-2">
                     {selectedUser.length >= 2 && (
                         <form className="flex flex-col gap-2">
-                            <div>
-                                <label htmlFor="nameGroup">Đặt tên cho cuộc trò chuyện</label>
+                            <div className="flex gap-3 items-center">
+                                <label htmlFor="nameGroup" className="text-sm text-brown-1">
+                                    Đặt tên cho cuộc trò chuyện
+                                </label>
                                 <input
                                     {...register("nameGroup", {
                                         required: "Group name is required",
                                     })}
                                     type="text"
                                     id="nameGroup"
-                                    className="border border-brown-1 focus:outline-none p-1 max-w-[120px] text-sm rounded-md"
+                                    className="border-2 border-brown-1 focus:outline-none p-1 max-w-[120px] text-sm rounded-md"
                                 />
                             </div>
                             <div>
-                                <label htmlFor="avatarGroup" className="flex flex-row gap-1">
+                                <label
+                                    htmlFor="avatarGroup"
+                                    className="flex flex-row gap-1 text-sm text-brown-1"
+                                >
                                     Tạo ảnh đại diện cho cuộc trò chuyện
                                     <Image
                                         src={"/assets/images/image-plus.svg"}
@@ -211,7 +216,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                                     <Button
                                         size={"sm"}
                                         variant={"ghost"}
-                                        className="text-xs"
+                                        className="text-xs bg-slate-200"
                                         onClick={handleCancel}
                                     >
                                         Xóa ảnh
@@ -227,17 +232,17 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                             <Loader2 className="w-8 h-8 animate-spin" />
                         )}
                     </Button>
-                    <div className="flex flex-col gap-2 mt-5">
+                    <ol className="flex flex-col gap-1 mt-5">
                         {selectedUser.length > 0 &&
-                            selectedUser.map((selectedUser) => (
-                                <div
+                            selectedUser.map((selectedUser, index) => (
+                                <li
                                     key={selectedUser.id}
-                                    className="line-clamp-1 text-xs text-brown-1"
+                                    className="line-clamp-1 text-xs font-medium text-brown-1"
                                 >
                                     {selectedUser.username}
-                                </div>
+                                </li>
                             ))}
-                    </div>
+                    </ol>
                 </div>
             </div>
             <SnackbarCustom

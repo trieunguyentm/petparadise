@@ -23,10 +23,10 @@ const TopBar = () => {
 
     return (
         <div className="py-4 flex justify-between mb-1">
-            <div className="pl-4 py-2 pr-8 bg-pink-1 rounded-xl relative border border-brown-1">
+            <div className="pl-4 py-2 pr-8 bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl relative border-2 border-brown-1 text-sm">
                 <input
                     type="text"
-                    placeholder="Tìm kiếm bài viết"
+                    placeholder="Tìm kiếm bài viết ..."
                     className="bg-transparent focus:outline-none py-2"
                     onKeyDown={handleKeyDown}
                     value={search}
@@ -37,16 +37,22 @@ const TopBar = () => {
                     alt="search"
                     width={25}
                     height={25}
-                    className="absolute top-4 right-2 cursor-pointer"
+                    className="absolute top-4 right-2 cursor-pointer transition-all hover:-translate-y-1.5"
                     onClick={handleSearch}
                 />
             </div>
             <Link
                 href={"/create-post"}
-                className="bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl flex items-center pl-4 pr-6 border border-brown-1"
+                className="bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl flex items-center pl-4 pr-6 border-2 border-brown-1 text-sm max-md:hidden"
             >
-                <div className="flex gap-2 text-brown-1">
-                    <Image src={"/assets/images/plus.svg"} alt="plus" width={25} height={25} />
+                <div className="flex gap-2 text-brown-1 items-center">
+                    <Image
+                        src={"/assets/images/plus.svg"}
+                        alt="plus"
+                        width={25}
+                        height={25}
+                        className="transition-all hover:-translate-y-1.5"
+                    />
                     Tạo bài viết mới
                 </div>
             </Link>

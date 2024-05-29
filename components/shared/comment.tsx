@@ -20,11 +20,9 @@ const CommentComponent = ({ comment }: { comment: ICommentDocument }) => {
             <div className="border w-full pl-3 py-1 pr-3 rounded-lg flex flex-col gap-2 bg-slate-100">
                 <div className="flex gap-4 items-center">
                     <div className="text-sm font-medium">{comment.poster.username}</div>
-                    <div className="text-xs font-light">
-                        {convertISOToFormat(comment.createdAt)}
-                    </div>
+                    <div className="text-xs font-thin">{convertISOToFormat(comment.createdAt)}</div>
                 </div>
-                <div className="text-sm">{comment.content}</div>
+                <div className="text-xs">{comment.content}</div>
                 {comment.image && (
                     <div className="pb-2">
                         <Image

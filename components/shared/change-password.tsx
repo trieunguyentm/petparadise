@@ -272,6 +272,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                         </Button>
                         <Button
                             variant="ghost"
+                            className="bg-slate-200"
                             onClick={() => setOpenChangePassword((prev) => !prev)}
                         >
                             Cancel

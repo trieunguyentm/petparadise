@@ -13,7 +13,7 @@ const PostContainer = async () => {
         <>
             {posts === null ? (
                 <div className="w-full h-full flex items-center justify-center">
-                    There are currently no posts
+                    Hiện tại không có bài đăng nào
                 </div>
             ) : (
                 <ListPost posts={posts} user={user} />

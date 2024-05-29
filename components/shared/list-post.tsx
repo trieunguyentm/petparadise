@@ -93,7 +93,6 @@ const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument
                     else indexRef = listPost.length - 3
                     return (
                         <div key={post._id} ref={index === indexRef ? ref : null}>
-                            {/* <PostFeed post={post} user={user} /> */}
                             <PostFeedDetail post={post} user={user} />
                         </div>
                     )
@@ -107,7 +106,7 @@ const ListPost = ({ posts, user }: { posts: IPostDocument[]; user: IUserDocument
             />
             {!hasMore && (
                 <div className="text-center">
-                    You have reached the end of the post, please refresh the page to see new posts
+                    Bạn đã xem hết các bài viết, hãy tải lại trang để tải các bài viết mới nhất
                 </div>
             )}
         </>

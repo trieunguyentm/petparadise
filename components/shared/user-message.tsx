@@ -25,8 +25,11 @@ const UserMessage = ({
                     width={40}
                     height={40}
                     className="rounded-full"
+                    style={{ clipPath: "circle()", minWidth: "40px", minHeight: "40px" }}
                 />
-                <div className="font-medium">{people.username}</div>
+                <div className="font-medium text-brown-1 text-sm line-clamp-1 max-sm:text-xs">
+                    {people.username}
+                </div>
             </label>
         </div>
     )

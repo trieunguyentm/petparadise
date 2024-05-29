@@ -31,8 +31,10 @@ const FindPetTab = ({
         <>
             <Tabs value={tab} className="w-full h-full" onValueChange={handleTabChange}>
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="post-find-pet">Tìm kiếm thú cưng</TabsTrigger>
-                    <TabsTrigger value="post-find-owner">
+                    <TabsTrigger value="post-find-pet" className="line-clamp-1">
+                        Tìm kiếm thú cưng
+                    </TabsTrigger>
+                    <TabsTrigger value="post-find-owner" className="line-clamp-1">
                         Tìm kiếm chủ nhân cho thú cưng
                     </TabsTrigger>
                 </TabsList>

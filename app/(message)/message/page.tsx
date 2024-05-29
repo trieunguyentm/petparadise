@@ -1,5 +1,7 @@
 import MessageListUser from "@/components/shared/message-list-user"
-import { fetchOtherUser } from "@/lib/fetch"
+import TitleMessagePage from "@/components/shared/title-message-page"
+import { fetchChatByUser, fetchOtherUser, fetchUser } from "@/lib/fetch"
+import { redirect } from "next/navigation"
 
 export const metadata = {
     title: "Message",
@@ -7,16 +9,23 @@ export const metadata = {
 }
 
 const Message = async () => {
-    const otherUser = await fetchOtherUser()
+    const [chats, user, otherUser] = await Promise.all([
+        fetchChatByUser(),
+        fetchUser(),
+        fetchOtherUser(),
+    ])
+
+    if (!user) {
+        redirect("/login")
+    }
 
     return (
         <div className="px-5 py-3">
             <div className="flex h-[calc(100vh-24px)] bg-pink-1 rounded-xl p-5 w-full">
                 <div className="bg-white rounded-xl w-full p-5 flex flex-col max-h-[100vh] overflow-scroll gap-10">
                     {/* TITLE */}
-                    <div className="text-brown-1 font-semibold">
-                        Chọn danh sách người dùng để bắt đầu một cuộc trò chuyện
-                    </div>
+                    <TitleMessagePage chats={chats} user={user} />
+
                     {/* SEARCH CONTACT */}
                     <MessageListUser otherUser={otherUser} />
                 </div>

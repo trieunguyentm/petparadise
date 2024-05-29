@@ -23,7 +23,7 @@ const People = async () => {
         <>
             {otherPeople === null ? (
                 <div className="w-full h-full flex items-center justify-center">
-                    There are no more users
+                    Hiện tại không có người dùng nào khác
                 </div>
             ) : (
                 <ListOtherPeople user={user} otherPeople={otherPeople} />

@@ -43,8 +43,8 @@ const UserCard = ({ people, user }: { people: IUserDocument; user: IUserDocument
     }
 
     return (
-        <div className="flex border-brown-1 border-2 py-3 pl-3 pr-5 rounded-xl justify-between items-center">
-            <div className="flex items-center gap-4">
+        <div className="flex border-brown-1 border-2 py-2 pl-2 pr-5 rounded-xl justify-between items-center">
+            <div className="flex items-center gap-4 cursor-pointer">
                 <Image
                     src={
                         people.profileImage
@@ -54,28 +54,31 @@ const UserCard = ({ people, user }: { people: IUserDocument; user: IUserDocument
                     alt="avatar"
                     width={50}
                     height={50}
-                    className="rounded-full"
+                    className="rounded-full border-2"
+                    style={{ clipPath: "circle()" }}
                     priority
                 />
                 <div className="flex flex-col">
-                    <div className="font-medium text-xl text-brown-1">{people.username}</div>
-                    <div className="text-gray-500 opacity-8 text-sm">@{people.username}</div>
+                    <div className="font-medium text-sm text-brown-1">{people.username}</div>
                 </div>
             </div>
-            <button className="cursor-pointer hover:opacity-50" onClick={handleFollow}>
+            <button
+                className="cursor-pointer hover:opacity-50 transition-all duration-300 hover:-translate-y-1.5"
+                onClick={handleFollow}
+            >
                 {!isFollowing ? (
                     <Image
                         src={"/assets/images/user-round-plus.svg"}
                         alt="plus"
-                        width={40}
-                        height={40}
+                        width={30}
+                        height={30}
                     />
                 ) : (
                     <Image
                         src={"/assets/images/user-round-minus.svg"}
                         alt="minus"
-                        width={40}
-                        height={40}
+                        width={30}
+                        height={30}
                     />
                 )}
             </button>

@@ -12,6 +12,10 @@ import { useState } from "react"
 import SnackbarCustom from "../ui/snackbar"
 import AreaConversation from "../shared/area-conversation"
 import { useRouter } from "next/navigation"
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
+import { CircleChevronLeft } from "lucide-react"
+import ListMessageCard from "../shared/list-message-card"
+import { useDebouncedCallback } from "use-debounce"
 
 type FormValues = {
     message: string
@@ -21,9 +25,11 @@ type FormValues = {
 const MessageDetailContainer = ({
     chatDetail,
     user,
+    chats,
 }: {
     chatDetail: IChatDocument
     user: IUserDocument
+    chats: IChatDocument[] | null
 }) => {
     const router = useRouter()
     const isGroup = chatDetail.isGroup
@@ -47,6 +53,13 @@ const MessageDetailContainer = ({
         reset,
         handleSubmit,
     } = useForm<FormValues>()
+
+    const [search, setSearch] = useState<string>("")
+    // const [listChat, setListChat] = useState<IChatDocument[] | null>(chats)
+
+    const handleChangeSearch = useDebouncedCallback((text: string) => {
+        setSearch(text)
+    }, 600)
 
     /** Input Comment and URL Image */
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null)
@@ -133,25 +146,70 @@ const MessageDetailContainer = ({
         <div className="flex flex-col p-1 h-screen">
             {/* HEADER */}
             <div className="h-[72px] border-b-2 border-brown-1 flex items-center">
-                <div className="flex flex-row items-center gap-4 ml-10">
-                    <Image
-                        src={imageSrc}
-                        alt="avatar-chat"
-                        width={40}
-                        height={40}
-                        className="rounded-full border border-brown-1"
-                        // style={{ clipPath: "circle()" }}
-                    />
-                    <div className="flex flex-col gap-1">
-                        <div className="font-medium">{displayName}</div>
-                        {isGroup && (
-                            <div className="text-xs">{chatDetail.members.length} thành viên</div>
-                        )}
-                        {!isGroup && (
-                            <div className="text-xs">
-                                {convertISOToFormatMessage(chatDetail.lastMessageAt)}
-                            </div>
-                        )}
+                <div className="flex justify-between w-full items-center">
+                    <div className="flex flex-row items-center gap-4 ml-10">
+                        <Image
+                            src={imageSrc}
+                            alt="avatar-chat"
+                            width={40}
+                            height={40}
+                            className="rounded-full border border-brown-1"
+                            style={{ clipPath: "circle()", minWidth: "40px", minHeight: "40px" }}
+                        />
+                        <div className="flex flex-col gap-1">
+                            <div className="font-medium">{displayName}</div>
+                            {isGroup && (
+                                <div className="text-xs">
+                                    {chatDetail.members.length} thành viên
+                                </div>
+                            )}
+                            {!isGroup && (
+                                <div className="text-xs">
+                                    {convertISOToFormatMessage(chatDetail.lastMessageAt)}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="lg:hidden">
+                        <Sheet>
+                            <SheetTrigger>
+                                <div className="cursor-pointer text-brown-1 transition-all hover:-translate-x-2 hover:opacity-55">
+                                    <CircleChevronLeft />
+                                </div>
+                            </SheetTrigger>
+                            <SheetContent className="overflow-scroll">
+                                {/* INPUT */}
+                                <div className="bg-gradient-to-tr from-pink-1 to-yellow-50 py-2 pl-2 pr-8 rounded-xl relative border-2 border-brown-1">
+                                    <input
+                                        type="text"
+                                        placeholder="Tìm cuộc trò chuyện..."
+                                        className="focus:outline-none py-2 px-1 bg-transparent"
+                                        onChange={(e) => handleChangeSearch(e.target.value)}
+                                    />
+                                    {/* <Image
+                                src={"/assets/images/search.svg"}
+                                alt="search"
+                                width={25}
+                                height={25}
+                                className="absolute top-4 right-2 cursor-pointer"
+                            /> */}
+                                </div>
+                                <div className="flex flex-1 overflow-scroll flex-col gap-4 pt-4 mt-6 border-t border-brown-1">
+                                    {!chats ? (
+                                        <div className="flex items-center justify-center text-brown-1">
+                                            Bạn chưa tham gia cuộc trò chuyện nào, hãy chọn bạn bè
+                                            của bạn và bắt đầu một cuộc trò chuyện
+                                        </div>
+                                    ) : (
+                                        <ListMessageCard
+                                            chats={chats}
+                                            user={user}
+                                            search={search}
+                                        />
+                                    )}
+                                </div>
+                            </SheetContent>
+                        </Sheet>
                     </div>
                 </div>
             </div>

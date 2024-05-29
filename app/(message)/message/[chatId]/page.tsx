@@ -1,5 +1,5 @@
 import MessageDetailContainer from "@/components/container/message-detail-container"
-import { fetchDetailChat, fetchUser } from "@/lib/fetch"
+import { fetchChatByUser, fetchDetailChat, fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"
 import React from "react"
 
@@ -10,7 +10,11 @@ export const metadata = {
 
 const DetailMessagePage = async ({ params }: { params: { chatId: string } }) => {
     const chatId = params.chatId
-    const [chatDetail, user] = await Promise.all([fetchDetailChat({ chatId }), fetchUser()])
+    const [chatDetail, user, chats] = await Promise.all([
+        fetchDetailChat({ chatId }),
+        fetchUser(),
+        fetchChatByUser(),
+    ])
 
     if (!user) {
         redirect("/login")
@@ -20,7 +24,7 @@ const DetailMessagePage = async ({ params }: { params: { chatId: string } }) => 
         redirect("/message")
     }
 
-    return <MessageDetailContainer chatDetail={chatDetail} user={user} />
+    return <MessageDetailContainer chatDetail={chatDetail} user={user} chats={chats} />
 }
 
 export default DetailMessagePage

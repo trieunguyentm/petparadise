@@ -14,7 +14,7 @@ const User = ({ otherUser }: { otherUser: IUserDocument }) => {
                     <Loader2 className="w-5 h-5 animate-spin" />
                 </AvatarFallback>
             </Avatar>
-            <div className="text-sm text-brown-1">{otherUser.username}</div>
+            <div className="text-sm text-brown-1 font-medium">{otherUser.username}</div>
         </div>
     )
 }

@@ -12,7 +12,7 @@ const MessageSideBar = async () => {
     }
 
     return (
-        <div className="w-1/5 h-screen overflow-scroll border-x border-brown-1 flex flex-col px-2">
+        <div className="w-1/5 h-screen overflow-scroll border-x border-brown-1 flex flex-col px-2 max-lg:hidden">
             <div className="max-h-[100vh] flex flex-col py-4 gap-3">
                 {/* LIST MESSAGE */}
                 <MessageListConversation chats={chats} user={user} />

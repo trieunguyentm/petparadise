@@ -72,10 +72,10 @@ const MessageListUser = ({ otherUser }: { otherUser: IUserDocument[] | null }) =
 
     return (
         <>
-            <div className="w-full border rounded-md px-2 py-3 relative">
+            <div className="w-full border-2 rounded-2xl border-brown-1 px-2 py-3 relative">
                 <input
                     type="text"
-                    className="w-full py-3 pl-2 pr-8 focus:outline-none bg-transparent"
+                    className="w-full py-3 pl-2 pr-8 focus:outline-none bg-transparent text-base"
                     placeholder="Tìm kiếm các liên hệ ..."
                     onChange={(e) => handleChangeSearch(e.target.value)}
                 />
@@ -87,7 +87,7 @@ const MessageListUser = ({ otherUser }: { otherUser: IUserDocument[] | null }) =
                         alt="search"
                         width={25}
                         height={25}
-                        className="absolute top-6 right-2 cursor-pointer"
+                        className="absolute top-6 right-2 cursor-pointer transition-all hover:-translate-y-1.5"
                     />
                 )}
             </div>

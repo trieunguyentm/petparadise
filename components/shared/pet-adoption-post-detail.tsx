@@ -416,27 +416,26 @@ const PetAdoptionPostDetail = ({
                     <div className="flex flex-col text-brown-1">
                         <div
                             onClick={() => router.push("/find-pet")}
-                            className="mb-1 cursor-pointer"
+                            className="mb-1 cursor-pointer transition-all hover:-translate-x-2"
                         >
                             <ArrowLeft />
                         </div>
                     </div>
                     <div className="flex flex-col pb-16 text-brown-1">
-                        <div className="font-semibold text-3xl">Nhận nuôi thú cưng</div>
+                        <div className="font-medium text-3xl">Nhận nuôi thú cưng</div>
                     </div>
                     <div className="flex justify-between items-center">
                         <div>
-                            {" "}
                             <div className="flex items-center gap-2">
                                 <Image
                                     src={post.poster.profileImage || "/assets/images/avatar.jpeg"}
                                     alt="avatar"
-                                    width={50}
-                                    height={50}
+                                    width={45}
+                                    height={45}
                                     className="rounded-full"
                                 />
                                 <div className="flex flex-col">
-                                    <div className="font-semibold text-base">
+                                    <div className="font-medium text-sm">
                                         {post.poster.username}
                                     </div>
                                     <div className="text-xs text-gray-600">
@@ -593,12 +592,13 @@ const PetAdoptionPostDetail = ({
                             </>
                         </div>
                     </div>
-                    <h1 className="text-xl mt-6 font-semibold">Thông tin chi tiết</h1>
+                    <h1 className="text-xl mt-6 font-medium text-brown-1">Thông tin chi tiết</h1>
                     <div className="mt-3">
                         <ul className="flex flex-col gap-2">
                             <li>
                                 <div className="text-sm">
-                                    &bull;&nbsp;<span className="font-semibold">Trạng thái: </span>
+                                    &bull;&nbsp;
+                                    <span className="font-medium text-brown-1">Trạng thái: </span>
                                     {!statusPost ? (
                                         <span className="text-yellow-500">
                                             Chưa có người nhận nuôi
@@ -614,7 +614,9 @@ const PetAdoptionPostDetail = ({
                                 <li>
                                     <div className="text-sm flex">
                                         &bull;&nbsp;
-                                        <span className="font-semibold">Người nhận nuôi:</span>
+                                        <span className="font-medium text-brown-1">
+                                            Người nhận nuôi:
+                                        </span>
                                         &nbsp;
                                         {loadGetAdoptedPetOwner ? (
                                             <Loader2 className="w-6 h-6 animate-spin" />
@@ -630,20 +632,25 @@ const PetAdoptionPostDetail = ({
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">Loại thú cưng: </span>{" "}
+                                    <span className="font-medium text-brown-1">
+                                        Loại thú cưng:{" "}
+                                    </span>{" "}
                                     {typePet[post.petType]}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
-                                    &bull;&nbsp;<span className="font-semibold">Kích thước: </span>{" "}
+                                    &bull;&nbsp;
+                                    <span className="font-medium text-brown-1">
+                                        Kích thước:{" "}
+                                    </span>{" "}
                                     {sizePet[post.sizePet] || "Chưa cung cấp"}
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">
+                                    <span className="font-medium text-brown-1">
                                         Vị trí hiện tại của thú cưng:{" "}
                                     </span>
                                     {post.location || "Chưa cung cấp"}
@@ -652,7 +659,7 @@ const PetAdoptionPostDetail = ({
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">
+                                    <span className="font-medium text-brown-1">
                                         Lí do cần tìm chủ cho thú cưng:{" "}
                                     </span>
                                     {post.reason === "lost-pet" ? (
@@ -668,7 +675,7 @@ const PetAdoptionPostDetail = ({
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">
+                                    <span className="font-medium text-brown-1">
                                         Tình trạng sức khỏe của thú cưng:{" "}
                                     </span>
                                     {post.healthInfo}
@@ -677,7 +684,7 @@ const PetAdoptionPostDetail = ({
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">
+                                    <span className="font-medium text-brown-1">
                                         Mô tả chi tiết về thú cưng và các yêu cầu khi chăm sóc:{" "}
                                     </span>
                                     {post.description}
@@ -686,14 +693,16 @@ const PetAdoptionPostDetail = ({
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">Thông tin liên hệ riêng: </span>
+                                    <span className="font-medium text-brown-1">
+                                        Thông tin liên hệ riêng:{" "}
+                                    </span>
                                     {post.contactInfo}
                                 </div>
                             </li>
                             <li>
-                                <div className="text-sm">
+                                <div className="text-sm mb-8">
                                     &bull;&nbsp;
-                                    <span className="font-semibold">
+                                    <span className="font-medium text-brown-1">
                                         Hình ảnh đi kèm của thú cưng:{" "}
                                     </span>
                                 </div>
@@ -712,7 +721,7 @@ const PetAdoptionPostDetail = ({
                                                         width="0"
                                                         height="0"
                                                         sizes="100vw"
-                                                        className="w-full h-auto"
+                                                        className="w-full h-auto rounded-md border-2 border-brown-1"
                                                     />
                                                 </SwiperSlide>
                                             ))}
