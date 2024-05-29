@@ -51,3 +51,14 @@ export const NOTIFICATION_PER_PAGE = 10
 export const POST_PER_PAGE = 10
 export const USER_PER_PAGE = 20
 export const MESSAGE_PER_PAGE = 20
+
+export const shopCategories = [
+    { value: "all", text: "Tất cả" },
+    { value: "food", text: "Đồ ăn" },
+    { value: "toys", text: "Đồ chơi" },
+    { value: "medicine", text: "Thuốc" },
+    { value: "accessories", text: "Phụ kiện" },
+    { value: "housing", text: "Nhà ở" },
+    { value: "training", text: "Huấn luyện" },
+    { value: "other", text: "Khác" },
+]
