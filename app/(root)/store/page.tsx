@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { fetchUser } from "@/lib/fetch"
 import { Loader2, Search, ShoppingCart } from "lucide-react"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export const metadata = {
@@ -40,7 +41,7 @@ const Store = async () => {
                             <Search className="absolute right-3 top-3 text-brown-1 hover:cursor-pointer transition-all hover:-translate-y-1.5" />
                         </div>
                         <div className="flex gap-3 items-center">
-                            <div className="border-2 border-brown-1 p-3 flex gap-2 rounded-2xl text-brown-1 hover:cursor-pointer items-center">
+                            <div className="border-2 border-brown-1 p-3 px-4 flex gap-2 rounded-2xl text-brown-1 hover:cursor-pointer items-center">
                                 <ShoppingCart className="transition-all hover:-translate-y-1.5" />
                                 <div className="text-xs">{`(0)`}</div>
                             </div>
@@ -57,9 +58,15 @@ const Store = async () => {
                                     </Avatar>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DropdownMenuItem>Tạo sản phẩm</DropdownMenuItem>
-                                    <DropdownMenuItem>Quản lý sản phẩm</DropdownMenuItem>
-                                    <DropdownMenuItem>Quản lý đơn hàng</DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href={"/store/create-product"}>Tạo sản phẩm</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href={"/store/manage-product"}>Quản lý sản phẩm</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href={"/store/manage-order"}>Quản lý đơn hàng</Link>
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>

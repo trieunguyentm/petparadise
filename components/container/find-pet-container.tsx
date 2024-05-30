@@ -217,7 +217,6 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectLabel>Chọn loại thú cưng cần tìm kiếm</SelectLabel>
                                 {filterTypePet.map((filter) => (
                                     <SelectItem key={filter.value} value={filter.value}>
                                         {filter.text}

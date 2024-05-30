@@ -13,10 +13,12 @@ export default function DatePickerDemo({
     date,
     setDate,
     label,
+    selectAll,
 }: {
     date: Date | undefined
     setDate: (arg: Date | undefined) => void
     label: string
+    selectAll?: boolean
 }) {
     const handleDateSelect = (selectedDate: Date | undefined) => {
         if (selectedDate) {
@@ -49,7 +51,11 @@ export default function DatePickerDemo({
                         selected={date}
                         onSelect={handleDateSelect}
                         initialFocus
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                        disabled={
+                            !selectAll
+                                ? (date) => date > new Date() || date < new Date("1900-01-01")
+                                : false
+                        }
                     />
                 </PopoverContent>
             </Popover>

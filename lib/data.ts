@@ -62,3 +62,15 @@ export const shopCategories = [
     { value: "training", text: "Huấn luyện" },
     { value: "other", text: "Khác" },
 ]
+
+export const typePet = [
+    { value: "all", text: "Tất cả" },
+    { value: "dog", text: "Chó" },
+    { value: "cat", text: "Mèo" },
+    { value: "bird", text: "Chim" },
+    { value: "rabbit", text: "Thỏ" },
+    { value: "fish", text: "Cá" },
+    { value: "rodents", text: "Loài gặm nhấm" },
+    { value: "reptile", text: "Loài bò sát" },
+    { value: "other", text: "Khác" },
+]

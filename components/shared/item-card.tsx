@@ -54,8 +54,8 @@ const ItemCard = () => {
                                     onClick={handleNextImage}
                                 />
                             </div>
-                            <div className="absolute rounded-full cursor-pointer top-2 right-2">
-                                <FavoriteIcon style={{ fontSize: "25px", color: "red" }} />
+                            <div className="absolute rounded-full cursor-pointer top-2 right-2 bg-white">
+                                <FavoriteIcon style={{ fontSize: "24px", color: "red" }} />
                             </div>
                         </div>
                     ))}

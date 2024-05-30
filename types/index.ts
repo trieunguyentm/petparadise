@@ -1,6 +1,14 @@
 import mongoose, { Schema } from "mongoose"
 
 export type TypePet = "dog" | "cat" | "bird" | "rabbit" | "fish" | "rodents" | "reptile" | "other"
+export type TypeProduct =
+    | "food"
+    | "toys"
+    | "medicine"
+    | "accessories"
+    | "housing"
+    | "training"
+    | "other"
 export interface IUserDocument extends mongoose.Document {
     username: string
     email: string
