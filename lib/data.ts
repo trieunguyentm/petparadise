@@ -4,6 +4,12 @@ type MenuItem = {
     link: string
 }
 
+export const NOTIFICATION_PER_PAGE = 20
+export const POST_PER_PAGE = 20
+export const USER_PER_PAGE = 20
+export const MESSAGE_PER_PAGE = 20
+export const PRODUCT_PER_PAGE = 20
+
 export const menuLeftSideBar: MenuItem[] = [
     {
         title: "Trang chủ",
@@ -46,11 +52,6 @@ export const menuLeftSideBar: MenuItem[] = [
         link: "/message",
     },
 ]
-
-export const NOTIFICATION_PER_PAGE = 10
-export const POST_PER_PAGE = 10
-export const USER_PER_PAGE = 20
-export const MESSAGE_PER_PAGE = 20
 
 export const shopCategories = [
     { value: "all", text: "Tất cả" },

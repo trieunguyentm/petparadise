@@ -7,6 +7,7 @@ import {
     INotificationDocument,
     IPetAdoptionPostDocument,
     IPostDocument,
+    IProductDocument,
     IUserDocument,
 } from "@/types"
 import { cookies } from "next/headers"
@@ -410,5 +411,29 @@ export const fetchAdoptedPetOwner = async ({ postId }: { postId: string }) => {
     } catch (error) {
         console.log(error)
         throw new Error("Failed to fetch adopted pet owner")
+    }
+}
+
+export const fetchProduct = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
+            },
+            credentials: "include",
+            cache: "no-store",
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data.products as IProductDocument[]
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch product")
     }
 }

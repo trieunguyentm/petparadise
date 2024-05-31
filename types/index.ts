@@ -164,3 +164,19 @@ export interface ITransferContractDocument extends mongoose.Document {
     createdAt: Date
     updatedAt: Date
 }
+
+export interface IProductDocument extends mongoose.Document {
+    seller: IUserDocument
+    name: string
+    description: string
+    price: number
+    discountRate?: number // Tỷ lệ giảm giá (%)
+    discountedPrice?: number // Giá sau khi giảm
+    discountStartDate?: Date // Ngày bắt đầu giảm giá
+    discountEndDate?: Date // Ngày kết thúc giảm giá
+    images: string[]
+    productType: "food" | "toys" | "medicine" | "accessories" | "housing" | "training" | "other"
+    stock: number // Số lượng sản phẩm
+    createdAt: Date
+    updatedAt: Date
+}

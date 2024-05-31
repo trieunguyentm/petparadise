@@ -4,22 +4,19 @@ import { CircleChevronLeft, CircleChevronRight } from "lucide-react"
 import Image from "next/image"
 import React, { useState } from "react"
 import FavoriteIcon from "@mui/icons-material/Favorite"
+import { IProductDocument } from "@/types"
 
-const ItemCard = () => {
+const ItemCard = ({ product }: { product: IProductDocument }) => {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
 
-    const listPhoto = [
-        "/assets/images/dog.png",
-        "/assets/images/test1.jpeg",
-        "/assets/images/test2.jpeg",
-    ]
-
     const handleNextImage = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % listPhoto.length)
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % product.images.length)
     }
 
     const handlePrevImage = () => {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + listPhoto.length) % listPhoto.length)
+        setCurrentIndex(
+            (prevIndex) => (prevIndex - 1 + product.images.length) % product.images.length,
+        )
     }
 
     return (
@@ -30,7 +27,7 @@ const ItemCard = () => {
                     style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                 >
                     {/* Sử dụng flex-shrik-0 để đảm bảo cho các ảnh còn lại bằng 0 so với ảnh hiện tại */}
-                    {listPhoto.map((photo, index) => (
+                    {product.images.map((photo, index) => (
                         <div
                             key={index}
                             className="relative flex-shrink-0 w-full flex items-center"
@@ -63,18 +60,18 @@ const ItemCard = () => {
             </div>
             <div className="flex justify-between items-start">
                 <div>
-                    <div className="text-base mb-1 font-medium">Hạt dinh dưỡng cho chó</div>
+                    <div className="text-base mb-1 font-medium">{product.name}</div>
                     <div className="flex items-center gap-2">
                         <img
-                            src={"/assets/images/avatar.jpeg"}
+                            src={product.seller.profileImage || "/assets/images/avatar.jpeg"}
                             alt="creator"
                             className="w-10 h-10 rounded-full"
                         />
-                        <span className="text-xs font-medium">{"trieunguyentm"}</span>
+                        <span className="text-xs font-medium">{product.seller.username}</span>
                     </div>
                 </div>
                 <div className="text-xs font-medium p-2 rounded-md bg-slate-200 hover:bg-slate-400">
-                    34.000 đ
+                    {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
                 </div>
             </div>
         </div>

@@ -1,15 +1,5 @@
-import ItemCard from "@/components/shared/item-card"
-import MenuShop from "@/components/shared/menu-shop"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { fetchUser } from "@/lib/fetch"
-import { Loader2, Search, ShoppingCart } from "lucide-react"
-import Link from "next/link"
+import ShopContainer from "@/components/container/shop-container"
+import { fetchProduct, fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"
 
 export const metadata = {
@@ -18,7 +8,7 @@ export const metadata = {
 }
 
 const Store = async () => {
-    const [user] = await Promise.all([fetchUser()])
+    const [user, products] = await Promise.all([fetchUser(), fetchProduct()])
 
     if (!user) {
         redirect(`/login`)
@@ -31,54 +21,7 @@ const Store = async () => {
                     <div className="flex pb-16 text-brown-1">
                         <div className="font-semibold text-3xl">Cửa hàng thú cưng</div>
                     </div>
-                    <div className="flex justify-between">
-                        <div className="relative border-brown-1 border-2 p-3 pr-10 rounded-2xl">
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm sản phẩm ..."
-                                className="focus:outline-none text-sm"
-                            />
-                            <Search className="absolute right-3 top-3 text-brown-1 hover:cursor-pointer transition-all hover:-translate-y-1.5" />
-                        </div>
-                        <div className="flex gap-3 items-center">
-                            <div className="border-2 border-brown-1 p-3 px-4 flex gap-2 rounded-2xl text-brown-1 hover:cursor-pointer items-center">
-                                <ShoppingCart className="transition-all hover:-translate-y-1.5" />
-                                <div className="text-xs">{`(0)`}</div>
-                            </div>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger className="focus:outline-none">
-                                    <Avatar className="hover:cursor-pointer">
-                                        <AvatarImage
-                                            src={user.profileImage || "/assets/images/avatar.jpeg"}
-                                            alt="@avatar"
-                                        />
-                                        <AvatarFallback>
-                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                        </AvatarFallback>
-                                    </Avatar>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuItem>
-                                        <Link href={"/store/create-product"}>Tạo sản phẩm</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link href={"/store/manage-product"}>Quản lý sản phẩm</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link href={"/store/manage-order"}>Quản lý đơn hàng</Link>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-                    </div>
-                    <MenuShop />
-                    <div className="grid grid-cols-2 max-md:grid-cols-1 gap-4 mt-8">
-                        <ItemCard />
-                        <ItemCard />
-                        <ItemCard />
-                        <ItemCard />
-                        <ItemCard />
-                    </div>
+                    <ShopContainer user={user} products={products} />
                 </div>
             </div>
         </div>
