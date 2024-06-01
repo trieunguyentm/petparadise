@@ -244,7 +244,11 @@ const PetAdoptionPostConfirm = ({
                                     <span className="font-semibold">
                                         Tình trạng sức khỏe của thú cưng:{" "}
                                     </span>
-                                    {post.healthInfo}
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.healthInfo.replace(/\n/g, "<br />"),
+                                        }}
+                                    />
                                 </div>
                             </li>
                             <li>
@@ -253,14 +257,22 @@ const PetAdoptionPostConfirm = ({
                                     <span className="font-semibold">
                                         Mô tả chi tiết về thú cưng và các yêu cầu khi chăm sóc:{" "}
                                     </span>
-                                    {post.description}
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.description.replace(/\n/g, "<br />"),
+                                        }}
+                                    />
                                 </div>
                             </li>
                             <li>
                                 <div className="text-sm">
                                     &bull;&nbsp;
                                     <span className="font-semibold">Thông tin liên hệ riêng: </span>
-                                    {post.contactInfo}
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.contactInfo.replace(/\n/g, "<br />"),
+                                        }}
+                                    />
                                 </div>
                             </li>
                             <li>

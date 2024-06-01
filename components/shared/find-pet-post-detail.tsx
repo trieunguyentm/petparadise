@@ -515,12 +515,17 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                 </div>
                             </li>
                             <li>
-                                <div className="text-sm">
+                                <div className="text-sm flex">
                                     &bull;&nbsp;
                                     <span className="font-medium text-brown-1">
-                                        Mô tả chi tiết:{" "}
+                                        Mô tả chi tiết:
                                     </span>
-                                    {post.description}
+                                    &nbsp;
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.description.replace(/\n/g, "<br />"),
+                                        }}
+                                    />
                                 </div>
                             </li>
                             <li>

@@ -271,7 +271,12 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             />
                         </div>
                     </div>
-                    <div className="font-normal text-sm pb-4">{post.content}</div>
+                    <div
+                        className="font-normal text-sm pb-4"
+                        dangerouslySetInnerHTML={{
+                            __html: post.content.replace(/\n/g, "<br />"),
+                        }}
+                    />
                     <div className="font-normal text-xs text-blue-1">
                         {post.tags.map((tag) => `#${tag}`).join(" ")}
                     </div>

@@ -437,3 +437,27 @@ export const fetchProduct = async () => {
         throw new Error("Failed to fetch product")
     }
 }
+
+export const fetchProductById = async ({ productId }: { productId: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${productId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `${sessionId?.name}=${sessionId?.value}`,
+            },
+            credentials: "include",
+            cache: "no-store",
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IProductDocument
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch product")
+    }
+}

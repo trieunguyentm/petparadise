@@ -22,7 +22,12 @@ const CommentComponent = ({ comment }: { comment: ICommentDocument }) => {
                     <div className="text-sm font-medium">{comment.poster.username}</div>
                     <div className="text-xs font-thin">{convertISOToFormat(comment.createdAt)}</div>
                 </div>
-                <div className="text-xs">{comment.content}</div>
+                <div
+                    className="text-xs"
+                    dangerouslySetInnerHTML={{
+                        __html: comment.content.replace(/\n/g, "<br />"),
+                    }}
+                />
                 {comment.image && (
                     <div className="pb-2">
                         <Image

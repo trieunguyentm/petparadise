@@ -678,7 +678,11 @@ const PetAdoptionPostDetail = ({
                                     <span className="font-medium text-brown-1">
                                         Tình trạng sức khỏe của thú cưng:{" "}
                                     </span>
-                                    {post.healthInfo}
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.healthInfo.replace(/\n/g, "<br />"),
+                                        }}
+                                    />
                                 </div>
                             </li>
                             <li>
@@ -687,7 +691,11 @@ const PetAdoptionPostDetail = ({
                                     <span className="font-medium text-brown-1">
                                         Mô tả chi tiết về thú cưng và các yêu cầu khi chăm sóc:{" "}
                                     </span>
-                                    {post.description}
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.description.replace(/\n/g, "<br />"),
+                                        }}
+                                    />
                                 </div>
                             </li>
                             <li>
@@ -696,7 +704,11 @@ const PetAdoptionPostDetail = ({
                                     <span className="font-medium text-brown-1">
                                         Thông tin liên hệ riêng:{" "}
                                     </span>
-                                    {post.contactInfo}
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.contactInfo.replace(/\n/g, "<br />"),
+                                        }}
+                                    />
                                 </div>
                             </li>
                             <li>

@@ -28,7 +28,13 @@ const FindPetPostComment = ({ comment }: { comment: IFindPetCommentDocument }) =
                         {convertISOToFormat(comment.createdAt)}
                     </div>
                 </div>
-                <div className="text-sm">{comment.content}</div>
+                {/* <div className="text-sm">{comment.content}</div> */}
+                <div
+                    className="text-xs"
+                    dangerouslySetInnerHTML={{
+                        __html: comment.content.replace(/\n/g, "<br />"),
+                    }}
+                />
                 {comment.images && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                         {/* <Swiper
