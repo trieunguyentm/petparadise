@@ -9,6 +9,11 @@ export type TypeProduct =
     | "housing"
     | "training"
     | "other"
+
+export interface ICartItem {
+    product: IProductDocument
+    quantity: number
+}
 export interface IUserDocument extends mongoose.Document {
     username: string
     email: string
@@ -25,6 +30,7 @@ export interface IUserDocument extends mongoose.Document {
     followers: IUserDocument[]
     following: IUserDocument[]
     chats: mongoose.Schema.Types.ObjectId[]
+    cart: ICartItem[]
     role: "user" | "admin"
     createdAt: Date
 }

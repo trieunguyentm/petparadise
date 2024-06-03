@@ -119,7 +119,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                         router.push("/login")
                         return
                     }
-                    console.log(res.text)
+                    // console.log(res.text)
                 }
             } catch (error) {
                 console.log(error)

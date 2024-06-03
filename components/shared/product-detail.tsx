@@ -1,14 +1,23 @@
 "use client"
 
 import { convertISOToFormatNotHours } from "@/lib/utils"
-import { IProductDocument } from "@/types"
+import { ICartItem, IProductDocument, IUserDocument } from "@/types"
 import Favorite from "@mui/icons-material/Favorite"
-import { ArrowLeft, CircleChevronLeft, CircleChevronRight, ShoppingCart } from "lucide-react"
+import {
+    ArrowLeft,
+    CircleChevronLeft,
+    CircleChevronRight,
+    Loader2,
+    Pencil,
+    ShoppingCart,
+} from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
+import { useRouter } from "next/navigation"
+import SnackbarCustom from "../ui/snackbar"
 
 const typePetToText = {
     food: "Đồ ăn",
@@ -20,11 +29,21 @@ const typePetToText = {
     other: "Khác",
 }
 
-const ProductDetail = ({ product }: { product: IProductDocument }) => {
+const ProductDetail = ({ product, user }: { product: IProductDocument; user: IUserDocument }) => {
+    const router = useRouter()
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     // Sale of products
     const [isDiscounted, setIsDiscounted] = useState<boolean>(false)
     const [discountedPrice, setDiscountedPrice] = useState<number>(product.price)
+    // Cart
+    const [loadingAddProduct, setLoadingAddProduct] = useState<boolean>(false)
+    const [cart, setCart] = useState<ICartItem[]>([])
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
     const handleNextImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % product.images.length)
@@ -38,6 +57,49 @@ const ProductDetail = ({ product }: { product: IProductDocument }) => {
 
     const calculateDiscountedPrice = (price: number, discountRate: number) => {
         return price * (1 - discountRate / 100)
+    }
+
+    const handleAddProductToCart = async () => {
+        try {
+            setLoadingAddProduct(true)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product/add-cart`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    productId: product._id.toString(),
+                }),
+                credentials: "include",
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message || "Error loading more posts")
+                return
+            }
+            if (data.success) {
+                setCart(data.data as ICartItem[])
+                setOpenSnackbar(true)
+                setTypeSnackbar("success")
+                setContentSnackbar("Sản phẩm đã được thêm vào giỏ hàng")
+            }
+        } catch (error) {
+            console.error("Failed to add product: ", error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("Failed to add product")
+        } finally {
+            setLoadingAddProduct(false)
+        }
     }
 
     useEffect(() => {
@@ -57,6 +119,36 @@ const ProductDetail = ({ product }: { product: IProductDocument }) => {
         }
     }, [product])
 
+    useEffect(() => {
+        try {
+            const fetchCart = async () => {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/cart`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                }
+                if (data.success) {
+                    setCart(data.data as ICartItem[])
+                }
+            }
+            fetchCart()
+        } catch (error) {
+            console.log(error)
+        }
+    }, [])
+
     return (
         <div className="px-5 py-3">
             <div className="flex h-[calc(100vh-24px)] bg-pink-1 rounded-xl p-5 w-full">
@@ -69,9 +161,16 @@ const ProductDetail = ({ product }: { product: IProductDocument }) => {
                     <div className="flex pb-16 text-brown-1">
                         <div className="font-semibold text-3xl">Chi tiết sản phẩm</div>
                     </div>
-                    <div className="flex gap-2 rounded-2xl text-brown-1 hover:cursor-pointer items-center mb-8 justify-end">
-                        <ShoppingCart className="transition-all hover:-translate-y-1.5 w-10 h-10" />
-                        <div className="text-sm">{`(0)`}</div>
+                    <div className="flex gap-4 rounded-2xl text-brown-1 hover:cursor-pointer items-center mb-8 justify-end">
+                        <div className="flex gap-2 items-center">
+                            <ShoppingCart className="transition-all hover:-translate-y-1.5 w-10 h-10" />
+                            <div className="text-sm font-medium">{`(${cart.length})`}</div>
+                        </div>
+                        {user._id.toString() === product.seller._id.toString() && (
+                            <Link href={`/store/edit-product/${product._id.toString()}`}>
+                                <Pencil className="transition-all hover:-translate-y-1.5 w-8 h-8" />
+                            </Link>
+                        )}
                     </div>
                     <div className="flex justify-between items-center mb-8">
                         <div className="text-2xl font-semibold text-brown-1">{product.name}</div>
@@ -168,13 +267,29 @@ const ProductDetail = ({ product }: { product: IProductDocument }) => {
                         />
                     </div>
                     <div className="mt-8">
-                        <Button className="flex gap-1 hover:opacity-60">
-                            <ShoppingCart />
-                            Thêm vào giỏ hàng
+                        <Button
+                            className="flex gap-1 hover:opacity-60"
+                            onClick={handleAddProductToCart}
+                            disabled={loadingAddProduct}
+                        >
+                            {loadingAddProduct ? (
+                                <Loader2 className="w-8 h-8 animate-spin" />
+                            ) : (
+                                <>
+                                    <ShoppingCart />
+                                    Thêm vào giỏ hàng
+                                </>
+                            )}
                         </Button>
                     </div>
                 </div>
             </div>
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import ProductDetail from "@/components/shared/product-detail"
-import { fetchProductById } from "@/lib/fetch"
+import { fetchProductById, fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"
 
 export const metadata = {
@@ -9,13 +9,17 @@ export const metadata = {
 
 const DetailProduct = async ({ params }: { params: { productId: string } }) => {
     const { productId } = params
-    const product = await fetchProductById({ productId })
+    const [product, user] = await Promise.all([fetchProductById({ productId }), fetchUser()])
 
     if (!product) {
         redirect("/store")
     }
 
-    return <ProductDetail product={product} />
+    if (!user) {
+        redirect(`/login`)
+    }
+
+    return <ProductDetail product={product} user={user} />
 }
 
 export default DetailProduct
