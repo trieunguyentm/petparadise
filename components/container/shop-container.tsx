@@ -206,7 +206,7 @@ const ShopContainer = ({
                     </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger className="focus:outline-none">
-                            <Avatar className="hover:cursor-pointer">
+                            <Avatar className="hover:cursor-pointer transition-all hover:-translate-y-1.5">
                                 <AvatarImage
                                     src={user.profileImage || "/assets/images/avatar.jpeg"}
                                     alt="@avatar"
@@ -222,6 +222,9 @@ const ShopContainer = ({
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <Link href={"/store/manage-product"}>Quản lý sản phẩm</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link href={"/store/favorite-product"}>Sản phẩm yêu thích</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <Link href={"/store/manage-order"}>Quản lý đơn hàng</Link>

@@ -1,10 +1,16 @@
 "use client"
 
-import { IProductDocument } from "@/types"
+import { IProductDocument, IUserDocument } from "@/types"
 import ItemCard from "../shared/item-card"
 import { useState } from "react"
 
-const ManageProductContainer = ({ products }: { products: null | IProductDocument[] }) => {
+const ManageProductContainer = ({
+    products,
+    user,
+}: {
+    products: null | IProductDocument[]
+    user: IUserDocument
+}) => {
     const [listProduct, setListProduct] = useState<IProductDocument[] | null>(products)
 
     const handleDelete = (productId: string) => {
@@ -23,6 +29,7 @@ const ManageProductContainer = ({ products }: { products: null | IProductDocumen
                     {listProduct?.map((product, index) => (
                         <ItemCard
                             key={index}
+                            userByFetch={user}
                             product={product}
                             manage={true}
                             handleDelete={handleDelete}
