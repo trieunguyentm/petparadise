@@ -9,7 +9,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { IProductDocument, IUserDocument } from "@/types"
+import { ICartItem, IProductDocument, IUserDocument } from "@/types"
 import { Loader2, Search, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
@@ -41,6 +41,8 @@ const ShopContainer = ({
     const [hasMore, setHasMore] = useState<boolean>(true)
     const [loadingMoreData, setLoadingMoreData] = useState<boolean>(false)
     const { ref, inView } = useInView()
+    // Cart
+    const [cart, setCart] = useState<ICartItem[]>([])
 
     useEffect(() => {
         setPage(0)
@@ -156,6 +158,36 @@ const ShopContainer = ({
         }
     }, [inView])
 
+    useEffect(() => {
+        try {
+            const fetchCart = async () => {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/cart`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                }
+                if (data.success) {
+                    setCart(data.data as ICartItem[])
+                }
+            }
+            fetchCart()
+        } catch (error) {
+            console.log(error)
+        }
+    }, [])
+
     return (
         <>
             <div className="flex justify-between">
@@ -168,9 +200,9 @@ const ShopContainer = ({
                     <Search className="absolute right-3 top-3 text-brown-1 hover:cursor-pointer transition-all hover:-translate-y-1.5" />
                 </div>
                 <div className="flex gap-3 items-center">
-                    <div className="border-2 border-brown-1 p-3 px-4 flex gap-2 rounded-2xl text-brown-1 hover:cursor-pointer items-center">
-                        <ShoppingCart className="transition-all hover:-translate-y-1.5" />
-                        <div className="text-xs">{`(0)`}</div>
+                    <div className="flex gap-2 items-center text-brown-1">
+                        <ShoppingCart className="transition-all hover:-translate-y-1.5 w-10 h-10 text-brown-1" />
+                        <div className="text-sm font-medium">{`(${cart.length})`}</div>
                     </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger className="focus:outline-none">

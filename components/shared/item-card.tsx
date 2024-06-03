@@ -1,16 +1,46 @@
 "use client"
 
-import { CircleChevronLeft, CircleChevronRight } from "lucide-react"
+import { CircleChevronLeft, CircleChevronRight, Loader2, Pencil, Trash2 } from "lucide-react"
 import Image from "next/image"
 import React, { useState, useEffect } from "react"
 import FavoriteIcon from "@mui/icons-material/Favorite"
 import { IProductDocument } from "@/types"
 import Link from "next/link"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "../ui/alert-dialog"
+import { useRouter } from "next/navigation"
+import SnackbarCustom from "../ui/snackbar"
 
-const ItemCard = ({ product }: { product: IProductDocument }) => {
+const ItemCard = ({
+    product,
+    manage,
+    handleDelete,
+}: {
+    product: IProductDocument
+    manage?: boolean
+    handleDelete?: (productId: string) => void
+}) => {
+    const router = useRouter()
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [isDiscounted, setIsDiscounted] = useState<boolean>(false)
     const [discountedPrice, setDiscountedPrice] = useState<number>(product.price)
+    const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false)
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
+    /** Snack Bar */
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
+        "success",
+    )
+    const [contentSnackbar, setContentSnackbar] = useState<string>("")
 
     const handleNextImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % product.images.length)
@@ -24,6 +54,49 @@ const ItemCard = ({ product }: { product: IProductDocument }) => {
 
     const calculateDiscountedPrice = (price: number, discountRate: number) => {
         return price * (1 - discountRate / 100)
+    }
+
+    const handleDeleteProduct = async () => {
+        if (!manage || !handleDelete) return
+        setLoadingDelete(true)
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${product._id.toString()}`,
+                {
+                    method: "DELETE",
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("success")
+                setContentSnackbar(data.message)
+                handleDelete(product._id.toString())
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingDelete(false)
+            setOpenDialogDelete(false)
+        }
     }
 
     useEffect(() => {
@@ -44,7 +117,7 @@ const ItemCard = ({ product }: { product: IProductDocument }) => {
     }, [product])
 
     return (
-        <div className="relative p-4 rounded-lg shadow-lg hover:shadow-2xl">
+        <div className="relative p-4 rounded-lg shadow-lg hover:shadow-2xl border-2">
             <div className="w-full overflow-hidden rounded-lg mb-4">
                 <div
                     className="flex transition-transform duration-500"
@@ -74,9 +147,30 @@ const ItemCard = ({ product }: { product: IProductDocument }) => {
                                     onClick={handleNextImage}
                                 />
                             </div>
-                            <div className="absolute rounded-full cursor-pointer top-2 right-2 bg-slate-100 p-1">
-                                <FavoriteIcon style={{ fontSize: "24px", color: "red" }} />
-                            </div>
+                            {manage == undefined && (
+                                <div className="absolute rounded-full cursor-pointer top-2 right-2 bg-slate-100 p-1">
+                                    <FavoriteIcon style={{ fontSize: "24px", color: "red" }} />
+                                </div>
+                            )}
+                            {manage && manage === true && (
+                                <div className="absolute rounded-full cursor-pointer top-2 right-2 bg-slate-100 p-2">
+                                    <div className="flex gap-2">
+                                        <Trash2
+                                            onClick={() => setOpenDialogDelete(true)}
+                                            style={{ fontSize: "24px", color: "gray" }}
+                                            className="transition-all hover:-translate-y-1"
+                                        />
+                                        <Link
+                                            href={`/store/edit-product/${product._id.toString()}`}
+                                        >
+                                            <Pencil
+                                                style={{ fontSize: "24px", color: "gray" }}
+                                                className="transition-all hover:-translate-y-1"
+                                            />
+                                        </Link>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -119,6 +213,35 @@ const ItemCard = ({ product }: { product: IProductDocument }) => {
                     )}
                 </div>
             </div>
+            <AlertDialog open={openDialogDelete}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Bạn có chắc chắn muốn xóa sản phẩm này?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Hành động này không thể hoàn tác. Thông tin về sản phẩm sẽ bị xóa vĩnh
+                            viễn.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setOpenDialogDelete(false)}>
+                            Hủy
+                        </AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteProduct}>
+                            {loadingDelete ? (
+                                <Loader2 className="w-8 h-8 animate-spin" />
+                            ) : (
+                                "Tiếp tục"
+                            )}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <SnackbarCustom
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                type={typeSnackbar}
+                content={contentSnackbar}
+            />
         </div>
     )
 }
