@@ -2,7 +2,8 @@
 
 import { convertISOToFormatNotHours } from "@/lib/utils"
 import { ICartItem, IProductDocument, IUserDocument } from "@/types"
-import Favorite from "@mui/icons-material/Favorite"
+import FavoriteIcon from "@mui/icons-material/Favorite"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import {
     ArrowLeft,
     CircleChevronLeft,
@@ -29,8 +30,17 @@ const typePetToText = {
     other: "Khác",
 }
 
-const ProductDetail = ({ product, user }: { product: IProductDocument; user: IUserDocument }) => {
+const ProductDetail = ({
+    product,
+    userByFetch,
+}: {
+    product: IProductDocument
+    userByFetch: IUserDocument
+}) => {
+    const [user, setUser] = useState<IUserDocument>(userByFetch)
+    // Router
     const router = useRouter()
+    // Index image
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     // Sale of products
     const [isDiscounted, setIsDiscounted] = useState<boolean>(false)
@@ -44,6 +54,8 @@ const ProductDetail = ({ product, user }: { product: IProductDocument; user: IUs
         "success",
     )
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
+    // Loading add favorite product
+    const [loadingAddFavoriteProduct, setLoadingAddFavoriteProduct] = useState<boolean>(false)
 
     const handleNextImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % product.images.length)
@@ -99,6 +111,48 @@ const ProductDetail = ({ product, user }: { product: IProductDocument; user: IUs
             setContentSnackbar("Failed to add product")
         } finally {
             setLoadingAddProduct(false)
+        }
+    }
+
+    const handleAddFavoriteProduct = async () => {
+        try {
+            setLoadingAddFavoriteProduct(true)
+            const res = await fetch(
+                `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/user/${product._id.toString()}/add-favorite-product`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message || "Error loading more posts")
+                return
+            }
+            if (data.success) {
+                setUser(data.data as IUserDocument)
+            }
+        } catch (error) {
+            console.error("Failed to add favorite product: ", error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("Failed to add favorite product")
+        } finally {
+            setLoadingAddFavoriteProduct(false)
         }
     }
 
@@ -174,8 +228,22 @@ const ProductDetail = ({ product, user }: { product: IProductDocument; user: IUs
                     </div>
                     <div className="flex justify-between items-center mb-8">
                         <div className="text-2xl font-semibold text-brown-1">{product.name}</div>
-                        <div className="rounded-full cursor-pointer bg-slate-100 p-1">
-                            <Favorite style={{ fontSize: "24px", color: "red" }} />
+                        <div
+                            className="rounded-full cursor-pointer bg-slate-100 p-1"
+                            onClick={handleAddFavoriteProduct}
+                        >
+                            {!loadingAddFavoriteProduct && (
+                                <>
+                                    {user.favoriteProducts.includes(product._id.toString()) ? (
+                                        <FavoriteIcon style={{ fontSize: "24px", color: "red" }} />
+                                    ) : (
+                                        <FavoriteBorderIcon style={{ fontSize: "24px" }} />
+                                    )}
+                                </>
+                            )}
+                            {loadingAddFavoriteProduct && (
+                                <Loader2 className="animate-spin" style={{ fontSize: "24px" }} />
+                            )}
                         </div>
                     </div>
                     <Separator />

@@ -19,7 +19,7 @@ const DetailProduct = async ({ params }: { params: { productId: string } }) => {
         redirect(`/login`)
     }
 
-    return <ProductDetail product={product} user={user} />
+    return <ProductDetail product={product} userByFetch={user} />
 }
 
 export default DetailProduct

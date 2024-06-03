@@ -31,6 +31,7 @@ export interface IUserDocument extends mongoose.Document {
     following: IUserDocument[]
     chats: mongoose.Schema.Types.ObjectId[]
     cart: ICartItem[]
+    favoriteProducts: IProductDocument[]
     role: "user" | "admin"
     createdAt: Date
 }

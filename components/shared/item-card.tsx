@@ -4,7 +4,8 @@ import { CircleChevronLeft, CircleChevronRight, Loader2, Pencil, Trash2 } from "
 import Image from "next/image"
 import React, { useState, useEffect } from "react"
 import FavoriteIcon from "@mui/icons-material/Favorite"
-import { IProductDocument } from "@/types"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import { IProductDocument, IUserDocument } from "@/types"
 import Link from "next/link"
 import {
     AlertDialog,
@@ -22,10 +23,12 @@ import SnackbarCustom from "../ui/snackbar"
 
 const ItemCard = ({
     product,
+    userByFetch,
     manage,
     handleDelete,
 }: {
     product: IProductDocument
+    userByFetch: IUserDocument
     manage?: boolean
     handleDelete?: (productId: string) => void
 }) => {
@@ -35,6 +38,9 @@ const ItemCard = ({
     const [discountedPrice, setDiscountedPrice] = useState<number>(product.price)
     const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false)
     const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
+    const [user, setUser] = useState<IUserDocument>(userByFetch)
+    // Loading add favorite product
+    const [loadingAddFavoriteProduct, setLoadingAddFavoriteProduct] = useState<boolean>(false)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
     const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
@@ -99,6 +105,48 @@ const ItemCard = ({
         }
     }
 
+    const handleAddFavoriteProduct = async () => {
+        try {
+            setLoadingAddFavoriteProduct(true)
+            const res = await fetch(
+                `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/user/${product._id.toString()}/add-favorite-product`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message || "Error loading more posts")
+                return
+            }
+            if (data.success) {
+                setUser(data.data as IUserDocument)
+            }
+        } catch (error) {
+            console.error("Failed to add favorite product: ", error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("Failed to add favorite product")
+        } finally {
+            setLoadingAddFavoriteProduct(false)
+        }
+    }
+
     useEffect(() => {
         const currentDate = new Date()
         if (
@@ -148,8 +196,29 @@ const ItemCard = ({
                                 />
                             </div>
                             {manage == undefined && (
-                                <div className="absolute rounded-full cursor-pointer top-2 right-2 bg-slate-100 p-1">
-                                    <FavoriteIcon style={{ fontSize: "24px", color: "red" }} />
+                                <div
+                                    className="absolute rounded-full cursor-pointer top-2 right-2 bg-slate-100 p-1"
+                                    onClick={handleAddFavoriteProduct}
+                                >
+                                    {!loadingAddFavoriteProduct && (
+                                        <>
+                                            {user.favoriteProducts.includes(
+                                                product._id.toString(),
+                                            ) ? (
+                                                <FavoriteIcon
+                                                    style={{ fontSize: "24px", color: "red" }}
+                                                />
+                                            ) : (
+                                                <FavoriteBorderIcon style={{ fontSize: "24px" }} />
+                                            )}
+                                        </>
+                                    )}
+                                    {loadingAddFavoriteProduct && (
+                                        <Loader2
+                                            className="animate-spin"
+                                            style={{ fontSize: "24px" }}
+                                        />
+                                    )}
                                 </div>
                             )}
                             {manage && manage === true && (

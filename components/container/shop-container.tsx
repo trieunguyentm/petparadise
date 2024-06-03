@@ -248,7 +248,7 @@ const ShopContainer = ({
                     ) : (
                         <div className="grid grid-cols-2 max-md:grid-cols-1 gap-4 mt-8 mb-8">
                             {listProduct?.map((product, index) => (
-                                <ItemCard key={index} product={product} />
+                                <ItemCard key={index} product={product} userByFetch={user} />
                             ))}
                         </div>
                     )}
