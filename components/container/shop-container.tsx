@@ -200,10 +200,10 @@ const ShopContainer = ({
                     <Search className="absolute right-3 top-3 text-brown-1 hover:cursor-pointer transition-all hover:-translate-y-1.5" />
                 </div>
                 <div className="flex gap-3 items-center">
-                    <div className="flex gap-2 items-center text-brown-1">
+                    <Link href={"/store/cart"} className="flex gap-2 items-center text-brown-1">
                         <ShoppingCart className="transition-all hover:-translate-y-1.5 w-10 h-10 text-brown-1" />
                         <div className="text-sm font-medium">{`(${cart.length})`}</div>
-                    </div>
+                    </Link>
                     <DropdownMenu>
                         <DropdownMenuTrigger className="focus:outline-none">
                             <Avatar className="hover:cursor-pointer transition-all hover:-translate-y-1.5">

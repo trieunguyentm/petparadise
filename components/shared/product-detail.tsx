@@ -216,10 +216,10 @@ const ProductDetail = ({
                         <div className="font-semibold text-3xl">Chi tiết sản phẩm</div>
                     </div>
                     <div className="flex gap-4 rounded-2xl text-brown-1 hover:cursor-pointer items-center mb-8 justify-end">
-                        <div className="flex gap-2 items-center">
+                        <Link href={"/store/cart"} className="flex gap-2 items-center">
                             <ShoppingCart className="transition-all hover:-translate-y-1.5 w-10 h-10" />
                             <div className="text-sm font-medium">{`(${cart.length})`}</div>
-                        </div>
+                        </Link>
                         {user._id.toString() === product.seller._id.toString() && (
                             <Link href={`/store/edit-product/${product._id.toString()}`}>
                                 <Pencil className="transition-all hover:-translate-y-1.5 w-8 h-8" />
