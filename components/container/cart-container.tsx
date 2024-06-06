@@ -5,7 +5,7 @@ import { IUserDocument } from "@/types"
 import { useState } from "react"
 import CartItem from "../shared/cart-item"
 import { Button } from "../ui/button"
-import { MoveRight } from "lucide-react"
+import { Loader2, MoveRight } from "lucide-react"
 import { useForm } from "react-hook-form"
 import {
     Dialog,
@@ -35,8 +35,9 @@ const CartContainer = ({
     const router = useRouter()
     const [product, setProduct] = useState<ListGroupedItem>(groupedItems)
     const [open, setOpen] = useState<string | null>(null)
-    /** Loading delete */
+    /** Loading */
     const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
+    const [loadingPayment, setLoadingPayment] = useState<boolean>(false)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
     const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
@@ -121,6 +122,11 @@ const CartContainer = ({
             quantity: item.quantity,
             price: item.price,
         }))
+        // Product
+        const products = product[sellerId].items.map((item) => ({
+            product: item.product,
+            quantity: item.quantity,
+        }))
         // Data Checkout
         const checkoutData = {
             orderCode: orderCodeNumber,
@@ -136,6 +142,7 @@ const CartContainer = ({
         }
 
         try {
+            setLoadingPayment(true)
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/create-payment-link`,
                 {
@@ -148,6 +155,9 @@ const CartContainer = ({
                         sellerId,
                         checkoutData,
                         buyerNote: watch("buyerNote"),
+                        listItem: {
+                            products,
+                        },
                     }),
                 },
             )
@@ -174,6 +184,8 @@ const CartContainer = ({
             setOpenSnackbar(true)
             setTypeSnackbar("error")
             setContentSnackbar("An error occurred, please try again")
+        } finally {
+            setLoadingPayment(false)
         }
     }
 
@@ -352,7 +364,13 @@ const CartContainer = ({
                                             </div>
                                             <DialogFooter className="mt-10">
                                                 <Button onClick={() => setOpen(null)}>Hủy</Button>
-                                                <Button type="submit">Xác nhận</Button>
+                                                <Button type="submit">
+                                                    {loadingPayment ? (
+                                                        <Loader2 className="w-8 h-8 animate-spin" />
+                                                    ) : (
+                                                        "Xác nhận"
+                                                    )}
+                                                </Button>
                                             </DialogFooter>
                                         </form>
                                     </DialogContent>
