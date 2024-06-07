@@ -221,13 +221,16 @@ const ShopContainer = ({
                                 <Link href={"/store/create-product"}>Tạo sản phẩm</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
+                                <Link href={"/store/favorite-product"}>Sản phẩm đã thích</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
                                 <Link href={"/store/manage-product"}>Quản lý sản phẩm</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <Link href={"/store/favorite-product"}>Sản phẩm yêu thích</Link>
+                                <Link href={"/store/manage-order"}>Quản lý đơn hàng</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <Link href={"/store/manage-order"}>Quản lý đơn hàng</Link>
+                                <Link href={"/store/purchased-order"}>Sản phẩm đã mua</Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

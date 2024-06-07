@@ -187,3 +187,18 @@ export interface IProductDocument extends mongoose.Document {
     createdAt: Date
     updatedAt: Date
 }
+
+export interface IOrderDocument extends mongoose.Document {
+    orderCode: number
+    buyer: IUserDocument
+    seller: IUserDocument
+    products: {
+        product: IProductDocument
+        quantity: number
+    }[]
+    totalAmount: number
+    buyerNote: string
+    status: "pending" | "processed" | "shipped" | "delivered" | "cancelled" | "success"
+    createdAt: Date
+    updatedAt: Date
+}
