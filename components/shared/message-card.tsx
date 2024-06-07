@@ -2,6 +2,7 @@ import { format } from "date-fns"
 import { IChatDocument, IUserDocument } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const normalizeText = (text: string) => {
     return text
@@ -20,6 +21,8 @@ const MessageCard = ({
     user: IUserDocument
     search: string
 }) => {
+    const pathName = usePathname()
+    const idConversation = pathName.split("/")[2]
     const isGroup = chat.isGroup
     let isSeen = chat.seenBy.includes(user._id)
 
@@ -40,7 +43,9 @@ const MessageCard = ({
     return shouldDisplay ? (
         <Link
             href={`/message/${chat._id}`}
-            className="flex gap-2 p-2 rounded-md hover:bg-pink-1 cursor-pointer"
+            className={`flex gap-2 p-2 rounded-md hover:bg-red-100 ${
+                idConversation === chat._id.toString() && "bg-pink-1"
+            } cursor-pointer`}
         >
             <Image
                 src={imageSrc}

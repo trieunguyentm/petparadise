@@ -197,7 +197,12 @@ export interface IOrderDocument extends mongoose.Document {
         quantity: number
     }[]
     totalAmount: number
-    buyerNote: string
+    description: string
+    buyerName?: string
+    buyerEmail?: string
+    buyerPhone?: string
+    buyerAddress?: string
+    buyerNote?: string
     status: "pending" | "processed" | "shipped" | "delivered" | "cancelled" | "success"
     createdAt: Date
     updatedAt: Date

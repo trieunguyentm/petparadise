@@ -1,7 +1,7 @@
 type MenuItem = {
     title: string
     icon: string
-    link: string
+    link: string[]
 }
 
 export const NOTIFICATION_PER_PAGE = 20
@@ -14,42 +14,42 @@ export const menuLeftSideBar: MenuItem[] = [
     {
         title: "Trang chủ",
         icon: "/assets/images/home.svg",
-        link: "/",
+        link: ["/"],
     },
     {
         title: "Tạo bài viết",
         icon: "/assets/images/image-plus.svg",
-        link: "/create-post",
+        link: ["/create-post"],
     },
     {
         title: "Bài viết đã lưu",
         icon: "/assets/images/bookmark-check.svg",
-        link: "/saved-post",
+        link: ["/saved-post"],
     },
     {
         title: "Bài viết đã thích",
         icon: "/assets/images/heart.svg",
-        link: "/liked-post",
+        link: ["/liked-post"],
     },
     {
         title: "Người dùng",
         icon: "/assets/images/users-round.svg",
-        link: "/people",
+        link: ["/people"],
     },
     {
         title: "Cửa hàng",
         icon: "/assets/images/store.svg",
-        link: "/store",
+        link: ["/store"],
     },
     {
         title: "Tìm thú cưng",
         icon: "/assets/images/dog.svg",
-        link: "/find-pet",
+        link: ["/find-pet", "/pet-adoption"],
     },
     {
         title: "Tin nhắn",
         icon: "/assets/images/message-circle.svg",
-        link: "/message",
+        link: ["/message"],
     },
 ]
 
