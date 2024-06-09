@@ -174,7 +174,7 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                     </SelectTrigger>
                     <SelectContent className="text-xs">
                         {Object.keys(statusOrder).map((type, index) => {
-                            if (type !== "pending") {
+                            if (type !== "pending" && type !== "success") {
                                 return (
                                     <SelectItem key={index} value={type} className="text-xs">
                                         {statusOrder[type]}
