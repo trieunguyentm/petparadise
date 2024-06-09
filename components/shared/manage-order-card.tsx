@@ -165,7 +165,11 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                 <div className="text-sm text-brown-1 font-semibold">Trạng thái đơn hàng</div>
 
                 <Select
-                    disabled={currentStatus === "cancelled" || currentStatus === "delivered"}
+                    disabled={
+                        currentStatus === "cancelled" ||
+                        currentStatus === "delivered" ||
+                        currentStatus === "success"
+                    }
                     value={status}
                     onValueChange={(value: StatusOrder) => setStatus(value)}
                 >
@@ -182,6 +186,11 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                                 )
                             }
                         })}
+                        {status === "success" && (
+                            <SelectItem value={"success"} className="text-xs">
+                                {statusOrder["success"]}
+                            </SelectItem>
+                        )}
                     </SelectContent>
                 </Select>
 

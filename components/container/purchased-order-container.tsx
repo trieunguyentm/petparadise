@@ -194,6 +194,14 @@ const PurchasedOrderContainer = () => {
                                                     Đã hoàn tiền
                                                 </Button>
                                             )}
+                                        {order.status === "delivered" && (
+                                            <Button
+                                                variant="outline"
+                                                className="bg-green-500 text-white"
+                                            >
+                                                Xác nhận đơn hàng
+                                            </Button>
+                                        )}
                                     </div>
                                     <DialogRefundOrder
                                         open={open}
