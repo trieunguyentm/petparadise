@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import ManageOrderCard from "../shared/manage-order-card"
 import SnackbarCustom from "../ui/snackbar"
+import ManageOrderSkeleton from "../skeleton/manage-order-skeleton"
 
 export type StatusOrder =
     | "pending"
@@ -20,7 +21,7 @@ const ManageOrderContainer = () => {
     /** Order */
     const [orders, setOrders] = useState<IOrderDocument[]>([])
     /** Loading */
-    const [loadingOrder, setLoadingOrder] = useState<boolean>(false)
+    const [loadingOrder, setLoadingOrder] = useState<boolean>(true)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
     const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
@@ -73,16 +74,26 @@ const ManageOrderContainer = () => {
 
     return (
         <>
-            {orders.length === 0 ? (
-                <div className="w-full h-full flex justify-center items-center">
-                    Hiện tại không có đơn hàng nào
-                </div>
-            ) : (
-                <div className="flex flex-col gap-8">
-                    {orders.map((order, index) => (
-                        <ManageOrderCard key={index} orderProp={order} />
+            {loadingOrder ? (
+                <>
+                    {Array.from({ length: 4 }).map((_, index) => (
+                        <ManageOrderSkeleton key={index} />
                     ))}
-                </div>
+                </>
+            ) : (
+                <>
+                    {orders.length === 0 ? (
+                        <div className="w-full h-full flex justify-center items-center">
+                            Hiện tại không có đơn hàng nào
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-8">
+                            {orders.map((order, index) => (
+                                <ManageOrderCard key={index} orderProp={order} />
+                            ))}
+                        </div>
+                    )}
+                </>
             )}
             <SnackbarCustom
                 open={openSnackbar}

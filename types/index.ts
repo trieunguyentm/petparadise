@@ -204,6 +204,19 @@ export interface IOrderDocument extends mongoose.Document {
     buyerAddress?: string
     buyerNote?: string
     status: "pending" | "processed" | "shipped" | "delivered" | "cancelled" | "success"
+    refund?: number
+    createdAt: Date
+    updatedAt: Date
+}
+
+export interface IRefundRequestDocument extends mongoose.Document {
+    order: IOrderDocument
+    buyer: IUserDocument
+    bankCode: string
+    accountNumber: string
+    accountName?: string
+    amount: number
+    status: "pending" | "approved" | "rejected"
     createdAt: Date
     updatedAt: Date
 }
