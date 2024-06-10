@@ -33,6 +33,8 @@ export interface IUserDocument extends mongoose.Document {
     cart: ICartItem[]
     favoriteProducts: IProductDocument[]
     role: "user" | "admin"
+    accountBalance: number
+    updatedAt: Date
     createdAt: Date
 }
 

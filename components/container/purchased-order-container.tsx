@@ -7,9 +7,9 @@ import { IOrderDocument } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "../ui/button"
-import { Skeleton } from "../ui/skeleton"
 import PurchasedOrderSkeleton from "../skeleton/purchased-order-skeleton"
 import DialogRefundOrder from "../shared/dialog-refund-order"
+import DialogConfirmOrder from "../shared/dialog-confirm-order"
 
 const typePetToText = {
     food: "Đồ ăn",
@@ -45,6 +45,14 @@ const PurchasedOrderContainer = () => {
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
     /** Dialog */
     const [open, setOpen] = useState<null | number>(null)
+    /** Alert Dialog */
+    const [openAlert, setOpenAlert] = useState<null | number>(null)
+
+    const handleUpdateOrder = (updatedOrder: IOrderDocument) => {
+        setOrders((prevOrders) =>
+            prevOrders.map((order) => (order._id === updatedOrder._id ? updatedOrder : order)),
+        )
+    }
 
     useEffect(() => {
         async function fetchPurchasedOrder() {
@@ -198,11 +206,18 @@ const PurchasedOrderContainer = () => {
                                             <Button
                                                 variant="outline"
                                                 className="bg-green-500 text-white"
+                                                onClick={() => setOpenAlert(order.orderCode)}
                                             >
                                                 Xác nhận đơn hàng
                                             </Button>
                                         )}
                                     </div>
+                                    <DialogConfirmOrder
+                                        open={openAlert}
+                                        setOpen={setOpenAlert}
+                                        order={order}
+                                        onUpdateOrder={handleUpdateOrder}
+                                    />
                                     <DialogRefundOrder
                                         open={open}
                                         setOpen={setOpen}
