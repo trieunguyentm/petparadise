@@ -98,7 +98,7 @@ const DialogRefundOrder = ({
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading more posts")
+                setContentSnackbar(data.message || "Xảy ra lỗi khi tạo yêu cầu hoàn tiền")
                 return
             }
             if (data.success) {
@@ -175,7 +175,7 @@ const DialogRefundOrder = ({
                 console.error("Failed to fetch list bank: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch list bank")
+                setContentSnackbar("Xảy ra lỗi khi tải danh sách ngân hàng")
             }
         }
         fetchListBank()

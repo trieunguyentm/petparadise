@@ -42,7 +42,9 @@ const ListOtherUserBySearch = ({
                 const res = await fetch(
                     `${
                         process.env.NEXT_PUBLIC_BASE_URL
-                    }/api/user/other/${param}?limit=${USER_PER_PAGE}&offset=${page * USER_PER_PAGE}`,
+                    }/api/user/other/${param}?limit=${USER_PER_PAGE}&offset=${
+                        page * USER_PER_PAGE
+                    }`,
                     {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
@@ -62,7 +64,7 @@ const ListOtherUserBySearch = ({
                     }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading more posts")
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                     return
                 }
                 if (data.success && data.data.length) {
@@ -78,7 +80,7 @@ const ListOtherUserBySearch = ({
                 console.error("Failed to fetch data: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch more data")
+                setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
             }
         }
 

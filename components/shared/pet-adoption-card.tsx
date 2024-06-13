@@ -1,8 +1,8 @@
-import { IPetAdoptionPostDocument } from "@/types"
-import { ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
+import { IPetAdoptionPostDocument } from "@/types"
+import { ChevronRight } from "lucide-react"
 
 const sizePet = {
     big: "> 15kg",

@@ -4,7 +4,7 @@ import { menuLeftSideBar } from "@/lib/data"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-
+// updated
 const MenuLeft = () => {
     const pathName = usePathname()
     const typePathName = "/" + pathName.split("/")[1]

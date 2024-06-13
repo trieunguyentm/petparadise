@@ -4,7 +4,6 @@ import TopBarPeople from "@/components/layout/top-bar-people"
 import { Suspense } from "react"
 import UserCardSkeleton from "@/components/skeleton/user-card-skeleton"
 
-// const rubik = Rubik({ subsets: ["latin"] })
 const vietnamese = Be_Vietnam_Pro({
     subsets: ["latin"],
     weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

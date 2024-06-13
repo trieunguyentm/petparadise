@@ -76,7 +76,7 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading more posts")
+                setContentSnackbar(data.message || "Xảy ra lỗi khi cập nhật trạng thái đơn hàng")
                 return
             }
             if (data.success) {
@@ -86,7 +86,7 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingSet(false)
         }

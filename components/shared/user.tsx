@@ -8,7 +8,7 @@ const User = ({ otherUser }: { otherUser: IUserDocument }) => {
             <Avatar>
                 <AvatarImage
                     src={otherUser.profileImage || "/assets/images/avatar.jpeg"}
-                    alt="@avatar"
+                    alt="avatar"
                 />
                 <AvatarFallback>
                     <Loader2 className="w-5 h-5 animate-spin" />

@@ -1,9 +1,9 @@
 "use client"
 
 import { IChatDocument, IUserDocument } from "@/types"
+import { pusherClient } from "@/lib/pusher"
 import React, { useEffect, useState } from "react"
 import MessageCard from "./message-card"
-import { pusherClient } from "@/lib/pusher"
 
 const ListMessageCard = ({
     chats,

@@ -1,4 +1,3 @@
-import Image from "next/image"
 import React from "react"
 import { fetchChatByUser, fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"

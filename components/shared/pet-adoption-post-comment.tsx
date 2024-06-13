@@ -1,8 +1,8 @@
 import { IPetAdoptionCommentDocument } from "@/types"
-import React from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Loader2 } from "lucide-react"
 import { convertISOToFormat } from "@/lib/utils"
+import React from "react"
 import Image from "next/image"
 
 const PetAdoptionPostComment = ({ comment }: { comment: IPetAdoptionCommentDocument }) => {

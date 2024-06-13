@@ -4,7 +4,6 @@ import LeftSideBar from "@/components/layout/left-side-bar"
 import MainContainer from "@/components/layout/main-container"
 import MessageSideBar from "@/components/layout/message-side-bar"
 
-// const rubik = Rubik({ subsets: ["latin"] })
 const vietnamese = Be_Vietnam_Pro({
     subsets: ["latin"],
     weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

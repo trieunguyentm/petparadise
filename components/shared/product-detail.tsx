@@ -95,7 +95,7 @@ const ProductDetail = ({
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading more posts")
+                setContentSnackbar(data.message || "Lỗi xảy ra khi thêm sản phẩm vào giỏ hàng")
                 return
             }
             if (data.success) {
@@ -108,7 +108,7 @@ const ProductDetail = ({
             console.error("Failed to add product: ", error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("Failed to add product")
+            setContentSnackbar("Lỗi xảy ra khi thêm sản phẩm vào giỏ hàng")
         } finally {
             setLoadingAddProduct(false)
         }
@@ -140,7 +140,7 @@ const ProductDetail = ({
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading more posts")
+                setContentSnackbar(data.message || "Lỗi xảy ra khi thêm sản phẩm yêu thích")
                 return
             }
             if (data.success) {
@@ -150,7 +150,7 @@ const ProductDetail = ({
             console.error("Failed to add favorite product: ", error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("Failed to add favorite product")
+            setContentSnackbar("Lỗi xảy ra khi thêm sản phẩm yêu thích")
         } finally {
             setLoadingAddFavoriteProduct(false)
         }

@@ -62,7 +62,7 @@ const MessageListUser = ({ otherUser }: { otherUser: IUserDocument[] | null }) =
                 console.log(error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("An error occurred, please try again")
+                setContentSnackbar("Đã xảy ra lỗi, vui lòng thử lại")
             } finally {
                 setLoading(false)
             }

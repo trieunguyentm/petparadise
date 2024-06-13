@@ -108,7 +108,7 @@ const FormCreatePost = () => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingCreate(false)
         }
@@ -177,10 +177,10 @@ const FormCreatePost = () => {
                 <div className="relative">
                     <textarea
                         {...register("content", {
-                            required: "Caption is required",
+                            required: "Cần điền mô tả cho bài viết",
                             validate: (value: string) => {
                                 if (value.trim().length === 0) {
-                                    return "Caption is required"
+                                    return "Cần điền mô tả cho bài viết"
                                 }
                             },
                         })}

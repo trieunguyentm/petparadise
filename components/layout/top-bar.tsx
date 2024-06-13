@@ -23,7 +23,7 @@ const TopBar = () => {
 
     return (
         <div className="py-4 flex justify-between mb-1">
-            <div className="pl-4 py-2 pr-8 bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl relative border-2 border-brown-1 text-sm">
+            <div className="py-2 pl-4 pr-8 bg-gradient-to-tr from-pink-1 to-yellow-50 rounded-xl relative border-2 border-brown-1 text-sm">
                 <input
                     type="text"
                     placeholder="Tìm kiếm bài viết ..."

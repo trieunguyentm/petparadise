@@ -32,7 +32,7 @@ const MessageCard = ({
 
     if (!isGroup) {
         const otherMember = chat.members.find((member) => member._id !== user._id)
-        displayName = otherMember ? otherMember.username : "Unknown"
+        displayName = otherMember ? otherMember.username : "Không xác định"
         imageSrc = otherMember && otherMember.profileImage ? otherMember.profileImage : defaultImage
     }
 

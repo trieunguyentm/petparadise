@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Button } from "../ui/button"
 import Image from "next/image"
 import { IUserDocument } from "@/types"
@@ -87,7 +87,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingChangePassword(false)
         }
@@ -154,10 +154,10 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                         <div className="flex flex-row gap-2 items-center">
                             <input
                                 {...register("currentPassword", {
-                                    required: "Current password is required",
+                                    required: "Cần nhập mật khẩu hiện tại",
                                     validate: (value: string) => {
                                         if (value.trim().length < 6) {
-                                            return "Current password must be at least 6 characters"
+                                            return "Mật khẩu cần có ít nhất 6 ký tự"
                                         }
                                     },
                                 })}
@@ -191,10 +191,10 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                         <div className="flex flex-row gap-2 items-center">
                             <input
                                 {...register("newPassword", {
-                                    required: "New password is required",
+                                    required: "Cần nhập mật khẩu mới",
                                     validate: (value: string) => {
                                         if (value.trim().length < 6) {
-                                            return "New password must be at least 6 characters"
+                                            return "Mật khẩu mới cần có ít nhất 6 ký tự"
                                         }
                                     },
                                 })}
@@ -228,13 +228,13 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                         <div className="flex flex-row gap-2 items-center">
                             <input
                                 {...register("confirmNewPassword", {
-                                    required: "Confirm new password is required",
+                                    required: "Cần nhập lại mật khẩu mới",
                                     validate: (value: string) => {
                                         if (value.trim().length < 6) {
-                                            return "Confirm new password must be at least 6 characters"
+                                            return "Mật khẩu mới cần ít nhất 6 ký tự"
                                         }
                                         if (value.toString() !== watch("newPassword").toString()) {
-                                            return "Confirmation password is incorrect"
+                                            return "Mật khẩu xác nhận không chính xác"
                                         }
                                     },
                                 })}
@@ -267,7 +267,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                             {loadingChangePassword ? (
                                 <Loader2 className="w-8 h-8 animate-spin" />
                             ) : (
-                                "Change password"
+                                "Đổi mật khẩu"
                             )}
                         </Button>
                         <Button
@@ -275,7 +275,7 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                             className="bg-slate-200"
                             onClick={() => setOpenChangePassword((prev) => !prev)}
                         >
-                            Cancel
+                            Hủy
                         </Button>
                     </div>
                 </form>

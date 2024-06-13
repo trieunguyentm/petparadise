@@ -60,7 +60,7 @@ const DialogConfirmOrder = ({
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading more posts")
+                setContentSnackbar(data.message || "Xảy ra lỗi khi xác nhận đơn hàng")
                 return
             }
             if (data.success) {
@@ -71,10 +71,10 @@ const DialogConfirmOrder = ({
                 setOpen(null)
             }
         } catch (error) {
-            console.error("Xảy ra lỗi khi xác nhận hóa đơn: ", error)
+            console.error("Xảy ra lỗi khi xác nhận đơn hàng: ", error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("Xảy ra lỗi khi xác nhận hóa đơn")
+            setContentSnackbar("Xảy ra lỗi khi xác nhận đơn hàng")
         }
     }
 
@@ -96,8 +96,18 @@ const DialogConfirmOrder = ({
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogAction className="bg-red-500" onClick={() => handleConfirmOrder("cancel")}>Hủy xác nhận</AlertDialogAction>
-                        <AlertDialogAction className="bg-blue-500" onClick={() => handleConfirmOrder("accept")}>Xác nhận</AlertDialogAction>
+                        <AlertDialogAction
+                            className="bg-red-500"
+                            onClick={() => handleConfirmOrder("cancel")}
+                        >
+                            Hủy xác nhận
+                        </AlertDialogAction>
+                        <AlertDialogAction
+                            className="bg-blue-500"
+                            onClick={() => handleConfirmOrder("accept")}
+                        >
+                            Xác nhận
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

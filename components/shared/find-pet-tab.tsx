@@ -1,9 +1,9 @@
 "use client"
 
-import { ILostPetPostDocument, IPetAdoptionPostDocument } from "@/types"
 import FindPetContainer from "../container/find-pet-container"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import PetAdoptionContainer from "../container/pet-adoption-container"
+import { ILostPetPostDocument, IPetAdoptionPostDocument } from "@/types"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { useEffect, useState } from "react"
 
 const FindPetTab = ({

@@ -4,7 +4,7 @@ const UserInfoSkeleton = () => {
     return (
         <div className="flex flex-col">
             <div className="border-b py-2 border-brown-1 font-semibold text-2xl text-brown-1">
-                Profile
+                Thông tin cá nhân
             </div>
             <div className="flex justify-between items-center p-5">
                 <Skeleton className="w-[140px] h-[140px] rounded-full" />

@@ -133,7 +133,7 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         }
     }
 
@@ -171,7 +171,7 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                     }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading more posts")
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                     return
                 }
                 if (data.success && data.data.length > 0) {
@@ -189,7 +189,7 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                 console.error("Failed to fetch data: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch more data")
+                setContentSnackbar("Có lỗi xảy ra khi tải thêm dữ liệu")
             } finally {
                 setLoadingMoreData(false)
             }

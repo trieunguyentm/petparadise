@@ -10,7 +10,7 @@ const UserProfile = async () => {
         <>
             <Avatar>
                 <AvatarImage
-                    src={user?.profileImage ? user.profileImage : "https://github.com/shadcn.png"}
+                    src={user?.profileImage ? user.profileImage : "/assets/images/avatar.jpeg"}
                     alt="@avatar"
                 />
                 <AvatarFallback>

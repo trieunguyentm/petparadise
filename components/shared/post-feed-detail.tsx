@@ -203,7 +203,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingComment(false)
         }
@@ -398,7 +398,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             <div className="border flex flex-1 items-center text-sm relative rounded-lg p-1">
                                 <textarea
                                     {...register("comment", {
-                                        required: "Comment is required",
+                                        required: "Cần nhập bình luận",
                                     })}
                                     placeholder="Viết bình luận..."
                                     id="comment"

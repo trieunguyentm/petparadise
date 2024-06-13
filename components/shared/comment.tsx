@@ -1,9 +1,9 @@
 import React from "react"
+import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Loader2 } from "lucide-react"
 import { ICommentDocument } from "@/types"
 import { convertISOToFormat } from "@/lib/utils"
-import Image from "next/image"
 
 const CommentComponent = ({ comment }: { comment: ICommentDocument }) => {
     return (

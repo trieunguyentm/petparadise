@@ -4,7 +4,6 @@ import { IChatDocument, IUserDocument } from "@/types"
 import ListMessageCard from "./list-message-card"
 import { useState } from "react"
 import { useDebouncedCallback } from "use-debounce"
-import Image from "next/image"
 
 const MessageListConversation = ({
     chats,

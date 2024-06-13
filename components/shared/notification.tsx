@@ -62,7 +62,7 @@ const Notification = ({ notification }: { notification: INotificationDocument })
             console.error("Failed to seen notification: ", error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("Failed to seen notification")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoading(false)
         }

@@ -1,9 +1,15 @@
 "use client"
 
 import { shopCategories } from "@/lib/data"
-import React, { useState } from "react"
+import React from "react"
 
-const MenuShop = ({ activeMenu, setActiveMenu }: { activeMenu: string; setActiveMenu: (arg: string) => void }) => {
+const MenuShop = ({
+    activeMenu,
+    setActiveMenu,
+}: {
+    activeMenu: string
+    setActiveMenu: (arg: string) => void
+}) => {
     return (
         <div className="mt-8 border-y-2 border-brown-1 py-3 flex flex-wrap gap-3 justify-center">
             {shopCategories.map((category, index) => (

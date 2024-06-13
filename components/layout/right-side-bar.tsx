@@ -4,6 +4,8 @@ import { fetchNotification, fetchOtherUser, fetchUser } from "@/lib/fetch"
 import ListNotification from "../shared/list-notification"
 import { redirect } from "next/navigation"
 
+// updated
+
 const RightSideBar = async () => {
     const [dataNotification, user, otherUsers] = await Promise.all([
         fetchNotification(),

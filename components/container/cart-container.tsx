@@ -86,7 +86,7 @@ const CartContainer = ({
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading more posts")
+                setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                 return
             }
             if (data.success) {
@@ -103,7 +103,7 @@ const CartContainer = ({
             console.error("Failed to remove item: ", error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("Failed to remove item")
+            setContentSnackbar("Xảy ra lỗi khi xóa sản phẩm")
         } finally {
             setLoadingDelete(false)
         }
@@ -183,7 +183,7 @@ const CartContainer = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingPayment(false)
         }
@@ -192,7 +192,7 @@ const CartContainer = ({
     return (
         <>
             {Object.keys(product).length === 0 ? (
-                <div className="w-full h-full flex items-center justify-center">
+                <div className="w-full h-full flex items-center justify-center text-brown-1">
                     Hiện tại chưa có sản phẩm nào
                 </div>
             ) : (

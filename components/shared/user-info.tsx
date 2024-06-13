@@ -144,7 +144,7 @@ const UserInfo = ({ user }: { user: IUserDocument | null }) => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingUpdate(false)
             // Set 'photo' field to null
@@ -217,7 +217,7 @@ const UserInfo = ({ user }: { user: IUserDocument | null }) => {
                     onChange={onFileChange}
                 />
 
-                <div className="flex flex-col gap-3 text-brown-1">
+                <div className="flex flex-col gap-3 text-brown-1 max-md:text-xs">
                     <div className="flex gap-2">
                         <Image
                             src={"/assets/images/circle-user-round.svg"}
@@ -229,7 +229,7 @@ const UserInfo = ({ user }: { user: IUserDocument | null }) => {
                     </div>
                     <div className="flex gap-2 cursor-pointer hover:text-red-100">
                         <Image src={"/assets/images/rss.svg"} alt="cake" width={25} height={25} />
-                        <div>Follower: {user?.followers.length}</div>
+                        <div>Người theo dõi: {user?.followers.length} người</div>
                     </div>
                     <div className="flex gap-2 cursor-pointer hover:text-red-100">
                         <Image
@@ -238,7 +238,7 @@ const UserInfo = ({ user }: { user: IUserDocument | null }) => {
                             width={25}
                             height={25}
                         />
-                        <div>Following: {user?.following.length}</div>
+                        <div>Đang theo dõi: {user?.following.length} người</div>
                     </div>
                 </div>
             </div>
@@ -293,10 +293,10 @@ const UserInfo = ({ user }: { user: IUserDocument | null }) => {
             {isChange && (
                 <div className="flex justify-end gap-3 mt-6">
                     <Button type="submit" disabled={loadingUpdate} onClick={handleSubmitForm}>
-                        {loadingUpdate ? <Loader2 className="w-8 h-8 animate-spin" /> : "Save"}
+                        {loadingUpdate ? <Loader2 className="w-8 h-8 animate-spin" /> : "Lưu"}
                     </Button>
                     <Button variant={"ghost"} onClick={handleCancel}>
-                        Cancel
+                        Hủy
                     </Button>
                 </div>
             )}

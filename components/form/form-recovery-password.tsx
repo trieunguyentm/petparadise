@@ -71,7 +71,7 @@ const FormRecoveryPassword = () => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại sau")
         } finally {
             setLoading(false)
         }
@@ -82,9 +82,9 @@ const FormRecoveryPassword = () => {
             onSubmit={handleSubmit(handleSubmitForm)}
             className="mt-10 flex flex-col justify-center gap-5"
         >
-            <div className="flex items-center gap-3">
-                Enter the email you associated with your account. We will send an OTP code to this
-                email for verify
+            <div className="flex items-center gap-3 text-brown-1">
+                Nhập gmail bạn đã liên kết với tài khoản của mình. Chúng tôi sẽ gửi mã OTP tới gmail
+                này để xác minh
             </div>
             <div className="flex items-center gap-3">
                 <label htmlFor="email">
@@ -92,18 +92,18 @@ const FormRecoveryPassword = () => {
                 </label>
                 <input
                     {...register("email", {
-                        required: "Email is required",
+                        required: "Cần địa đỉa chỉ gmail",
                         validate: (value) => {
                             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                             if (regex.test(value)) {
                                 return true
-                            } else return "Invalid email"
+                            } else return "Địa chỉ gmail không hợp lệ"
                         },
                     })}
                     type="text"
                     name="email"
                     id="email"
-                    placeholder="Enter your email"
+                    placeholder="Nhập gmail của bạn"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -127,7 +127,7 @@ const FormRecoveryPassword = () => {
                         <Loader2 className="w-9 h-9 animate-spin" />
                     ) : (
                         <>
-                            Send OTP
+                            Gửi mã OTP
                             <ArrowRight />
                         </>
                     )}
@@ -135,13 +135,13 @@ const FormRecoveryPassword = () => {
             </div>
             <div className="flex items-center justify-between text-brown-1">
                 <Separator className="w-[40%]" />
-                Or
+                hoặc
                 <Separator className="w-[40%]" />
             </div>
             <div className="flex justify-center text-brown-1">
-                If you already have an account,&nbsp;
+                Nếu bạn đã có tài khoản,&nbsp;
                 <Link href={"/login"} className="underline hover:opacity-50">
-                    log in now
+                    đăng nhập ngay
                 </Link>
             </div>
             <SnackbarCustom

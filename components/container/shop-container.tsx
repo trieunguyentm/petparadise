@@ -74,7 +74,7 @@ const ShopContainer = ({
                         }
                         setOpenSnackbar(true)
                         setTypeSnackbar("error")
-                        setContentSnackbar(data.message || "Error loading more posts")
+                        setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                         return
                     }
                     if (data.success) {
@@ -84,7 +84,7 @@ const ShopContainer = ({
                     console.error("Failed to fetch data: ", error)
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar("Failed to fetch more data")
+                    setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
                 } finally {
                     setLoadingCard(false)
                 }
@@ -122,7 +122,7 @@ const ShopContainer = ({
                     }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading more posts")
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                     return
                 }
                 if (data.success && data.data.products?.length > 0) {
@@ -140,7 +140,7 @@ const ShopContainer = ({
                 console.error("Failed to fetch data: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch more data")
+                setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
             } finally {
                 setLoadingMoreData(false)
             }
@@ -248,7 +248,7 @@ const ShopContainer = ({
             ) : (
                 <>
                     {listProduct.length === 0 ? (
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center text-brown-1">
                             Hiện tại không có sản phẩm nào
                         </div>
                     ) : (

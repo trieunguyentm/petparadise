@@ -1,5 +1,3 @@
-import { IProductDocument } from "@/types"
-import { CircleMinus, CirclePlus, Trash } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -11,6 +9,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { IProductDocument } from "@/types"
+import { CircleMinus, CirclePlus, Trash } from "lucide-react"
 import { useState } from "react"
 
 const typePetToText = {

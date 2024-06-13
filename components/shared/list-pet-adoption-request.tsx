@@ -71,7 +71,7 @@ const PetAdoptionRequestDetail = ({
                     }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading more posts")
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                     return
                 }
                 if (data.success && data.data.adoptionRequests.length) {
@@ -88,7 +88,7 @@ const PetAdoptionRequestDetail = ({
                 console.error("Failed to fetch data: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch more data")
+                setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
             } finally {
                 setLoading(false)
             }

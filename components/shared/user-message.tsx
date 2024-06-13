@@ -1,5 +1,4 @@
 import Image from "next/image"
-import React from "react"
 import { Checkbox } from "../ui/checkbox"
 import { IUserDocument } from "@/types"
 import { CheckedState } from "@radix-ui/react-checkbox"

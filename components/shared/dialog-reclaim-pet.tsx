@@ -1,11 +1,10 @@
 "use client"
 
-import { Dot, ImagePlus, Loader2, X } from "lucide-react"
+import { ImagePlus, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "../ui/button"
-import SnackbarCustom from "../ui/snackbar"
 import { IPetAdoptionPostDocument } from "@/types"
 import { useRouter } from "next/navigation"
 
@@ -143,7 +142,7 @@ const DialogReclaimPet = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingRequest(false)
         }
@@ -216,10 +215,10 @@ const DialogReclaimPet = ({
                 </div>
                 <div className="flex justify-end gap-3">
                     <Button variant={"ghost"} onClick={() => setOpenDialogRequest(false)}>
-                        Cancel
+                        Hủy
                     </Button>
                     <Button onClick={handleSendRequest}>
-                        {loadingRequest ? <Loader2 className="w-8 h-8 animate-spin" /> : "Send"}
+                        {loadingRequest ? <Loader2 className="w-8 h-8 animate-spin" /> : "Gửi"}
                     </Button>
                 </div>
             </div>

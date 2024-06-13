@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { LocationPet } from "../container/find-pet-container"
 import {
     Select,
     SelectContent,
@@ -8,7 +9,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select"
-import { LocationPet } from "../container/find-pet-container"
 
 export type City = { Id: string; Name: string; Districts: District[] }
 

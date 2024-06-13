@@ -125,7 +125,7 @@ const PetAdoptionContainer = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         }
     }
 
@@ -159,7 +159,7 @@ const PetAdoptionContainer = ({
                     }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading more posts")
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                     return
                 }
                 if (data.success && data.data.length > 0) {
@@ -177,7 +177,7 @@ const PetAdoptionContainer = ({
                 console.error("Failed to fetch data: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch more data")
+                setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
             } finally {
                 setLoadingMoreData(false)
             }
@@ -324,7 +324,7 @@ const PetAdoptionContainer = ({
             {/* DATA POST FIND OWNER */}
             {!listPost || listPost.length === 0 ? (
                 <div className="w-full h-full flex items-center justify-center mt-10">
-                    There are currently no pet adoption posts
+                    Hiện tại không có bài đăng tìm người nhận nuôi thú cưng
                 </div>
             ) : (
                 <>

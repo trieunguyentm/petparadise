@@ -54,7 +54,7 @@ const ManageOrderContainer = () => {
                     }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading more posts")
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                     return
                 }
                 if (data.success) {
@@ -64,7 +64,7 @@ const ManageOrderContainer = () => {
                 console.error("Failed to fetch order: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch order")
+                setContentSnackbar("Xảy ra lỗi khi lấy danh sách đơn hàng")
             } finally {
                 setLoadingOrder(false)
             }

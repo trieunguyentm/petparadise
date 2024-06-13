@@ -83,7 +83,7 @@ const FormRegister = () => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại sau")
         } finally {
             setLoading(false)
         }
@@ -98,21 +98,21 @@ const FormRegister = () => {
                 </label>
                 <input
                     {...register("username", {
-                        required: "Username is required",
+                        required: "Cần điền tên người dùng",
                         validate: (value: string) => {
                             if (value.trim().length < 6) {
-                                return "Username must be at least 6 characters"
+                                return "Tên người dùng cần có ít nhất 6 ký tự"
                             }
                             const regex = /^[a-z0-9]+$/
                             if (!regex.test(value)) {
-                                return "Username cannot contain special characters"
+                                return "Tên người dùng không được chứa kí tự đặc biệt"
                             }
                         },
                     })}
                     type="text"
                     name="username"
                     id="username"
-                    placeholder="Enter your username"
+                    placeholder="Nhập tên người dùng"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -132,18 +132,18 @@ const FormRegister = () => {
                 </label>
                 <input
                     {...register("email", {
-                        required: "Email is required",
+                        required: "Cần nhập địa chỉ gmail",
                         validate: (value) => {
                             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                             if (regex.test(value)) {
                                 return true
-                            } else return "Invalid email"
+                            } else return "Địa chỉ gmail không hợp lệ"
                         },
                     })}
                     type="text"
                     name="email"
                     id="email"
-                    placeholder="Enter your email"
+                    placeholder="Nhập địa chỉ gmail"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -163,10 +163,10 @@ const FormRegister = () => {
                 </label>
                 <input
                     {...register("password", {
-                        required: "Password is required",
+                        required: "Cần điền mật khẩu",
                         validate: (value: string) => {
                             if (value.trim().length < 6) {
-                                return "Password must be at least 6 characters"
+                                return "Mật khẩu cần có ít nhất 6 ký tự"
                             }
                         },
                     })}
@@ -174,7 +174,7 @@ const FormRegister = () => {
                     type={showPassword ? "text" : "password"}
                     name="password"
                     id="password"
-                    placeholder="Confirm your password"
+                    placeholder="Nhập mật khẩu"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <div className="absolute inset-y-0 right-0 mr-10 flex items-center text-sm leading-5">
@@ -212,7 +212,7 @@ const FormRegister = () => {
                         <Loader2 className="w-9 h-9 animate-spin" />
                     ) : (
                         <>
-                            Register
+                            Đăng ký
                             <ArrowRight />
                         </>
                     )}
@@ -221,13 +221,13 @@ const FormRegister = () => {
             {/* NAVIGATION */}
             <div className="flex items-center justify-between text-brown-1">
                 <Separator className="w-[40%]" />
-                Or
+                hoặc
                 <Separator className="w-[40%]" />
             </div>
             <div className="flex justify-center text-brown-1">
-                If you already have an account,&nbsp;
+                Nếu bạn đã có tài khoản,&nbsp;
                 <Link href={"/login"} className="underline hover:opacity-50">
-                    log in now
+                    đăng nhập ngay
                 </Link>
             </div>
             <SnackbarCustom

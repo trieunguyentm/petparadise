@@ -76,7 +76,7 @@ const ListOtherPeople = ({
                 console.error("Failed to fetch data: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch more data")
+                setContentSnackbar("Đã xảy ra lỗi khi tải thêm dữ liệu")
             }
         }
 

@@ -62,7 +62,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading message")
+                setContentSnackbar(data.message || "Xảy ra lỗi khi tải tin nhắn")
                 return
             }
             const messages: IMessageDocument[] = data.data.reverse()
@@ -76,7 +76,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
             console.error("Failed to fetch message: ", error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("Failed to fetch message")
+            setContentSnackbar("Xảy ra lỗi khi tải tin nhắn")
         } finally {
             if (page === 0) {
                 setLoadingMessage(false)

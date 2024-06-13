@@ -87,7 +87,7 @@ const FormLogin = () => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại sau")
         } finally {
             setLoading(false)
         }
@@ -104,18 +104,18 @@ const FormLogin = () => {
                 </label>
                 <input
                     {...register("email", {
-                        required: "Email is required",
+                        required: "Cần điền địa chỉ gmail",
                         validate: (value) => {
                             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                             if (regex.test(value)) {
                                 return true
-                            } else return "Invalid email"
+                            } else return "Địa chỉ gmail không hợp lệ"
                         },
                     })}
                     type="text"
                     name="email"
                     id="email"
-                    placeholder="Enter your email"
+                    placeholder="Nhập địa chỉ gmail"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -134,10 +134,10 @@ const FormLogin = () => {
                 </label>
                 <input
                     {...register("password", {
-                        required: "Password is required",
+                        required: "Cần nhập mật khẩu",
                         validate: (value: string) => {
                             if (value.trim().length < 6) {
-                                return "Password must be at least 6 characters"
+                                return "Mật khẩu phải có ít nhất 6 ký tự"
                             }
                         },
                     })}
@@ -145,7 +145,7 @@ const FormLogin = () => {
                     type={showPassword ? "text" : "password"}
                     name="password"
                     id="password"
-                    placeholder="Enter your password"
+                    placeholder="Nhập mật khẩu"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <div className="absolute inset-y-0 right-0 mr-10 flex items-center text-sm leading-5">
@@ -182,7 +182,7 @@ const FormLogin = () => {
                         <Loader2 className="w-9 h-9 animate-spin" />
                     ) : (
                         <>
-                            Login
+                            Đăng nhập
                             <ArrowRight />
                         </>
                     )}
@@ -192,17 +192,17 @@ const FormLogin = () => {
                 href={"/recovery-password"}
                 className="flex justify-center text-brown-1 underline hover:opacity-50"
             >
-                Forget password ?
+                Quên mật khẩu ?
             </Link>
             <div className="flex items-center justify-between text-brown-1">
                 <Separator className="w-[40%]" />
-                Or
+                hoặc
                 <Separator className="w-[40%]" />
             </div>
             <div className="flex justify-center text-brown-1">
-                If you don't have an account,&nbsp;
+                Nếu bạn chưa có tài khoản,&nbsp;
                 <Link href={"/register"} className="underline hover:opacity-50">
-                    register here
+                    đăng ký tại đây
                 </Link>
             </div>
             <SnackbarCustom

@@ -5,7 +5,7 @@ import UserProfile from "../shared/user-profile"
 import { Suspense } from "react"
 import UserProfileSkeleton from "../skeleton/user-profile-skeleton"
 import LogoutComponent from "../shared/logout-component"
-
+// updated
 const LeftSideBar = () => {
     return (
         <div className="w-1/5 border-x border-brown-1 h-screen flex flex-col p-1">

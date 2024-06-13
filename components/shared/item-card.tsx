@@ -98,7 +98,7 @@ const ItemCard = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingDelete(false)
             setOpenDialogDelete(false)
@@ -131,7 +131,7 @@ const ItemCard = ({
                 }
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message || "Error loading more posts")
+                setContentSnackbar(data.message || "Xảy ra lỗi")
                 return
             }
             if (data.success) {
@@ -141,7 +141,7 @@ const ItemCard = ({
             console.error("Failed to add favorite product: ", error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("Failed to add favorite product")
+            setContentSnackbar("Xảy ra lỗi khi thêm sản phẩm yêu thích")
         } finally {
             setLoadingAddFavoriteProduct(false)
         }

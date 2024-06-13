@@ -5,13 +5,9 @@ import React, { useState } from "react"
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
 } from "../ui/sheet"
 import { IChatDocument, IUserDocument } from "@/types"
-import Image from "next/image"
 import { useDebouncedCallback } from "use-debounce"
 import ListMessageCard from "./list-message-card"
 

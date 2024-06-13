@@ -53,7 +53,7 @@ const FavoriteProductContainer = ({ user }: { user: IUserDocument }) => {
                 console.log(error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("An error occurred, please try again")
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
             } finally {
                 setLoading(false)
             }

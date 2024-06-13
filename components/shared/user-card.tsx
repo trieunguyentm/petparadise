@@ -1,7 +1,7 @@
 "use client"
 
-import { IUserDocument } from "@/types"
 import Image from "next/image"
+import { IUserDocument } from "@/types"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 

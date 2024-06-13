@@ -204,7 +204,7 @@ const PetAdoptionPostDetail = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingStartChat(false)
         }
@@ -263,7 +263,7 @@ const PetAdoptionPostDetail = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingComment(false)
         }
@@ -303,7 +303,7 @@ const PetAdoptionPostDetail = ({
             } catch (error) {
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("An error occurred, please try again")
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
             } finally {
                 setLoadingListComment(false)
             }
@@ -358,7 +358,7 @@ const PetAdoptionPostDetail = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingDelete(false)
         }
@@ -399,7 +399,7 @@ const PetAdoptionPostDetail = ({
                 console.log(error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("An error occurred, please try again")
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
             } finally {
                 setLoadGetAdoptedPetOwner(false)
             }
@@ -781,7 +781,7 @@ const PetAdoptionPostDetail = ({
                         <div className="border flex flex-1 items-center relative rounded-lg p-1">
                             <textarea
                                 {...register("comment", {
-                                    required: "Comment is required",
+                                    required: "Cần nhập bình luận",
                                 })}
                                 placeholder="Viết bình luận của bạn..."
                                 id="comment"

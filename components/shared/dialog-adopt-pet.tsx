@@ -107,7 +107,7 @@ const DialogAdoptPet = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingRequest(false)
         }
@@ -145,10 +145,10 @@ const DialogAdoptPet = ({
                 </div>
                 <div className="flex justify-end gap-3">
                     <Button variant={"ghost"} onClick={() => setOpenDialogRequest(false)}>
-                        Cancel
+                        Hủy
                     </Button>
                     <Button onClick={handleSendRequest}>
-                        {loadingRequest ? <Loader2 className="w-8 h-8 animate-spin" /> : "Send"}
+                        {loadingRequest ? <Loader2 className="w-8 h-8 animate-spin" /> : "Gửi"}
                     </Button>
                 </div>
             </div>

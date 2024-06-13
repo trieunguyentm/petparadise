@@ -72,7 +72,7 @@ const ListNotification = ({
                     }
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.message || "Error loading more posts")
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
                     return
                 }
                 if (data.success && data.data.length) {
@@ -89,7 +89,7 @@ const ListNotification = ({
                 console.error("Failed to fetch data: ", error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("Failed to fetch more data")
+                setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
             }
         }
 
@@ -116,7 +116,7 @@ const ListNotification = ({
         <div className="p-2 max-h-[40vh] min-h-[200px] w-[100%] overflow-auto bg-white rounded-xl flex flex-col gap-5 border-brown-1 border">
             {listNotification.length === 0 && (
                 <div className="w-full h-full flex items-center justify-center">
-                    No notifications
+                    Không có thông báo
                 </div>
             )}
             {listNotification.length > 0 && (

@@ -19,7 +19,6 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import {
@@ -31,7 +30,6 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
 import data from "@emoji-mart/data"
@@ -134,7 +132,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingStartChat(false)
         }
@@ -221,7 +219,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingComment(false)
         }
@@ -264,7 +262,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingUpdatePost(false)
         }
@@ -304,7 +302,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
             } catch (error) {
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar("An error occurred, please try again")
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
             } finally {
                 setLoadingListComment(false)
             }
@@ -359,7 +357,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingDelete(false)
         }
@@ -607,7 +605,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                         <div className="border flex flex-1 items-center relative rounded-lg p-1">
                             <textarea
                                 {...register("comment", {
-                                    required: "Comment is required",
+                                    required: "Cần điền bình luận",
                                 })}
                                 placeholder="Viết bình luận của bạn..."
                                 id="comment"

@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form"
 import SnackbarCustom from "../ui/snackbar"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
-import { pusherClient } from "@/lib/pusher"
 
 type SelectedUser = {
     id: string
@@ -85,7 +84,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
         if (selectedUser.length === 0) {
             setOpenSnackbar(true)
             setTypeSnackbar("info")
-            setContentSnackbar("Select the person you want to chat with")
+            setContentSnackbar("Vui lòng hãy chọn người dùng mà bạn muốn nhắn tin")
             return
         }
         const isGroup = selectedUser.length >= 2
@@ -95,7 +94,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
             if (!watch("nameGroup")) {
                 setOpenSnackbar(true)
                 setTypeSnackbar("info")
-                setContentSnackbar("Name group is required")
+                setContentSnackbar("Cần tạo tên nhóm trò chuyện")
                 return
             }
             formData.append("name", watch("nameGroup"))
@@ -141,7 +140,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingStartChat(false)
         }
@@ -150,7 +149,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
     return (
         <div className="flex-col flex gap-1">
             {/* LIST OTHER USER */}
-            <div className="w-full border-2 border-brown-1 h-[300px] rounded-md p-3 flex flex-col gap-4">
+            <div className="w-full border-2 border-brown-1 h-[300px] rounded-md p-3 flex flex-col gap-4 text-brown-1">
                 {otherUser === null ? (
                     <>Không có người dùng nào</>
                 ) : (
@@ -176,7 +175,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
                                 </label>
                                 <input
                                     {...register("nameGroup", {
-                                        required: "Group name is required",
+                                        required: "Cần phải đặt tên nhóm",
                                     })}
                                     type="text"
                                     id="nameGroup"

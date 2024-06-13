@@ -40,7 +40,7 @@ const MessageDetailContainer = ({
 
     if (!isGroup) {
         const otherMember = chatDetail.members.find((member) => member._id !== user._id)
-        displayName = otherMember ? otherMember.username : "Unknown"
+        displayName = otherMember ? otherMember.username : "Không xác định"
         imageSrc = otherMember && otherMember.profileImage ? otherMember.profileImage : defaultImage
     }
 
@@ -135,10 +135,10 @@ const MessageDetailContainer = ({
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             // setLoadingStartChat(false)
-            console.log("Message sent")
+            console.log("Đã gửi tin nhắn")
         }
     }
 

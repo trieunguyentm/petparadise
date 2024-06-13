@@ -70,7 +70,7 @@ const FormVerifyOTPRecovery = () => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoading(false)
         }
@@ -108,13 +108,13 @@ const FormVerifyOTPRecovery = () => {
             if (data.success) {
                 setOpenSnackbar(true)
                 setTypeSnackbar("success")
-                setContentSnackbar("Resend OTP successfully, please check email")
+                setContentSnackbar("Gửi lại mã OTP thành công")
             }
         } catch (error) {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingResend(false)
         }
@@ -125,9 +125,9 @@ const FormVerifyOTPRecovery = () => {
             onSubmit={handleSubmit(handleSubmitForm)}
             className="mt-10 flex flex-col justify-center gap-5"
         >
-            <div className="flex items-center gap-3">
-                We have sent an OTP code to the email you want to recover your password, please
-                enter the OTP code to verify your email information.
+            <div className="flex items-center gap-3 text-brown-1">
+                Chúng tôi đã gửi mã OTP tới gmail của tài khoản bạn muốn lấy lại mật khẩu, vui lòng nhập mã OTP để
+                xác minh thông tin gmail của bạn.
             </div>
             <div className="flex items-center gap-3">
                 <label htmlFor="otpCode">
@@ -135,12 +135,12 @@ const FormVerifyOTPRecovery = () => {
                 </label>
                 <input
                     {...register("otpCode", {
-                        required: "OTP Code is required",
+                        required: "Cần điền mã OTP",
                     })}
                     type="text"
                     name="otpCode"
                     id="otpCode"
-                    placeholder="Enter OTP"
+                    placeholder="Nhập mã OTP"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -153,13 +153,13 @@ const FormVerifyOTPRecovery = () => {
                     />
                 </Tooltip>
             </div>
-            <div className="flex items-center gap-3">
-                You haven't received the OTP yet?
+            <div className="flex items-center gap-1 text-brown-1">
+                Bạn vẫn chưa nhận được mã OTP ?
                 <span
                     className="underline cursor-pointer hover:opacity-50"
                     onClick={handleResendOTP}
                 >
-                    {loadingResend ? <Loader2 className="w-6 h-6 animate-spin" /> : "Click here"}
+                    {loadingResend ? <Loader2 className="w-6 h-6 animate-spin" /> : "Nhận lại"}
                 </span>
             </div>
             <div className="flex items-cente justify-center">
@@ -173,7 +173,7 @@ const FormVerifyOTPRecovery = () => {
                         <Loader2 className="w-9 h-9 animate-spin" />
                     ) : (
                         <>
-                            Verify
+                            Xác minh
                             <ArrowRight />
                         </>
                     )}
@@ -181,13 +181,13 @@ const FormVerifyOTPRecovery = () => {
             </div>
             <div className="flex items-center justify-between text-brown-1">
                 <Separator className="w-[40%]" />
-                Or
+                hoặc
                 <Separator className="w-[40%]" />
             </div>
             <div className="flex justify-center text-brown-1">
-                If you already have an account,&nbsp;
+                Nếu bạn đã có tài khoản,&nbsp;
                 <Link href={"/login"} className="underline hover:opacity-50">
-                    log in now
+                    đăng nhập ngay
                 </Link>
             </div>
             <SnackbarCustom

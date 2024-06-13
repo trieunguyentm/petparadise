@@ -64,7 +64,7 @@ const FormVerifyOTP = () => {
                 // Lưu thông báo vào localStorage
                 localStorage.setItem(
                     "toastMessage",
-                    JSON.stringify({ type: "success", content: "Register successfully!" }),
+                    JSON.stringify({ type: "success", content: "Đăng ký thành công!" }),
                 )
                 router.push("/login")
             }
@@ -72,7 +72,7 @@ const FormVerifyOTP = () => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoading(false)
         }
@@ -110,13 +110,13 @@ const FormVerifyOTP = () => {
             if (data.success) {
                 setOpenSnackbar(true)
                 setTypeSnackbar("success")
-                setContentSnackbar("Resend OTP successfully, please check email")
+                setContentSnackbar("Đã gửi lại mã OTP, vui lòng kiểm tra lại thư")
             }
         } catch (error) {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingResend(false)
         }
@@ -127,8 +127,8 @@ const FormVerifyOTP = () => {
             onSubmit={handleSubmit(handleSubmitForm)}
             className="mt-10 flex flex-col justify-center gap-5"
         >
-            <div className="flex items-center gap-3">
-                We have sent an OTP code to your email, please check and confirm
+            <div className="flex items-center gap-3 text-brown-1">
+                Chúng tôi đã gửi một mã OTP tới gmail của bạn, vui lòng kiểm tra hộp thư và xác nhận
             </div>
             <div className="flex items-center gap-3">
                 <label htmlFor="otpCode">
@@ -136,12 +136,12 @@ const FormVerifyOTP = () => {
                 </label>
                 <input
                     {...register("otpCode", {
-                        required: "OTP Code is required",
+                        required: "Bạn cần điền mã OTP",
                     })}
                     type="text"
                     name="otpCode"
                     id="otpCode"
-                    placeholder="Enter OTP"
+                    placeholder="Nhập mã OTP"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -154,13 +154,17 @@ const FormVerifyOTP = () => {
                     />
                 </Tooltip>
             </div>
-            <div className="flex items-center gap-3">
-                You haven't received the OTP yet?
+            <div className="flex items-center gap-1 text-brown-1">
+                Bạn chưa nhận được mã OTP?
                 <span
                     className="underline cursor-pointer hover:opacity-50"
                     onClick={handleResendOTP}
                 >
-                    {loadingResend ? <Loader2 className="w-6 h-6 animate-spin" /> : "Click here"}
+                    {loadingResend ? (
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                    ) : (
+                        "Nhận lại mã OTP"
+                    )}
                 </span>
             </div>
             <div className="flex items-cente justify-center">
@@ -174,7 +178,7 @@ const FormVerifyOTP = () => {
                         <Loader2 className="w-9 h-9 animate-spin" />
                     ) : (
                         <>
-                            Verify
+                            Xác nhận OTP
                             <ArrowRight />
                         </>
                     )}
@@ -182,13 +186,13 @@ const FormVerifyOTP = () => {
             </div>
             <div className="flex items-center justify-between text-brown-1">
                 <Separator className="w-[40%]" />
-                Or
+                hoặc
                 <Separator className="w-[40%]" />
             </div>
             <div className="flex justify-center text-brown-1">
-                If you already have an account,&nbsp;
+                Nếu bạn đã có tài khoản,&nbsp;
                 <Link href={"/login"} className="underline hover:opacity-50">
-                    log in now
+                    đăng nhập ngay
                 </Link>
             </div>
             <SnackbarCustom

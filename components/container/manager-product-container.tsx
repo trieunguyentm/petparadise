@@ -21,7 +21,7 @@ const ManageProductContainer = ({
     return (
         <>
             {!listProduct || (listProduct && listProduct.length === 0) ? (
-                <div className="w-full h-full flex items-center justify-center">
+                <div className="w-full h-full flex items-center justify-center text-brown-1">
                     Hiện tại không có sản phẩm nào
                 </div>
             ) : (

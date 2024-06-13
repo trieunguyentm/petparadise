@@ -4,6 +4,8 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { KeyboardEvent, useState } from "react"
 
+// updated
+
 const TopBarPeople = () => {
     const router = useRouter()
     const [search, setSearch] = useState<string>("")

@@ -67,7 +67,7 @@ const FormConfirmPassword = () => {
                 // Lưu thông báo vào localStorage
                 localStorage.setItem(
                     "toastMessage",
-                    JSON.stringify({ type: "success", content: "Recovery password successfully!" }),
+                    JSON.stringify({ type: "success", content: "Khôi phục mật khẩu thành công!" }),
                 )
                 router.push("/login")
             }
@@ -75,7 +75,7 @@ const FormConfirmPassword = () => {
             console.log(error)
             setOpenSnackbar(true)
             setTypeSnackbar("error")
-            setContentSnackbar("An error occurred, please try again")
+            setContentSnackbar("Đã xảy ra lỗi, vui lòng thử lại")
         } finally {
             setLoading(false)
         }
@@ -86,8 +86,8 @@ const FormConfirmPassword = () => {
             onSubmit={handleSubmit(handleSubmitForm)}
             className="mt-10 flex flex-col justify-center gap-5"
         >
-            <div className="flex items-center gap-3">
-                Please enter a new password for your account
+            <div className="flex items-center gap-3 text-brown-1">
+                Vui lòng nhập mật khẩu mới cho tài khoản của bạn
             </div>
             <div className="flex items-center gap-3">
                 <label htmlFor="password">
@@ -95,17 +95,17 @@ const FormConfirmPassword = () => {
                 </label>
                 <input
                     {...register("password", {
-                        required: "Password is required",
+                        required: "Cần điền mật khẩu",
                         validate: (value: string) => {
                             if (value.trim().length < 6) {
-                                return "Username must be at least 6 characters"
+                                return "Mật khẩu phải có ít nhất 6 ký tự"
                             }
                         },
                     })}
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="Enter your new password"
+                    placeholder="Nhập mật khẩu mới"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -124,13 +124,13 @@ const FormConfirmPassword = () => {
                 </label>
                 <input
                     {...register("passwordConfirm", {
-                        required: "Confirm password is required",
+                        required: "Cần nhập lại mật khẩu mới",
                         validate: (value: string) => {
                             if (value.trim().length < 6) {
-                                return "Password must be at least 6 characters"
+                                return "Mật khẩu phải có ít nhất 6 ký tự"
                             } else {
                                 if (value.toString() !== watch("password").toString()) {
-                                    return "Confirmation password is incorrect"
+                                    return "Mật khẩu xác nhận không chính xác"
                                 }
                             }
                         },
@@ -138,7 +138,7 @@ const FormConfirmPassword = () => {
                     type="password"
                     name="passwordConfirm"
                     id="passwordConfirm"
-                    placeholder="Confirm your password"
+                    placeholder="Nhập lại mật khẩu mới"
                     className="flex-1 p-4 max-sm:p-2 pr-16 max-sm:pr-8 border-brown-1 rounded-2xl border-2 text-lg font-normal focus:outline-none"
                 />
                 <Tooltip
@@ -164,7 +164,7 @@ const FormConfirmPassword = () => {
                         <Loader2 className="w-9 h-9 animate-spin" />
                     ) : (
                         <>
-                            Submit
+                            Xác nhận
                             <ArrowRight />
                         </>
                     )}
@@ -172,13 +172,13 @@ const FormConfirmPassword = () => {
             </div>
             <div className="flex items-center justify-between text-brown-1">
                 <Separator className="w-[40%]" />
-                Or
+                hoặc
                 <Separator className="w-[40%]" />
             </div>
             <div className="flex justify-center text-brown-1">
-                If you already have an account,&nbsp;
+                Nếu bạn đã có tài khoản,&nbsp;
                 <Link href={"/login"} className="underline hover:opacity-50">
-                    log in now
+                    đăng nhập ngay
                 </Link>
             </div>
             <SnackbarCustom
