@@ -250,7 +250,10 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                     <div className="flex flex-row justify-between items-center pb-4">
                         <div className="flex items-center gap-3">
                             <Avatar className="cursor-pointer">
-                                <AvatarImage src={post.poster.profileImage} alt="@avatar" />
+                                <AvatarImage
+                                    src={post.poster.profileImage || "assets/images/avatar.jpeg"}
+                                    alt="@avatar"
+                                />
                                 <AvatarFallback>
                                     <Loader2 className="w-5 h-5 animate-spin" />
                                 </AvatarFallback>

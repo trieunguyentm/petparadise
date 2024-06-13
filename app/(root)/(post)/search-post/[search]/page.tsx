@@ -23,7 +23,7 @@ const SearchPost = async ({ params }: { params: { search: string } }) => {
         <div>
             {!searchedPosts || searchedPosts.length === 0 ? (
                 <div className="w-full h-full items-center justify-center flex text-brown-1">
-                    There are no posts according to your search request
+                    Không có bài đăng nào được tìm thấy
                 </div>
             ) : (
                 <div className="flex flex-col gap-10">

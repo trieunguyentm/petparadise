@@ -115,7 +115,7 @@ const ListNotification = ({
     return (
         <div className="p-2 max-h-[40vh] min-h-[200px] w-[100%] overflow-auto bg-white rounded-xl flex flex-col gap-5 border-brown-1 border">
             {listNotification.length === 0 && (
-                <div className="w-full h-full flex items-center justify-center">
+                <div className="w-full h-full flex items-center justify-center text-brown-1">
                     Không có thông báo
                 </div>
             )}

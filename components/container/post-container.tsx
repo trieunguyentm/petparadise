@@ -11,7 +11,7 @@ const PostContainer = async () => {
 
     return (
         <>
-            {posts === null ? (
+            {posts === null || posts.length === 0 ? (
                 <div className="w-full h-full flex items-center justify-center text-brown-1">
                     Hiện tại không có bài đăng nào
                 </div>

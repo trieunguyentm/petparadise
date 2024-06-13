@@ -37,10 +37,18 @@ const RightSideBar = async () => {
                     <div className="font-medium text-base">Người dùng khác</div>
                 </div>
                 <div className="p-2 max-h-[40vh] min-h-[200px] w-[100%] overflow-auto bg-white rounded-xl flex flex-col gap-1 border-brown-1 border">
-                    {otherUsers &&
-                        otherUsers.map((otherUser) => (
-                            <User key={otherUser._id} otherUser={otherUser} />
-                        ))}
+                    {!otherUsers || otherUsers.length === 0 ? (
+                        <div className="w-full h-full flex items-center justify-center text-brown-1">
+                            Không có người dùng nào khác
+                        </div>
+                    ) : (
+                        <>
+                            {otherUsers &&
+                                otherUsers.map((otherUser) => (
+                                    <User key={otherUser._id} otherUser={otherUser} />
+                                ))}
+                        </>
+                    )}
                 </div>
             </div>
         </div>
