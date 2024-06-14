@@ -83,7 +83,7 @@ const ManageOrderContainer = () => {
             ) : (
                 <>
                     {orders.length === 0 ? (
-                        <div className="w-full h-full flex justify-center items-center">
+                        <div className="w-full h-full flex justify-center items-center text-brown-1">
                             Hiện tại không có đơn hàng nào
                         </div>
                     ) : (

@@ -149,7 +149,7 @@ const MessageContainer = ({ otherUser }: { otherUser: IUserDocument[] | null }) 
     return (
         <div className="flex-col flex gap-1">
             {/* LIST OTHER USER */}
-            <div className="w-full border-2 border-brown-1 h-[300px] rounded-md p-3 flex flex-col gap-4 text-brown-1">
+            <div className="w-full border-2 border-brown-1 h-[300px] overflow-scroll rounded-md p-3 flex flex-col gap-4 text-brown-1">
                 {otherUser === null ? (
                     <>Không có người dùng nào</>
                 ) : (

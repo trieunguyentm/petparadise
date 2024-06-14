@@ -49,7 +49,7 @@ const UserCard = ({ people, user }: { people: IUserDocument; user: IUserDocument
                     src={
                         people.profileImage
                             ? people.profileImage
-                            : "/assets/images/avatardefault.svg"
+                            : "/assets/images/avatar.jpeg"
                     }
                     alt="avatar"
                     width={50}

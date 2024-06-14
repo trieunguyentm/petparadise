@@ -73,12 +73,12 @@ const PetAdoptionCard = ({ post }: { post: IPetAdoptionPostDocument }) => {
                         )}
                     </span>
                 </div>
-                <div className="line-clamp-3" style={{ minHeight: "4.5rem" }}>
+                <div className="line-clamp-3" style={{ minHeight: "2.5rem" }}>
                     <span className="font-medium text-brown-1">Tình trạng sức khỏe</span>
                     :&nbsp;
                     <span> {post.description}</span>
                 </div>
-                <div className="line-clamp-4" style={{ minHeight: "4.5rem" }}>
+                <div className="line-clamp-4" style={{ minHeight: "2.5rem" }}>
                     <span className="font-medium text-brown-1">Mô tả</span>:&nbsp;
                     <span> {post.description}</span>
                 </div>

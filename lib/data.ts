@@ -14,7 +14,7 @@ export const menuLeftSideBar: MenuItem[] = [
     {
         title: "Trang chủ",
         icon: "/assets/images/home.svg",
-        link: ["/"],
+        link: ["/", "/post"],
     },
     {
         title: "Tạo bài viết",

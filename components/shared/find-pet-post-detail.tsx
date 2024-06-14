@@ -513,12 +513,10 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                 </div>
                             </li>
                             <li>
-                                <div className="text-sm flex">
-                                    &bull;&nbsp;
+                                <div className="text-sm flex flex-col">
                                     <span className="font-medium text-brown-1">
-                                        Mô tả chi tiết:
+                                        &bull;&nbsp;Mô tả chi tiết:
                                     </span>
-                                    &nbsp;
                                     <div
                                         dangerouslySetInnerHTML={{
                                             __html: post.description.replace(/\n/g, "<br />"),
@@ -527,10 +525,9 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                 </div>
                             </li>
                             <li>
-                                <div className="text-sm">
-                                    &bull;&nbsp;
+                                <div className="text-sm flex flex-col">
                                     <span className="font-medium text-brown-1">
-                                        Thông tin liên hệ:{" "}
+                                        &bull;&nbsp;Thông tin liên hệ:{" "}
                                     </span>
                                     {post.contactInfo}
                                 </div>

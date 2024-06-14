@@ -72,7 +72,7 @@ const MessageListUser = ({ otherUser }: { otherUser: IUserDocument[] | null }) =
 
     return (
         <>
-            <div className="w-full border-2 rounded-2xl border-brown-1 px-2 py-3 relative">
+            <div className="w-full border-2 rounded-md border-brown-1 px-2 py-3 relative">
                 <input
                     type="text"
                     className="w-full py-3 pl-2 pr-8 focus:outline-none bg-transparent text-base"
