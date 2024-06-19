@@ -315,7 +315,7 @@ const PetAdoptionContainer = ({
             <div className="w-full mt-5">
                 <Button
                     onClick={() => router.push("/pet-adoption/create-post")}
-                    className="w-full bg-green-300 text-black hover:text-white line-clamp-1 flex items-center"
+                    className="w-full bg-green-500 text-black hover:text-white line-clamp-1 flex items-center"
                 >
                     Tạo một bài viết mới để tìm chủ nhân cho thú cưng &nbsp;
                     <MessageCirclePlus className="w-4 h-4" />

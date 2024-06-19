@@ -18,6 +18,7 @@ const typePetToText = {
     accessories: "Phụ kiện",
     housing: "Nhà ở",
     training: "Huấn luyện",
+    service: "Dịch vụ",
     other: "Khác",
 }
 

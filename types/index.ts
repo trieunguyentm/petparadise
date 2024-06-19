@@ -8,6 +8,7 @@ export type TypeProduct =
     | "accessories"
     | "housing"
     | "training"
+    | "service"
     | "other"
 
 export interface ICartItem {
@@ -34,6 +35,7 @@ export interface IUserDocument extends mongoose.Document {
     favoriteProducts: IProductDocument[]
     role: "user" | "admin"
     accountBalance: number
+    withdrawalHistory: IWithdrawalHistory[]
     updatedAt: Date
     createdAt: Date
 }
@@ -184,7 +186,15 @@ export interface IProductDocument extends mongoose.Document {
     discountStartDate?: Date // Ngày bắt đầu giảm giá
     discountEndDate?: Date // Ngày kết thúc giảm giá
     images: string[]
-    productType: "food" | "toys" | "medicine" | "accessories" | "housing" | "training" | "other"
+    productType:
+        | "food"
+        | "toys"
+        | "medicine"
+        | "accessories"
+        | "housing"
+        | "training"
+        | "service"
+        | "other"
     stock: number // Số lượng sản phẩm
     createdAt: Date
     updatedAt: Date
@@ -219,6 +229,14 @@ export interface IRefundRequestDocument extends mongoose.Document {
     accountName?: string
     amount: number
     status: "pending" | "approved" | "rejected"
+    createdAt: Date
+    updatedAt: Date
+}
+
+export interface IWithdrawalHistory extends mongoose.Document {
+    user: IUserDocument
+    amount: number
+    status: "pending" | "completed" | "failed"
     createdAt: Date
     updatedAt: Date
 }

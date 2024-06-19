@@ -61,6 +61,7 @@ export const shopCategories = [
     { value: "accessories", text: "Phụ kiện" },
     { value: "housing", text: "Nhà ở" },
     { value: "training", text: "Huấn luyện" },
+    { value: "service", text: "Dịch vụ" },
     { value: "other", text: "Khác" },
 ]
 

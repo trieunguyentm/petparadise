@@ -280,7 +280,7 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
             <div className="w-full mt-5">
                 <Button
                     onClick={() => router.push("/find-pet/create-post")}
-                    className="w-full bg-green-300 text-black hover:text-white line-clamp-1 flex"
+                    className="w-full bg-green-500 text-black hover:text-white line-clamp-1 flex"
                 >
                     Tạo một bài viết mới để tìm kiếm thú cưng &nbsp;
                     <MessageCirclePlus className="w-4 h-4 max-sm:hidden" />
