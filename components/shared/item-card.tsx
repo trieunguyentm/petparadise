@@ -259,6 +259,7 @@ const ItemCard = ({
                             width={40}
                             height={40}
                             className="rounded-full"
+                            style={{ clipPath: "circle()" }}
                         />
                         <span className="text-xs font-medium">{product.seller.username}</span>
                     </div>

@@ -379,7 +379,7 @@ const EditProductContainer = ({ product }: { product: IProductDocument }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     <div className="flex flex-col gap-1">
                         <label htmlFor="discountStartDate" className="text-sm">
-                            Thời gian bắt đầu giảm giá
+                            Thời gian bắt đầu giảm giá 
                         </label>
                         <DatePickerDemo
                             date={discountStartDate}

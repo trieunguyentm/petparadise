@@ -39,10 +39,28 @@ const CartStore = async () => {
                         items: [],
                     }
                 }
+
+                // Kiểm tra khuyến mãi
+                const currentDate = new Date()
+                let price = item.product.price
+                if (
+                    item.product.discountRate &&
+                    item.product.discountStartDate &&
+                    item.product.discountEndDate
+                ) {
+                    const discountStart = new Date(item.product.discountStartDate)
+                    const discountEnd = new Date(item.product.discountEndDate)
+                    if (currentDate >= discountStart && currentDate <= discountEnd) {
+                        price =
+                            item.product.price -
+                            item.product.price * (item.product.discountRate / 100)
+                    }
+                }
+
                 acc[sellerId].items.push({
                     name: item.product.name,
                     quantity: item.quantity,
-                    price: item.product.price,
+                    price: price,
                     product: item.product,
                 })
                 return acc

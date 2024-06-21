@@ -313,9 +313,9 @@ const ProductDetail = ({
                                 <>
                                     {/* <div>Giảm giá : {product.discountRate}%</div> */}
                                     <div>
-                                        Thời gian giảm giá bắt đầu từ:{" "}
+                                        Thời gian giảm giá bắt đầu từ: 00:00AM ngày{" "}
                                         {convertISOToFormatNotHours(product.discountStartDate)} đến
-                                        hết ngày{" "}
+                                        00:00AM ngày{" "}
                                         {convertISOToFormatNotHours(product.discountEndDate)}
                                     </div>
                                 </>

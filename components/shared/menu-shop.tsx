@@ -15,7 +15,7 @@ const MenuShop = ({
             {shopCategories.map((category, index) => (
                 <div
                     key={index}
-                    className={`hover:bg-slate-300 p-4 rounded-2xl text-sm font-medium hover:cursor-pointer transition-all hover:-translate-y-1.5 ${
+                    className={`hover:bg-slate-300 p-2 rounded-2xl text-sm font-medium hover:cursor-pointer transition-all hover:-translate-y-1.5 ${
                         activeMenu === category.value && "bg-pink-1 drop-shadow-2xl"
                     }`}
                     onClick={() => setActiveMenu(category.value)}

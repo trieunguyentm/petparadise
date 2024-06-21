@@ -141,6 +141,18 @@ const CartContainer = ({
             buyerAddress: data.buyerAddress,
         }
 
+        /** Kiểm tra số lượng sản phẩm */
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].quantity > products[i].product.stock) {
+                setOpenSnackbar(true)
+                setTypeSnackbar("info")
+                setContentSnackbar(
+                    `Sản phẩm ${products[i].product.name} chỉ còn ${products[i].product.stock} sản phẩm.`,
+                )
+                return
+            }
+        }
+
         try {
             setLoadingPayment(true)
             const res = await fetch(
