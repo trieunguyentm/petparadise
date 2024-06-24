@@ -24,6 +24,7 @@ const typePetToText = {
 
 const statusOrder = {
     pending: "Chưa thanh toán",
+    offline: "Thanh toán khi nhận hàng",
     processed: "Đã thanh toán",
     shipped: "Đang giao hàng",
     delivered: "Đã giao hàng",

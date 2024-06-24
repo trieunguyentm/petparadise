@@ -9,6 +9,7 @@ import ManageOrderSkeleton from "../skeleton/manage-order-skeleton"
 
 export type StatusOrder =
     | "pending"
+    | "offline"
     | "processed"
     | "shipped"
     | "delivered"

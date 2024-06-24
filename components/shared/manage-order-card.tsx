@@ -28,6 +28,7 @@ const typePetToText = {
 
 const statusOrder: { [key: string]: string } = {
     pending: "Chưa thanh toán",
+    offline: "Thanh toán khi giao hàng",
     processed: "Đã thanh toán",
     shipped: "Đang giao hàng",
     delivered: "Đã giao hàng",
@@ -166,6 +167,7 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                 <div className="text-sm text-brown-1 font-semibold">Trạng thái đơn hàng</div>
 
                 <Select
+                    // Không thể thay đổi trạng thái khi "cancelled", "delivered", "success"
                     disabled={
                         currentStatus === "cancelled" ||
                         currentStatus === "delivered" ||
@@ -177,22 +179,53 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                     <SelectTrigger className="w-[120px] text-xs p-0.5">
                         <SelectValue placeholder="Trạng thái đơn hàng" />
                     </SelectTrigger>
-                    <SelectContent className="text-xs">
-                        {Object.keys(statusOrder).map((type, index) => {
-                            if (type !== "pending" && type !== "success") {
-                                return (
-                                    <SelectItem key={index} value={type} className="text-xs">
-                                        {statusOrder[type]}
-                                    </SelectItem>
-                                )
-                            }
-                        })}
-                        {status === "success" && (
-                            <SelectItem value={"success"} className="text-xs">
-                                {statusOrder["success"]}
-                            </SelectItem>
-                        )}
-                    </SelectContent>
+                    {order.typePayment === "online" && (
+                        <SelectContent className="text-xs">
+                            {Object.keys(statusOrder).map((type, index) => {
+                                if (
+                                    type === "processed" ||
+                                    type === "shipped" ||
+                                    type === "delivered" ||
+                                    type === "cancelled"
+                                ) {
+                                    return (
+                                        <SelectItem key={index} value={type} className="text-xs">
+                                            {statusOrder[type]}
+                                        </SelectItem>
+                                    )
+                                }
+                            })}
+                            {/* Khi trạng thái đơn hàng là success rồi thì mới hiển thị option này trong Select
+                        nếu không người bán có thể tự đặt trạng thái là success */}
+                            {status === "success" && (
+                                <SelectItem value={"success"} className="text-xs">
+                                    {statusOrder["success"]}
+                                </SelectItem>
+                            )}
+                        </SelectContent>
+                    )}
+                    {order.typePayment === "offline" && (
+                        <SelectContent className="text-xs">
+                            {Object.keys(statusOrder).map((type, index) => {
+                                if (
+                                    type === "offline" ||
+                                    type === "cancelled" ||
+                                    type === "delivered"
+                                ) {
+                                    return (
+                                        <SelectItem key={index} value={type} className="text-xs">
+                                            {statusOrder[type]}
+                                        </SelectItem>
+                                    )
+                                }
+                            })}
+                            {status === "success" && (
+                                <SelectItem value={"success"} className="text-xs">
+                                    {statusOrder["success"]}
+                                </SelectItem>
+                            )}
+                        </SelectContent>
+                    )}
                 </Select>
 
                 {status !== currentStatus && (

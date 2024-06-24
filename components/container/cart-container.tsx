@@ -17,6 +17,7 @@ import {
 } from "../ui/dialog"
 import { useRouter } from "next/navigation"
 import SnackbarCustom from "../ui/snackbar"
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 
 type FormValues = {
     buyerName: string
@@ -24,6 +25,8 @@ type FormValues = {
     buyerAddress: string
     buyerNote: string
 }
+
+type TypePayment = "online" | "offline"
 
 const CartContainer = ({
     groupedItems,
@@ -44,6 +47,7 @@ const CartContainer = ({
         "success",
     )
     const [contentSnackbar, setContentSnackbar] = useState<string>("")
+    const [typePayment, setTypePayment] = useState<TypePayment>("online")
     const {
         register,
         setValue,
@@ -152,52 +156,105 @@ const CartContainer = ({
                 return
             }
         }
-
-        try {
-            setLoadingPayment(true)
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/create-payment-link`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        sellerId,
-                        checkoutData,
-                        buyerNote: watch("buyerNote"),
-                        listItem: {
-                            products,
+        /** Nếu thanh toán trực tuyến */
+        if (typePayment === "online") {
+            try {
+                setLoadingPayment(true)
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/create-payment-link`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
                         },
-                    }),
-                },
-            )
-            const data = await res.json()
-            if (!res.ok) {
-                if (data.type === "ERROR_SESSION") {
-                    // Lưu thông báo vào localStorage
-                    localStorage.setItem(
-                        "toastMessage",
-                        JSON.stringify({ type: "error", content: data.message }),
-                    )
-                    router.push("/login")
-                    return
+                        credentials: "include",
+                        body: JSON.stringify({
+                            sellerId,
+                            checkoutData,
+                            buyerNote: watch("buyerNote"),
+                            listItem: {
+                                products,
+                            },
+                        }),
+                    },
+                )
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message)
                 }
+                if (data.success) {
+                    router.push(data.data)
+                }
+            } catch (error) {
+                console.log(error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message)
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
+            } finally {
+                setLoadingPayment(false)
             }
-            if (data.success) {
-                router.push(data.data)
+        } else {
+            /** Nếu thanh toán sau khi nhận hàng */
+            setLoadingPayment(true)
+            try {
+                setLoadingPayment(true)
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/direct-payment`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        credentials: "include",
+                        body: JSON.stringify({
+                            sellerId,
+                            checkoutData,
+                            buyerNote: watch("buyerNote"),
+                            listItem: {
+                                products,
+                            },
+                        }),
+                    },
+                )
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message)
+                }
+                if (data.success) {
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("success")
+                    setContentSnackbar(data.message)
+                }
+            } catch (error) {
+                console.log(error)
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
+            } finally {
+                setLoadingPayment(false)
             }
-        } catch (error) {
-            console.log(error)
-            setOpenSnackbar(true)
-            setTypeSnackbar("error")
-            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
-        } finally {
-            setLoadingPayment(false)
         }
     }
 
@@ -276,6 +333,35 @@ const CartContainer = ({
                                                     đ
                                                 </div>
                                                 <div className="flex flex-col gap-2 text-sm">
+                                                    <label htmlFor="typePayment">
+                                                        Phương thức thanh toán{" "}
+                                                        <span className="text-red-500">*</span>
+                                                    </label>
+                                                    <RadioGroup
+                                                        value={typePayment}
+                                                        onValueChange={(value: TypePayment) =>
+                                                            setTypePayment(value)
+                                                        }
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem
+                                                                value="online"
+                                                                id="r1"
+                                                            />
+                                                            <label htmlFor="r1">
+                                                                Thanh toán trực tuyến
+                                                            </label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem
+                                                                value="offline"
+                                                                id="r2"
+                                                            />
+                                                            <label htmlFor="r2">
+                                                                Thanh toán khi nhận hàng
+                                                            </label>
+                                                        </div>
+                                                    </RadioGroup>
                                                     <label htmlFor="buyerName">
                                                         Tên người mua hàng{" "}
                                                         <span className="text-red-500">*</span>
