@@ -260,7 +260,10 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             </Avatar>
                             <div className="flex flex-col">
                                 <div className="text-sm font-medium">{post.poster.username}</div>
-                                <div className="text-xs font-thin">
+                                <div
+                                    className="text-xs font-thin cursor-pointer"
+                                    onClick={() => router.push(`/post/${post._id.toString()}`)}
+                                >
                                     {convertISOToFormat(post.createdAt)}
                                 </div>
                             </div>

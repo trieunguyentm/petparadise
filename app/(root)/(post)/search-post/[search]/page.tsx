@@ -1,4 +1,4 @@
-import PostFeed from "@/components/shared/post-feed"
+import PostFeedDetail from "@/components/shared/post-feed-detail"
 import { fetchSearchPost, fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"
 
@@ -29,7 +29,7 @@ const SearchPost = async ({ params }: { params: { search: string } }) => {
                 <div className="flex flex-col gap-10">
                     {searchedPosts.reverse().map((post) => (
                         <div key={post._id}>
-                            <PostFeed user={user} post={post} />
+                            <PostFeedDetail user={user} post={post} />
                         </div>
                     ))}
                 </div>
