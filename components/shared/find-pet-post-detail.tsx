@@ -387,6 +387,7 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                     width={45}
                                     height={45}
                                     className="rounded-full"
+                                    style={{ clipPath: "circle()" }}
                                 />
                                 <div className="flex flex-col">
                                     <div className="font-medium text-sm">
