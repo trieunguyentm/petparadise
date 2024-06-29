@@ -10,6 +10,17 @@ import { useForm } from "react-hook-form"
 import { Tooltip, Zoom } from "@mui/material"
 import { CircleAlert, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const delay = (delayInms: number) => {
     return new Promise((resolve) => setTimeout(resolve, delayInms))
@@ -42,6 +53,9 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
     } = useForm<FormValues>({
         mode: "onChange",
     })
+    /** Logout All Device */
+    const [loadingLogoutAllDevice, setLoadingLogoutAllDevice] = useState<boolean>(false)
+    const [showAlert, setShowAlert] = useState<boolean>(false)
 
     const handleSubmitForm = async () => {
         setLoadingChangePassword(true)
@@ -90,6 +104,48 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
             setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         } finally {
             setLoadingChangePassword(false)
+        }
+    }
+
+    const handleLogoutAllDevice = async () => {
+        setShowAlert(false)
+        setLoadingLogoutAllDevice(true)
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/logout-all-device`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                },
+            )
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                router.push("/login")
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
+        } finally {
+            setLoadingLogoutAllDevice(false)
         }
     }
 
@@ -280,6 +336,34 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                     </div>
                 </form>
             )}
+            <div className="flex justify-end text-xs underline text-brown-1 cursor-pointer">
+                {loadingLogoutAllDevice ? (
+                    <Loader2 className="animate-spin w-6 h-6" />
+                ) : (
+                    <span onClick={() => setShowAlert(true)}>
+                        Đăng xuất khỏi tất cả các thiết bị
+                    </span>
+                )}
+            </div>
+            <AlertDialog open={showAlert}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Bạn có muốn đăng xuất?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Hành động này sẽ làm đăng xuất tài khoản của bạn trên tất cả các thiết
+                            bị khác, ngay cả thiết bị hiện tại đang sử dụng.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setShowAlert(false)}>
+                            Hủy
+                        </AlertDialogCancel>
+                        <AlertDialogAction onClick={handleLogoutAllDevice}>
+                            Tiếp tục
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <SnackbarCustom
                 open={openSnackbar}
                 setOpen={setOpenSnackbar}

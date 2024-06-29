@@ -4,14 +4,19 @@ import { Loader2 } from "lucide-react"
 import { convertISOToFormat } from "@/lib/utils"
 import React from "react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 const PetAdoptionPostComment = ({ comment }: { comment: IPetAdoptionCommentDocument }) => {
+    const router = useRouter()
+
     return (
         <div className="flex flex-row gap-4">
             <Avatar>
                 <AvatarImage
+                    onClick={() => router.push(`/profile/${comment.poster.username}`)}
                     src={comment.poster.profileImage || "/assets/images/avatar.jpeg"}
                     alt="@avatar"
+                    className="cursor-pointer"
                 />
                 <AvatarFallback>
                     <Loader2 className="w-5 h-5 animate-spin" />

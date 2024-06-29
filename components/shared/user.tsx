@@ -1,10 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { IUserDocument } from "@/types"
 import { Loader2 } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const User = ({ otherUser }: { otherUser: IUserDocument }) => {
     return (
-        <div className="pl-1 py-1 my-2 flex items-center gap-3 cursor-pointer hover:bg-red-100 rounded-xl">
+        <Link
+            className="pl-1 py-1 my-2 flex items-center gap-3 cursor-pointer hover:bg-red-100 rounded-xl"
+            href={`/profile/${otherUser.username}`}
+        >
             <Avatar>
                 <AvatarImage
                     src={otherUser.profileImage || "/assets/images/avatar.jpeg"}
@@ -15,7 +20,7 @@ const User = ({ otherUser }: { otherUser: IUserDocument }) => {
                 </AvatarFallback>
             </Avatar>
             <div className="text-sm text-brown-1 font-medium">{otherUser.username}</div>
-        </div>
+        </Link>
     )
 }
 

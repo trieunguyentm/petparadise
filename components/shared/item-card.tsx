@@ -254,11 +254,12 @@ const ItemCard = ({
                     </Link>
                     <div className="flex items-center gap-2 hover:underline hover:text-brown-1 cursor-pointer">
                         <Image
+                            onClick={() => router.push(`/profile/${product.seller.username}`)}
                             src={product.seller.profileImage || "/assets/images/avatar.jpeg"}
                             alt="creator"
                             width={40}
                             height={40}
-                            className="rounded-full"
+                            className="rounded-full cursor-pointer"
                             style={{ clipPath: "circle()" }}
                         />
                         <span className="text-xs font-medium">{product.seller.username}</span>

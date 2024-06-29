@@ -428,11 +428,12 @@ const PetAdoptionPostDetail = ({
                         <div>
                             <div className="flex items-center gap-2">
                                 <Image
+                                    onClick={() => router.push(`/profile/${post.poster.username}`)}
                                     src={post.poster.profileImage || "/assets/images/avatar.jpeg"}
                                     alt="avatar"
                                     width={45}
                                     height={45}
-                                    className="rounded-full"
+                                    className="rounded-full cursor-pointer"
                                 />
                                 <div className="flex flex-col">
                                     <div className="font-medium text-sm">

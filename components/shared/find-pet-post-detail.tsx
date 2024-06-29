@@ -386,8 +386,9 @@ const FindPetPostDetail = ({ post, user }: { post: ILostPetPostDocument; user: I
                                     alt="avatar"
                                     width={45}
                                     height={45}
-                                    className="rounded-full"
+                                    className="rounded-full cursor-pointer"
                                     style={{ clipPath: "circle()" }}
+                                    onClick={() => router.push(`/profile/${post.poster.username}`)}
                                 />
                                 <div className="flex flex-col">
                                     <div className="font-medium text-sm">

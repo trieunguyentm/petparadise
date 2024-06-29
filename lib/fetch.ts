@@ -50,6 +50,33 @@ export const fetchUser = async () => {
     }
 }
 
+export const fetchUserByUsername = async ({ username }: { username: string }) => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/detail-info/${username}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IUserDocument
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error(`Failed to fetch ${username} info`)
+    }
+}
+
 export const fetchPost = async () => {
     const sessionId = (await getSessionId()) as { name: string; value: string }
     try {

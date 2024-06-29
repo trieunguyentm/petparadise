@@ -75,6 +75,7 @@ const RequestAdoptPet = ({
             <div className="flex justify-between">
                 <div className="flex gap-2">
                     <Image
+                        onClick={() => router.push(`/profile/${request.requester.username}`)}
                         src={request.requester.profileImage || "/assets/images/avatar.jpeg"}
                         alt="avatar"
                         width={40}

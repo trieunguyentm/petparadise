@@ -6,14 +6,19 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 const FindPetPostComment = ({ comment }: { comment: IFindPetCommentDocument }) => {
+    const router = useRouter()
+
     return (
         <div className="flex flex-row gap-4">
             <Avatar>
                 <AvatarImage
+                    onClick={() => router.push(`/profile/${comment.poster.username}`)}
                     src={comment.poster.profileImage || "/assets/images/avatar.jpeg"}
                     alt="@avatar"
+                    className="cursor-pointer"
                 />
                 <AvatarFallback>
                     <Loader2 className="w-5 h-5 animate-spin" />

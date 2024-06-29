@@ -4,21 +4,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Loader2 } from "lucide-react"
 import { ICommentDocument } from "@/types"
 import { convertISOToFormat } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 const CommentComponent = ({ comment }: { comment: ICommentDocument }) => {
+    const router = useRouter()
+
     return (
         <div className="flex flex-row gap-4">
             <Avatar>
                 <AvatarImage
+                    onClick={() => router.push(`/profile/${comment.poster.username}`)}
                     src={comment.poster?.profileImage || "/assets/images/avatar.jpeg"}
                     alt="@avatar"
+                    className="cursor-pointer"
                 />
                 <AvatarFallback>
                     <Loader2 className="w-5 h-5 animate-spin" />
                 </AvatarFallback>
             </Avatar>
             <div className="border w-full pl-3 py-1 pr-3 rounded-lg flex flex-col gap-2 bg-slate-100">
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-4 sm:items-center max-sm:flex-col">
                     <div className="text-sm font-medium">{comment.poster.username}</div>
                     <div className="text-xs font-thin">{convertISOToFormat(comment.createdAt)}</div>
                 </div>

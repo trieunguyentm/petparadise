@@ -251,8 +251,10 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                         <div className="flex items-center gap-3">
                             <Avatar className="cursor-pointer">
                                 <AvatarImage
+                                    onClick={() => router.push(`/profile/${post.poster.username}`)}
                                     src={post.poster.profileImage || "assets/images/avatar.jpeg"}
                                     alt="@avatar"
+                                    className="cursor-pointer"
                                 />
                                 <AvatarFallback>
                                     <Loader2 className="w-5 h-5 animate-spin" />

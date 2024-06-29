@@ -46,11 +46,8 @@ const UserCard = ({ people, user }: { people: IUserDocument; user: IUserDocument
         <div className="flex border-brown-1 border-2 py-2 pl-2 pr-5 rounded-xl justify-between items-center">
             <div className="flex items-center gap-4 cursor-pointer">
                 <Image
-                    src={
-                        people.profileImage
-                            ? people.profileImage
-                            : "/assets/images/avatar.jpeg"
-                    }
+                    onClick={() => router.push(`/profile/${people.username}`)}
+                    src={people.profileImage ? people.profileImage : "/assets/images/avatar.jpeg"}
                     alt="avatar"
                     width={50}
                     height={50}

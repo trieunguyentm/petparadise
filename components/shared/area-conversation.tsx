@@ -169,6 +169,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                                             width={32}
                                             height={32}
                                             className="rounded-full"
+                                            style={{ clipPath: "circle()" }}
                                         />
                                         <div className="flex flex-col gap-2">
                                             <p className="text-sm font-medium">
