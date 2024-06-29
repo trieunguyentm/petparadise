@@ -24,7 +24,7 @@ const MessageCard = ({
     const pathName = usePathname()
     const idConversation = pathName.split("/")[2]
     const isGroup = chat.isGroup
-    let isSeen = chat.seenBy.includes(user._id)
+    let isSeen = chat?.seenBy?.includes(user._id) || false
 
     const defaultImage = "/assets/images/avatar.jpeg"
     let imageSrc = chat.groupPhoto || defaultImage
@@ -38,7 +38,7 @@ const MessageCard = ({
 
     const normalizedSearch = normalizeText(search.trim())
     const shouldDisplay =
-        normalizedSearch === "" || normalizeText(displayName).includes(normalizedSearch)
+        normalizedSearch === "" || normalizeText(displayName)?.includes(normalizedSearch)
 
     return shouldDisplay ? (
         <Link

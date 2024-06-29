@@ -27,7 +27,7 @@ const SearchPeople = async ({ params }: { params: { search: string } }) => {
             <div>
                 {!listPeopleWithOutUser || listPeopleWithOutUser.length === 0 ? (
                     <div className="w-full h-full items-center justify-center flex text-brown-1">
-                        There are no user according to your search request
+                        Không tìm thấy người dùng nào phù hợp
                     </div>
                 ) : (
                     <ListOtherUserBySearch
