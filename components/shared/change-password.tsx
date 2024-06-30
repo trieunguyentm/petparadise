@@ -8,7 +8,7 @@ import SnackbarCustom from "../ui/snackbar"
 import { Skeleton } from "../ui/skeleton"
 import { useForm } from "react-hook-form"
 import { Tooltip, Zoom } from "@mui/material"
-import { CircleAlert, Loader2 } from "lucide-react"
+import { CircleAlert, Landmark, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import {
     AlertDialog,
@@ -19,8 +19,8 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import DialogDrawMoney from "./dialog-draw-money"
 
 const delay = (delayInms: number) => {
     return new Promise((resolve) => setTimeout(resolve, delayInms))
@@ -56,6 +56,8 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
     /** Logout All Device */
     const [loadingLogoutAllDevice, setLoadingLogoutAllDevice] = useState<boolean>(false)
     const [showAlert, setShowAlert] = useState<boolean>(false)
+    /** Draw money */
+    const [showDialogDrawMoney, setShowDialogDrawMoney] = useState<boolean>(false)
 
     const handleSubmitForm = async () => {
         setLoadingChangePassword(true)
@@ -164,6 +166,26 @@ const ChangePassword = ({ user }: { user: IUserDocument | null }) => {
                             ) : (
                                 user?.username
                             )}
+                        </div>
+                    </div>
+                    <div className={`block md:flex items-center`}>
+                        <div className="w-1/6 font-medium">Số dư</div>
+                        <div className="w-5/6 text-sm flex items-center gap-4">
+                            {loading && !user ? (
+                                <Skeleton className="w-[100px] h-4" />
+                            ) : (
+                                `${user?.accountBalance
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ`
+                            )}
+                            <button onClick={() => setShowDialogDrawMoney(true)}>
+                                <Landmark className="w-5 h-5" />
+                            </button>
+                            <DialogDrawMoney
+                                user={user}
+                                showDialogDrawMoney={showDialogDrawMoney}
+                                setShowDialogDrawMoney={setShowDialogDrawMoney}
+                            />
                         </div>
                     </div>
                     <div className={`block md:flex items-center`}>
