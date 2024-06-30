@@ -1,7 +1,13 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { convertISOToFormat } from "@/lib/utils"
@@ -15,13 +21,21 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { useEffect, useState } from "react"
-import { Loader2, X } from "lucide-react"
+import { Flag, Loader2, Pencil, Settings, Trash, X } from "lucide-react"
 import { useForm } from "react-hook-form"
 import CommentComponent from "./comment"
 import { Button } from "../ui/button"
 import SnackbarCustom from "../ui/snackbar"
 import { pusherClient } from "@/lib/pusher"
 import { useRouter } from "next/navigation"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "../ui/dialog"
 
 type FormValues = {
     comment: string
@@ -63,6 +77,9 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
     const [comments, setComments] = useState<ICommentDocument[]>(post.comments)
     /** Show comment */
     const [showComment, setShowComment] = useState<boolean>(false)
+    /** Dialog */
+    const [showDialog, setShowDialog] = useState<boolean>(false)
+    const [descriptionReport, setDescriptionReport] = useState<string>("")
 
     const addEmoji = (emoji: any) => {
         let emojiString = emoji.native
@@ -209,6 +226,49 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
         }
     }
 
+    const handleCreateReport = async () => {
+        setShowDialog(false)
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/create-report`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    description: descriptionReport,
+                    link: `${process.env.NEXT_PUBLIC_YOUR_URL}/post/${post._id.toString()}`,
+                }),
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                if (data.type === "ERROR_SESSION") {
+                    // Lưu thông báo vào localStorage
+                    localStorage.setItem(
+                        "toastMessage",
+                        JSON.stringify({ type: "error", content: data.message }),
+                    )
+                    router.push("/login")
+                    return
+                }
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar(data.message)
+            }
+            if (data.success) {
+                setDescriptionReport("")
+                setOpenSnackbar(true)
+                setTypeSnackbar("success")
+                setContentSnackbar(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            setOpenSnackbar(true)
+            setTypeSnackbar("error")
+            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
+        }
+    }
+
     const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0]
@@ -271,12 +331,71 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             </div>
                         </div>
                         <div className="cursor-pointer">
-                            <Image
+                            {/* <Image
                                 src={"/assets/images/settings.svg"}
                                 alt="setting"
                                 width={20}
                                 height={20}
-                            />
+                            /> */}
+                            <>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <Settings />
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuGroup>
+                                            <DropdownMenuItem onClick={() => setShowDialog(true)}>
+                                                <Flag className="mr-2 h-4 w-4" />
+                                                <span>Báo cáo vi phạm</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuGroup>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <Dialog open={showDialog}>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                        <DialogHeader>
+                                            <DialogTitle>Báo cáo vi phạm</DialogTitle>
+                                            <DialogDescription>
+                                                Nếu bạn thấy bài viết có nội dung vi phạm, hãy cung
+                                                cấp thêm thông tin mô tả vi phạm cho chúng tôi
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <div className="flex flex-col gap-4">
+                                            <label htmlFor="descriptionReport" className="text-sm">
+                                                Mô tả vi phạm
+                                            </label>
+                                            <textarea
+                                                value={descriptionReport}
+                                                onChange={(e) =>
+                                                    setDescriptionReport(e.target.value)
+                                                }
+                                                name="descriptionReport"
+                                                id="descriptionReport"
+                                                rows={5}
+                                                className="p-2 border border-brown-1 focus:outline-none rounded-md text-sm"
+                                            />
+                                            <div className="text-xs text-red-500">
+                                                {descriptionReport.trim() === "" &&
+                                                    "Nhập mô tả vi phạm"}
+                                            </div>
+                                        </div>
+                                        <DialogFooter>
+                                            <Button
+                                                variant={"destructive"}
+                                                onClick={() => setShowDialog(false)}
+                                            >
+                                                Hủy
+                                            </Button>
+                                            <Button
+                                                disabled={descriptionReport.trim() === ""}
+                                                onClick={handleCreateReport}
+                                            >
+                                                Gửi
+                                            </Button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                            </>
                         </div>
                     </div>
                     <div
