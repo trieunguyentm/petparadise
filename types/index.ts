@@ -243,3 +243,12 @@ export interface IWithdrawalHistory extends mongoose.Document {
     createdAt: Date
     updatedAt: Date
 }
+
+export interface IReportDocument extends mongoose.Document {
+    reporter: IUserDocument
+    description: string
+    link: string
+    status: "pending" | "reviewing" | "resolved"
+    createdAt: Date
+    updatedAt: Date
+}
