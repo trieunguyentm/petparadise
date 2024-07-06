@@ -36,6 +36,8 @@ export interface IUserDocument extends mongoose.Document {
     role: "user" | "admin"
     accountBalance: number
     withdrawalHistory: IWithdrawalHistory[]
+    isBanned: boolean
+    banExpiration?: Date
     updatedAt: Date
     createdAt: Date
 }

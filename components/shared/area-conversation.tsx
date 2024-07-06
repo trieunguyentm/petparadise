@@ -176,7 +176,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                                                 {message.sender.username}&#160;&#183;&#160;
                                                 {format(new Date(message?.createdAt), "p")}
                                             </p>
-                                            <p className="w-fit max-w-[80%] bg-slate-100 px-2 py-1 rounded-md text-sm">
+                                            <p className="w-fit max-w-[80%] bg-slate-100 px-2 py-2 rounded-md text-sm">
                                                 {message?.text}
                                                 {message.photo && (
                                                     <Image
@@ -202,7 +202,7 @@ const AreaConversation = ({ chatId, user }: { chatId: string; user: IUserDocumen
                                                 {format(new Date(message?.createdAt), "p")}
                                             </p>
 
-                                            <p className="w-fit max-w-[80%] bg-purple-400 px-2 py-1 rounded-md text-sm">
+                                            <p className="w-fit max-w-[80%] bg-purple-400 px-2 py-2 rounded-md text-sm">
                                                 {message?.text}
                                                 {message.photo && (
                                                     <Image

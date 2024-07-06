@@ -312,7 +312,7 @@ const PostFeedDetail = ({ post, user }: { post: IPostDocument; user: IUserDocume
                             <Avatar className="cursor-pointer">
                                 <AvatarImage
                                     onClick={() => router.push(`/profile/${post.poster.username}`)}
-                                    src={post.poster.profileImage || "assets/images/avatar.jpeg"}
+                                    src={post.poster.profileImage || "/assets/images/avatar.jpeg"}
                                     alt="@avatar"
                                     className="cursor-pointer"
                                 />

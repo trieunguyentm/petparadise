@@ -1,20 +1,12 @@
 import Image from "next/image"
 import Link from "next/link"
-import MenuLeft from "./menu-left"
-import UserProfile from "../shared/user-profile"
+import MenuLeftAdmin from "./menu-left-admin"
 import { Suspense } from "react"
 import UserProfileSkeleton from "../skeleton/user-profile-skeleton"
+import UserProfile from "../shared/user-profile"
 import LogoutComponent from "../shared/logout-component"
-import { fetchUser } from "@/lib/fetch"
-import { redirect } from "next/navigation"
-// updated
-const LeftSideBar = async () => {
-    const user = await fetchUser()
 
-    if (!user) {
-        redirect("/login")
-    }
-
+const LeftSideBarAdmin = async () => {
     return (
         <div className="w-1/5 border-x border-brown-1 h-screen flex flex-col p-1">
             <div className="flex flex-row items-center justify-center border-b-2 border-brown-1 pb-5">
@@ -25,7 +17,7 @@ const LeftSideBar = async () => {
                     </div>
                 </Link>
             </div>
-            <MenuLeft user={user} />
+            <MenuLeftAdmin />
             <Link
                 href={"/profile"}
                 className="flex py-3 items-center gap-3 border-b-2 border-brown-1 cursor-pointer max-sm:justify-center"
@@ -39,4 +31,4 @@ const LeftSideBar = async () => {
     )
 }
 
-export default LeftSideBar
+export default LeftSideBarAdmin

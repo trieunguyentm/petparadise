@@ -12,7 +12,7 @@ export async function generateMetadata({
     const username = params.username
 
     return {
-        title: username,
+        title: "Trang cá nhân " + username,
         description: "Thông tin cá nhân của " + username,
     }
 }

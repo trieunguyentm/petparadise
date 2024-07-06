@@ -13,7 +13,7 @@ import SnackbarCustom from "../ui/snackbar"
 import AreaConversation from "../shared/area-conversation"
 import { useRouter } from "next/navigation"
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
-import { CircleChevronLeft } from "lucide-react"
+import { CircleChevronLeft, X } from "lucide-react"
 import ListMessageCard from "../shared/list-message-card"
 import { useDebouncedCallback } from "use-debounce"
 
@@ -230,7 +230,7 @@ const MessageDetailContainer = ({
                             onClick={handleDeleteImage}
                             className="p-0 w-4 h-4 text-sm absolute top-0 -right-2 text-red-600 bg-slate-400 rounded-full"
                         >
-                            X
+                            <X />
                         </Button>
                     </div>
                 </div>
