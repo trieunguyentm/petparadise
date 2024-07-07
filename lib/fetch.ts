@@ -11,6 +11,7 @@ import {
     IProductDocument,
     IReportDocument,
     IUserDocument,
+    IWithdrawalHistory,
 } from "@/types"
 import { cookies } from "next/headers"
 
@@ -563,5 +564,32 @@ export const fetchReport = async () => {
     } catch (error) {
         console.log(error)
         throw new Error("Failed to fetch report")
+    }
+}
+
+export const fetchDrawMoneyHistories = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/get-draw-money-histories`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IWithdrawalHistory[]
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch draw money histories")
     }
 }

@@ -240,6 +240,9 @@ export interface IWithdrawalHistory extends mongoose.Document {
     user: IUserDocument
     amount: number
     status: "pending" | "completed" | "failed"
+    bankCode: string
+    accountNumber: string
+    accountName?: string
     createdAt: Date
     updatedAt: Date
 }
