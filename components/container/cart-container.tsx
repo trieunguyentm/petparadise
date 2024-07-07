@@ -246,6 +246,7 @@ const CartContainer = ({
                     setOpenSnackbar(true)
                     setTypeSnackbar("success")
                     setContentSnackbar(data.message)
+                    setOpen(null)
                 }
             } catch (error) {
                 console.log(error)

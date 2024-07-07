@@ -186,7 +186,8 @@ const PurchasedOrderContainer = () => {
                                             </span>
                                         </div>
                                         {order.refund !== order.totalAmount &&
-                                            order.status === "cancelled" && (
+                                            order.status === "cancelled" &&
+                                            order.typePayment === "online" && (
                                                 <Button
                                                     variant="outline"
                                                     onClick={() => setOpen(order.orderCode)}
@@ -195,7 +196,8 @@ const PurchasedOrderContainer = () => {
                                                 </Button>
                                             )}
                                         {order.refund === order.totalAmount &&
-                                            order.status === "cancelled" && (
+                                            order.status === "cancelled" &&
+                                            order.typePayment === "online" && (
                                                 <Button
                                                     variant="outline"
                                                     className="bg-green-500"

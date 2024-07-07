@@ -51,6 +51,7 @@ const DialogRefundOrder = ({
     /** Loading */
     const [loadingAccountName, setLoadingAccountName] = useState<boolean>(false)
     const [loadingSendRequest, setLoadingSendRequest] = useState<boolean>(false)
+    const [loadingGetRefundRequest, setLoadingGetRefundRequest] = useState<boolean>(true)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
     const [typeSnackbar, setTypeSnackbar] = useState<"success" | "info" | "warning" | "error">(
@@ -105,6 +106,7 @@ const DialogRefundOrder = ({
                 setOpenSnackbar(true)
                 setTypeSnackbar("success")
                 setContentSnackbar(data.message)
+                setRefundRequest(data.data as IRefundRequestDocument)
                 setOpen(null)
             }
         } catch (error) {
@@ -141,7 +143,8 @@ const DialogRefundOrder = ({
                     setDisabledAccountName(false)
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.desc)
+                    // setContentSnackbar(data.desc)
+                    setContentSnackbar("Xảy ra lỗi khi lấy tên tài khoản, vui lòng nhập thủ công")
                 }
 
                 if (data.data) {
@@ -151,7 +154,8 @@ const DialogRefundOrder = ({
                     setDisabledAccountName(false)
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar(data.desc)
+                    // setContentSnackbar(data.desc)
+                    setContentSnackbar("Xảy ra lỗi khi lấy tên tài khoản, vui lòng nhập thủ công")
                 }
             }
         } catch (error) {
@@ -189,6 +193,7 @@ const DialogRefundOrder = ({
 
     useEffect(() => {
         async function fetchRefundRequest() {
+            if (order.status !== "cancelled") return
             try {
                 const res = await fetch(
                     `${
@@ -206,6 +211,7 @@ const DialogRefundOrder = ({
                 }
                 if (data.success) {
                     setRefundRequest(data.data as IRefundRequestDocument | null)
+                    setLoadingGetRefundRequest(false)
                 }
             } catch (error) {
                 setRefundRequest(null)
@@ -243,7 +249,7 @@ const DialogRefundOrder = ({
                                 đ
                             </li>
                         </ul>
-                        {!refundRequest && (
+                        {!refundRequest && !loadingGetRefundRequest && (
                             <>
                                 <div className="text-sm text-brown-1 font-semibold">
                                     Thông tin ngân hàng
@@ -292,6 +298,7 @@ const DialogRefundOrder = ({
                                         <div>
                                             <input
                                                 // value={accountNumber}
+                                                defaultValue={accountNumber}
                                                 onChange={(e) =>
                                                     handleChangeAccountNumber(e.target.value)
                                                 }
@@ -326,11 +333,16 @@ const DialogRefundOrder = ({
                                     disabled={
                                         selectedBank === undefined ||
                                         accountNumber === "" ||
-                                        loadingAccountName
+                                        loadingAccountName ||
+                                        accountName.trim() === ""
                                     }
                                     onClick={handleSendRequest}
                                 >
-                                    Gửi yêu cầu
+                                    {loadingSendRequest ? (
+                                        <Loader2 className="w-8 h-8 animate-spin" />
+                                    ) : (
+                                        "Gửi yêu cầu"
+                                    )}
                                 </Button>
                             </div>
                         ) : (

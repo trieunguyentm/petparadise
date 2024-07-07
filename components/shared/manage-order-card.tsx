@@ -209,6 +209,7 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                             {Object.keys(statusOrder).map((type, index) => {
                                 if (
                                     type === "offline" ||
+                                    type === "shipped" ||
                                     type === "cancelled" ||
                                     type === "delivered"
                                 ) {
