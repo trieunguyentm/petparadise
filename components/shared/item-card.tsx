@@ -25,11 +25,13 @@ const ItemCard = ({
     product,
     userByFetch,
     manage,
+    admin,
     handleDelete,
 }: {
     product: IProductDocument
     userByFetch: IUserDocument
     manage?: boolean
+    admin?: boolean
     handleDelete?: (productId: string) => void
 }) => {
     const router = useRouter()
@@ -66,13 +68,15 @@ const ItemCard = ({
         if (!manage || !handleDelete) return
         setLoadingDelete(true)
         try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${product._id.toString()}`,
-                {
-                    method: "DELETE",
-                    credentials: "include",
-                },
-            )
+            let endPointURL = !admin
+                ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${product._id.toString()}`
+                : `${
+                      process.env.NEXT_PUBLIC_BASE_URL
+                  }/api/admin/delete-product/${product._id.toString()}`
+            const res = await fetch(endPointURL, {
+                method: "DELETE",
+                credentials: "include",
+            })
             const data = await res.json()
             if (!res.ok) {
                 if (data.type === "ERROR_SESSION") {
@@ -179,7 +183,7 @@ const ItemCard = ({
                             <Image
                                 src={photo}
                                 alt="work"
-                                className="w-full h-full hover:scale-110 transition-all duration-500"
+                                className="w-full h-full hover:scale-110 transition-all duration-500 max-h-[300px]"
                                 width={1000}
                                 height={200}
                             />
@@ -195,7 +199,7 @@ const ItemCard = ({
                                     onClick={handleNextImage}
                                 />
                             </div>
-                            {manage == undefined && (
+                            {manage === undefined && (
                                 <div
                                     className="absolute rounded-full cursor-pointer top-2 right-2 bg-slate-100 p-1"
                                     onClick={handleAddFavoriteProduct}
@@ -229,14 +233,16 @@ const ItemCard = ({
                                             style={{ fontSize: "24px", color: "gray" }}
                                             className="transition-all hover:-translate-y-1"
                                         />
-                                        <Link
-                                            href={`/store/edit-product/${product._id.toString()}`}
-                                        >
-                                            <Pencil
-                                                style={{ fontSize: "24px", color: "gray" }}
-                                                className="transition-all hover:-translate-y-1"
-                                            />
-                                        </Link>
+                                        {admin !== true && (
+                                            <Link
+                                                href={`/store/edit-product/${product._id.toString()}`}
+                                            >
+                                                <Pencil
+                                                    style={{ fontSize: "24px", color: "gray" }}
+                                                    className="transition-all hover:-translate-y-1"
+                                                />
+                                            </Link>
+                                        )}
                                     </div>
                                 </div>
                             )}

@@ -309,7 +309,7 @@ const CartContainer = ({
                                     </Button>
                                 </div>
                                 <Dialog open={open === sellerId} onOpenChange={() => setOpen(null)}>
-                                    <DialogContent className="sm:max-w-[425px]">
+                                    <DialogContent className="sm:max-w-[425px] max-h-[620px] overflow-scroll">
                                         <form
                                             onSubmit={handleSubmit((formData) =>
                                                 onSubmit(formData, sellerId),
