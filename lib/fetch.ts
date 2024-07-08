@@ -9,6 +9,7 @@ import {
     IPetAdoptionPostDocument,
     IPostDocument,
     IProductDocument,
+    IRefundRequestDocument,
     IReportDocument,
     IUserDocument,
     IWithdrawalHistory,
@@ -591,5 +592,32 @@ export const fetchDrawMoneyHistories = async () => {
     } catch (error) {
         console.log(error)
         throw new Error("Failed to fetch draw money histories")
+    }
+}
+
+export const fetchRefundRequest = async () => {
+    const sessionId = (await getSessionId()) as { name: string; value: string }
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/get-refund-request`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: `${sessionId?.name}=${sessionId?.value}`,
+                },
+                credentials: "include",
+                cache: "no-store",
+            },
+        )
+        const data = await res.json()
+        if (!res.ok) {
+            return null
+        } else {
+            return data.data as IRefundRequestDocument[]
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch refund request")
     }
 }

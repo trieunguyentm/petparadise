@@ -154,7 +154,7 @@ const ManageProductAdminContainer = ({
     }, [inView])
 
     return (
-        <div className="mb-10">
+        <div className="pb-10">
             <MenuShop activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
             {loadingCard ? (
                 <>
@@ -182,13 +182,13 @@ const ManageProductAdminContainer = ({
                                     handleDelete={handleDelete}
                                 />
                             ))}
+                            <div ref={ref} className="w-full flex justify-center">
+                                {loadingMoreData && <Loader2 className="w-8 h-8 animate-spin" />}
+                            </div>
                         </div>
                     )}
                 </>
             )}
-            <div ref={ref} className="w-full flex justify-center">
-                {loadingMoreData && <Loader2 className="w-8 h-8 animate-spin" />}
-            </div>
             <SnackbarCustom
                 open={openSnackbar}
                 setOpen={setOpenSnackbar}

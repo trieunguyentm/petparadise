@@ -231,7 +231,7 @@ export interface IRefundRequestDocument extends mongoose.Document {
     accountNumber: string
     accountName?: string
     amount: number
-    status: "pending" | "approved" | "rejected"
+    status: "pending" | "approved"
     createdAt: Date
     updatedAt: Date
 }

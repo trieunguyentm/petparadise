@@ -3,13 +3,16 @@
 import React, { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ManageProductAdminContainer from "../container/manage-product-admin-container"
-import { IProductDocument, IUserDocument } from "@/types"
+import { IProductDocument, IRefundRequestDocument, IUserDocument } from "@/types"
+import ManageRefundRequestContainer from "../container/manage-refund-request-container"
 
 const ManageStoreTab = ({
     products,
+    refundRequests,
     user,
 }: {
     products: IProductDocument[] | null
+    refundRequests: IRefundRequestDocument[] | null
     user: IUserDocument
 }) => {
     const [tab, setTab] = useState<"manage-product" | "manage-refund-money">("manage-product")
@@ -28,7 +31,7 @@ const ManageStoreTab = ({
                 <ManageProductAdminContainer products={products} user={user} />
             </TabsContent>
             <TabsContent value="manage-refund-money" className="h-full">
-                Yêu cầu hoàn tiền
+                <ManageRefundRequestContainer refundRequests={refundRequests} user={user} />
             </TabsContent>
         </Tabs>
     )

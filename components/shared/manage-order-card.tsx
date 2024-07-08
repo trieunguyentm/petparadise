@@ -107,6 +107,12 @@ const ManageOrderCard = ({ orderProp }: { orderProp: IOrderDocument }) => {
                     {order.orderCode}
                 </div>
                 <div>
+                    <span className="text-brown-1 font-semibold">Hình thức thanh toán:</span>{" "}
+                    {order.typePayment === "online"
+                        ? "Thanh toán trực tuyến"
+                        : "Thanh toán sau khi nhận hàng"}
+                </div>
+                <div>
                     <span className="text-brown-1 font-semibold">Tổng giá trị:</span>{" "}
                     {order.totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ
                 </div>

@@ -1,6 +1,5 @@
-import { fetchProduct, fetchUser } from "@/lib/fetch"
+import { fetchProduct, fetchRefundRequest, fetchUser } from "@/lib/fetch"
 import { redirect } from "next/navigation"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import React from "react"
 import ManageStoreTab from "@/components/shared/manage-store-admin-tab"
 
@@ -10,7 +9,11 @@ export const metadata = {
 }
 
 const ManageStore = async () => {
-    const [user, products] = await Promise.all([fetchUser(), fetchProduct()])
+    const [user, products, refundRequests] = await Promise.all([
+        fetchUser(),
+        fetchProduct(),
+        fetchRefundRequest(),
+    ])
 
     if (!user) {
         redirect("/login")
@@ -28,7 +31,11 @@ const ManageStore = async () => {
                         <div className="font-semibold text-3xl">Quản lý cửa hàng</div>
                         <div>Quản lý các sản phẩm và yêu cầu hoàn tiền sản phẩm từ người dùng</div>
                     </div>
-                    <ManageStoreTab products={products} user={user} />
+                    <ManageStoreTab
+                        products={products}
+                        refundRequests={refundRequests}
+                        user={user}
+                    />
                 </div>
             </div>
         </div>

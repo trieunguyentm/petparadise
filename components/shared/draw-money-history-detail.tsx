@@ -23,10 +23,15 @@ const convertStatus = {
     failed: "Đã hủy",
 }
 
-const DrawMoneyHistoryDetail = ({ drawMoneyHistory }: { drawMoneyHistory: IWithdrawalHistory }) => {
+const DrawMoneyHistoryDetail = ({
+    drawMoneyHistory,
+    listBank,
+}: {
+    drawMoneyHistory: IWithdrawalHistory
+    listBank: Bank[]
+}) => {
     const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
-    const [listBank, setListBank] = useState<Bank[]>([])
     const [bank, setBank] = useState<Bank | undefined>(undefined)
     /** Snack Bar */
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
@@ -86,33 +91,8 @@ const DrawMoneyHistoryDetail = ({ drawMoneyHistory }: { drawMoneyHistory: IWithd
     }
 
     useEffect(() => {
-        const findBank = (_bank: Bank) => {
-            return _bank.code === drawMoneyHistory.bankCode
-        }
-        const bankSelected = listBank.find(findBank)
-
-        setBank(bankSelected)
+        setBank(listBank.find((bank) => bank.code === drawMoneyHistory.bankCode))
     }, [listBank])
-
-    useEffect(() => {
-        async function fetchListBank() {
-            try {
-                const res = await fetch(`https://api.vietqr.io/v2/banks`, {
-                    method: "GET",
-                })
-                const data = await res.json()
-                if (res.ok) {
-                    setListBank(data.data as Bank[])
-                }
-            } catch (error) {
-                console.error("Failed to fetch list bank: ", error)
-                setOpenSnackbar(true)
-                setTypeSnackbar("error")
-                setContentSnackbar("Xảy ra lỗi khi tải danh sách ngân hàng")
-            }
-        }
-        fetchListBank()
-    }, [])
 
     return (
         <div className="border border-brown-1 rounded-md p-2 flex flex-col gap-4">
