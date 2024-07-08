@@ -171,21 +171,23 @@ const ManageProductAdminContainer = ({
                             Hiện tại không có sản phẩm nào
                         </div>
                     ) : (
-                        <div className="grid grid-cols-3 max-xl:grid-cols-2 max-md:grid-cols-1 gap-4 mt-8 mb-8">
-                            {listProduct?.map((product, index) => (
-                                <ItemCard
-                                    key={index}
-                                    product={product}
-                                    userByFetch={user}
-                                    manage={true}
-                                    admin={true}
-                                    handleDelete={handleDelete}
-                                />
-                            ))}
+                        <>
+                            <div className="grid grid-cols-3 max-xl:grid-cols-2 max-md:grid-cols-1 gap-4 mt-8 mb-8">
+                                {listProduct?.map((product, index) => (
+                                    <ItemCard
+                                        key={index}
+                                        product={product}
+                                        userByFetch={user}
+                                        manage={true}
+                                        admin={true}
+                                        handleDelete={handleDelete}
+                                    />
+                                ))}
+                            </div>
                             <div ref={ref} className="w-full flex justify-center">
                                 {loadingMoreData && <Loader2 className="w-8 h-8 animate-spin" />}
                             </div>
-                        </div>
+                        </>
                     )}
                 </>
             )}
