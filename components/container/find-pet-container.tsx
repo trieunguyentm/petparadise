@@ -7,7 +7,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import FindPetCard from "../shared/find-pet-card"
 import LocationSelector from "../shared/location-selector"
 import DatePickerDemo from "../shared/date-picker"
@@ -99,65 +99,85 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
         setSizePet(value)
     }
 
-    const handleSearchPost = async () => {
-        try {
-            let apiEndpoint: string = `${
-                process.env.NEXT_PUBLIC_BASE_URL
-            }/api/lost-pet/find-pet-post-by-search?petType=${typePet}&gender=${genderPet}&size=${sizePet}&lastSeenLocation=${
-                locationPet.cityName + "-" + locationPet.districtName + "-" + locationPet.wardName
-            }`
-            if (selectedDate) apiEndpoint += `&lastSeenDate=${selectedDate}`
-            const res = await fetch(`${apiEndpoint}`, {
-                method: "GET",
-                credentials: "include",
-            })
-            const data = await res.json()
-            if (!res.ok) {
-                if (data.type === "ERROR_SESSION") {
-                    // Lưu thông báo vào localStorage
-                    localStorage.setItem(
-                        "toastMessage",
-                        JSON.stringify({ type: "error", content: data.message }),
-                    )
-                    router.push("/login")
-                    return
-                }
-                setOpenSnackbar(true)
-                setTypeSnackbar("error")
-                setContentSnackbar(data.message)
-            }
-            if (data.success) {
-                setListPost(data.data as ILostPetPostDocument[])
-            }
-        } catch (error) {
-            console.log(error)
-            setOpenSnackbar(true)
-            setTypeSnackbar("error")
-            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
-        }
-    }
-
     const fetchMorePosts = useCallback(() => {
         setPage((prev) => prev + 1)
     }, [])
+
+    // Flag to check first render
+    const firstRender = useRef(true)
+
+    useEffect(() => {
+        const handleSearchPost = async () => {
+            try {
+                let apiEndpoint: string = `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/lost-pet/find-pet-post-by-search?petType=${typePet}&gender=${genderPet}&size=${sizePet}&lastSeenLocation=${
+                    locationPet.cityName +
+                    "-" +
+                    locationPet.districtName +
+                    "-" +
+                    locationPet.wardName
+                }`
+                if (selectedDate) apiEndpoint += `&lastSeenDate=${selectedDate}`
+                const res = await fetch(`${apiEndpoint}`, {
+                    method: "GET",
+                    credentials: "include",
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message)
+                }
+                if (data.success) {
+                    setListPost(data.data as ILostPetPostDocument[])
+                    setPage(0)
+                    setHasMore(true)
+                }
+            } catch (error) {
+                console.log(error)
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
+            }
+        }
+
+        if (firstRender.current) {
+            firstRender.current = false
+        } else {
+            handleSearchPost()
+        }
+    }, [typePet, genderPet, sizePet, locationPet, selectedDate])
 
     useEffect(() => {
         async function loadMoreData() {
             setLoadingMoreData(true)
             try {
                 if (!listPost) return
-                const res = await fetch(
-                    `${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                    }/api/lost-pet/find-pet-post?limit=${POST_PER_PAGE}&offset=${
-                        page * POST_PER_PAGE
-                    }`,
-                    {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                    },
-                )
+                let apiEndpoint: string = `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/lost-pet/find-pet-post-by-search?petType=${typePet}&gender=${genderPet}&size=${sizePet}&lastSeenLocation=${
+                    locationPet.cityName +
+                    "-" +
+                    locationPet.districtName +
+                    "-" +
+                    locationPet.wardName
+                }&limit=${POST_PER_PAGE}&offset=${page * POST_PER_PAGE}`
+                if (selectedDate) apiEndpoint += `&lastSeenDate=${selectedDate}`
+                const res = await fetch(apiEndpoint, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                })
                 const data = await res.json()
                 if (!res.ok) {
                     if (data.type === "ERROR_SESSION") {
@@ -272,11 +292,11 @@ const FindPetContainer = ({ findPetPosts }: { findPetPosts: ILostPetPostDocument
                     label="Thời gian bị mất"
                 />
             </div>
-            <div className="w-full mt-5">
+            {/* <div className="w-full mt-5">
                 <Button onClick={handleSearchPost} className="w-full bg-brown-1">
                     Tìm kiếm
                 </Button>
-            </div>
+            </div> */}
             <div className="w-full mt-5">
                 <Button
                     onClick={() => router.push("/find-pet/create-post")}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
     Select,
     SelectContent,
@@ -92,60 +92,81 @@ const PetAdoptionContainer = ({
         setPage((prev) => prev + 1)
     }, [])
 
-    const handleSearchPost = async () => {
-        try {
-            let apiEndpoint: string = `${
-                process.env.NEXT_PUBLIC_BASE_URL
-            }/api/pet-adoption/pet-adoption-post-by-search?petType=${typePet}&gender=${genderPet}&size=${sizePet}&location=${
-                locationPet.cityName + "-" + locationPet.districtName + "-" + locationPet.wardName
-            }&status=${statusPet}&reason=${reasonFindPet}`
-            const res = await fetch(`${apiEndpoint}`, {
-                method: "GET",
-                credentials: "include",
-            })
-            const data = await res.json()
-            if (!res.ok) {
-                if (data.type === "ERROR_SESSION") {
-                    // Lưu thông báo vào localStorage
-                    localStorage.setItem(
-                        "toastMessage",
-                        JSON.stringify({ type: "error", content: data.message }),
-                    )
-                    router.push("/login")
-                    return
+    // Flag to check first render
+    const firstRender = useRef(true)
+
+    useEffect(() => {
+        const handleSearchPost = async () => {
+            try {
+                let apiEndpoint: string = `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/pet-adoption/pet-adoption-post-by-search?petType=${typePet}&gender=${genderPet}&size=${sizePet}&location=${
+                    locationPet.cityName +
+                    "-" +
+                    locationPet.districtName +
+                    "-" +
+                    locationPet.wardName
+                }&status=${statusPet}&reason=${reasonFindPet}`
+                const res = await fetch(`${apiEndpoint}`, {
+                    method: "GET",
+                    credentials: "include",
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
+                        return
+                    }
+                    setOpenSnackbar(true)
+                    setTypeSnackbar("error")
+                    setContentSnackbar(data.message)
                 }
+                if (data.success) {
+                    setListPost(data.data as IPetAdoptionPostDocument[])
+                    setPage(0)
+                    setHasMore(true)
+                }
+            } catch (error) {
+                console.log(error)
                 setOpenSnackbar(true)
                 setTypeSnackbar("error")
-                setContentSnackbar(data.message)
+                setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
             }
-            if (data.success) {
-                setListPost(data.data as IPetAdoptionPostDocument[])
-            }
-        } catch (error) {
-            console.log(error)
-            setOpenSnackbar(true)
-            setTypeSnackbar("error")
-            setContentSnackbar("Có lỗi xảy ra, vui lòng thử lại")
         }
-    }
+
+        if (firstRender.current) {
+            firstRender.current = false
+        } else {
+            handleSearchPost()
+        }
+    }, [typePet, genderPet, sizePet, locationPet, statusPet, reasonFindPet])
 
     useEffect(() => {
         async function loadMoreData() {
             setLoadingMoreData(true)
             try {
                 if (!listPost) return
-                const res = await fetch(
-                    `${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                    }/api/pet-adoption/pet-adoption-post?limit=${POST_PER_PAGE}&offset=${
-                        page * POST_PER_PAGE
-                    }`,
-                    {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                    },
-                )
+                let apiEndpoint: string = `${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                }/api/pet-adoption/pet-adoption-post-by-search?petType=${typePet}&gender=${genderPet}&size=${sizePet}&location=${
+                    locationPet.cityName +
+                    "-" +
+                    locationPet.districtName +
+                    "-" +
+                    locationPet.wardName
+                }&status=${statusPet}&reason=${reasonFindPet}&limit=${POST_PER_PAGE}&offset=${
+                    page * POST_PER_PAGE
+                }`
+                const res = await fetch(apiEndpoint, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                })
                 const data = await res.json()
                 if (!res.ok) {
                     if (data.type === "ERROR_SESSION") {
@@ -307,11 +328,11 @@ const PetAdoptionContainer = ({
                     </Select>
                 </div>
             </div>
-            <div className="w-full mt-5">
+            {/* <div className="w-full mt-5">
                 <Button onClick={handleSearchPost} className="w-full bg-brown-1">
                     Tìm kiếm
                 </Button>
-            </div>
+            </div> */}
             <div className="w-full mt-5">
                 <Button
                     onClick={() => router.push("/pet-adoption/create-post")}
