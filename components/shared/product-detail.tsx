@@ -263,7 +263,7 @@ const ProductDetail = ({
                                         <Image
                                             src={photo}
                                             alt="work"
-                                            className="hover:scale-110 transition-all duration-500 rounded-lg"
+                                            className="hover:scale-110 transition-all duration-500 rounded-lg max-h-[360px]"
                                             width={500}
                                             height={200}
                                         />
