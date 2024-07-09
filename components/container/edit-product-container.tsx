@@ -32,11 +32,6 @@ type FormValues = {
     images: File[]
 }
 
-async function urlToFile(url: string, filename: string, mimeType: string): Promise<File> {
-    const response = await fetch(url)
-    const blob = await response.blob()
-    return new File([blob], filename, { type: mimeType })
-}
 
 const EditProductContainer = ({ product }: { product: IProductDocument }) => {
     const router = useRouter()
@@ -61,6 +56,16 @@ const EditProductContainer = ({ product }: { product: IProductDocument }) => {
     )
     const [previewImages, setPreviewImages] = useState<string[]>(product.images)
     const [loadingEdit, setLoadingEdit] = useState<boolean>(false)
+
+    async function urlToFile(url: string, filename: string, mimeType: string) {
+        // Chuyển đổi URL từ HTTP sang HTTPS nếu cần thiết
+        if (url.startsWith("http://")) {
+            url = url.replace("http://", "https://");
+        }
+        const response = await fetch(url)
+        const blob = await response.blob()
+        return new File([blob], filename, { type: mimeType })
+    }
 
     useEffect(() => {
         const loadFiles = async () => {
@@ -379,7 +384,7 @@ const EditProductContainer = ({ product }: { product: IProductDocument }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     <div className="flex flex-col gap-1">
                         <label htmlFor="discountStartDate" className="text-sm">
-                            Thời gian bắt đầu giảm giá 
+                            Thời gian bắt đầu giảm giá
                         </label>
                         <DatePickerDemo
                             date={discountStartDate}
