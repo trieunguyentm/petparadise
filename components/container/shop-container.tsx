@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation"
 import ItemCardSkeleton from "../skeleton/item-card-skeleton"
 import { useInView } from "react-intersection-observer"
 import { PRODUCT_PER_PAGE } from "@/lib/data"
+import { useDebouncedCallback } from "use-debounce"
 
 const ShopContainer = ({
     user,
@@ -43,55 +44,68 @@ const ShopContainer = ({
     const { ref, inView } = useInView()
     // Cart
     const [cart, setCart] = useState<ICartItem[]>([])
+    // Search name product
+    const [nameProduct, setNameProduct] = useState<string>("")
+
+    const handleChangeNameProduct = useDebouncedCallback((text: string) => {
+        setNameProduct(text)
+    }, 600)
 
     useEffect(() => {
         setPage(0)
         setHasMore(true)
-        if (activeMenu === "all") {
-            setListProduct(!products ? [] : products)
-        } else {
-            const fetchProductByCategory = async () => {
-                setLoadingCard(true)
-                try {
-                    const res = await fetch(
-                        `${process.env.NEXT_PUBLIC_BASE_URL}/api/product?productType=${activeMenu}`,
-                        {
-                            method: "GET",
-                            headers: { "Content-Type": "application/json" },
-                            credentials: "include",
-                        },
-                    )
-                    const data = await res.json()
-                    if (!res.ok) {
-                        if (data.type === "ERROR_SESSION") {
-                            // Lưu thông báo vào localStorage
-                            localStorage.setItem(
-                                "toastMessage",
-                                JSON.stringify({ type: "error", content: data.message }),
-                            )
-                            router.push("/login")
-                            return
-                        }
-                        setOpenSnackbar(true)
-                        setTypeSnackbar("error")
-                        setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
+
+        const fetchProductByCategory = async () => {
+            setLoadingCard(true)
+            try {
+                let endPointURL: string = `${process.env.NEXT_PUBLIC_BASE_URL}/api/product`
+
+                const queryParams: string[] = []
+                if (activeMenu !== "all") {
+                    queryParams.push(`productType=${activeMenu}`)
+                }
+                if (nameProduct.trim() !== "") {
+                    queryParams.push(`name=${nameProduct}`)
+                }
+                if (queryParams.length > 0) {
+                    endPointURL += `?${queryParams.join("&")}`
+                }
+
+                const res = await fetch(endPointURL, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    if (data.type === "ERROR_SESSION") {
+                        // Lưu thông báo vào localStorage
+                        localStorage.setItem(
+                            "toastMessage",
+                            JSON.stringify({ type: "error", content: data.message }),
+                        )
+                        router.push("/login")
                         return
                     }
-                    if (data.success) {
-                        setListProduct(data.data.products as IProductDocument[])
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch data: ", error)
                     setOpenSnackbar(true)
                     setTypeSnackbar("error")
-                    setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
-                } finally {
-                    setLoadingCard(false)
+                    setContentSnackbar(data.message || "Xảy ra lỗi khi tải thêm dữ liệu")
+                    return
                 }
+                if (data.success) {
+                    setListProduct(data.data.products as IProductDocument[])
+                }
+            } catch (error) {
+                console.error("Failed to fetch data: ", error)
+                setOpenSnackbar(true)
+                setTypeSnackbar("error")
+                setContentSnackbar("Xảy ra lỗi khi tải thêm dữ liệu")
+            } finally {
+                setLoadingCard(false)
             }
-            fetchProductByCategory()
         }
-    }, [activeMenu])
+        fetchProductByCategory()
+    }, [activeMenu, nameProduct])
 
     useEffect(() => {
         async function loadMoreData() {
@@ -103,6 +117,9 @@ const ShopContainer = ({
                 }/api/product?limit=${PRODUCT_PER_PAGE}&offset=${page * PRODUCT_PER_PAGE}`
                 if (activeMenu !== "all") {
                     endPointURL = endPointURL + `&productType=${activeMenu}`
+                }
+                if (nameProduct.trim() !== "") {
+                    endPointURL = endPointURL + `&name=${nameProduct}`
                 }
                 const res = await fetch(endPointURL, {
                     method: "GET",
@@ -196,6 +213,7 @@ const ShopContainer = ({
                         type="text"
                         placeholder="Tìm kiếm sản phẩm ..."
                         className="focus:outline-none text-sm"
+                        onChange={(e) => handleChangeNameProduct(e.target.value)}
                     />
                     <Search className="absolute right-3 top-3 text-brown-1 hover:cursor-pointer transition-all hover:-translate-y-1.5" />
                 </div>
