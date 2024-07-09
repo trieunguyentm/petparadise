@@ -19,3 +19,7 @@ NEXT_PUBLIC_PUSHER_APP_KEY=<Lấy AppKey của Pusher>
 4. Build và chạy dự án
 
 `npm run build && npm start`
+
+## Demo dự án
+
+Dự án được triển khai với Server Ubuntu, sử dụng Nginx với link sau: [PetParadise](https://petparadise.pro.vn/)
