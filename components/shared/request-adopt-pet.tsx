@@ -81,6 +81,7 @@ const RequestAdoptPet = ({
                         width={40}
                         height={40}
                         className="rounded-full"
+                        style={{ clipPath: "circle()" }}
                     />
                     <div className="flex flex-col">
                         <div className="text-sm font-medium">{request.requester.username}</div>

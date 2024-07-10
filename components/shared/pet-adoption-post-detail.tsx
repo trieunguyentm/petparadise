@@ -434,6 +434,7 @@ const PetAdoptionPostDetail = ({
                                     width={45}
                                     height={45}
                                     className="rounded-full cursor-pointer"
+                                    style={{ clipPath: "circle()" }}
                                 />
                                 <div className="flex flex-col">
                                     <div className="font-medium text-sm">
