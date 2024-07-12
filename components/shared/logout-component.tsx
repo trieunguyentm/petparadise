@@ -42,7 +42,7 @@ const LogoutComponent = () => {
                 setContentSnackbar(data.message)
             }
             if (data.success) {
-                router.push("/")
+                router.push("/login")
             }
         } catch (error) {
             console.log(error)
